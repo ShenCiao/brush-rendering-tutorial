@@ -43,7 +43,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/ShenCiao/brush-stroke-tutorial/tree/main/docs',
+            'https://github.com/ShenCiao/brush-stroke-tutorial/tree/main',
         },
         blog: false,
         theme: {
@@ -60,6 +60,10 @@ const config = {
       image: 'img/vanilla-stroke.png',
       navbar: {
         title: 'Brush Stroke Tutorial',
+        logo: {
+          alt: 'logo',
+          src: 'img/vanilla-stroke.png'
+        },
         items: [
           {
             type: 'docSidebar',
@@ -88,6 +92,10 @@ const config = {
         },
       },
     }),
+
+  plugins: [
+    'raw-loaders'
+  ]
 };
 
 module.exports = config;

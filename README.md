@@ -7,7 +7,7 @@ The website will be WIP for a long time since rendering brush strokes with GPU i
 Shen Ciao continuously update tutorial-style articles on (potentially) influential research works.
 
 ## Be critical
-Most contents come from the research *[Ciallo: The next generation vector paint program][Ciallo]*.
+The most contents come from Shen Ciao and Li-yi Wei's research *[Ciallo: The next generation vector paint program][Ciallo]*.
 It's impossible to create a perfect tutorial in the first place, so we eagerly need critiques and suggestions.
 We would be grateful for creating issues or pull requests to fix typos, correct facto mistakes, and revise terrible terminology naming in this tutorial.
 
