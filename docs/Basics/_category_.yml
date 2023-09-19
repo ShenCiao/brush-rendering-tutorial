@@ -1,9 +1,0 @@
-position: 3
-label: 'Basics'
-collapsible: false
-collapsed: false
-className: red
-link:
-  type: generated-index
-customProps:
-  description: This description can be used in the swizzled DocCard

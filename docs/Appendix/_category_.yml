@@ -1,7 +1,0 @@
-position: 20
-collapsible: true
-collapsed: true
-link:
-  type: generated-index
-customProps:
-  description: This description can be used in the swizzled DocCard
