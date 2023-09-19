@@ -95,7 +95,8 @@ const config = {
 
   plugins: [
     'raw-loaders'
-  ]
+  ],
+  trailingSlash : true
 };
 
 module.exports = config;
