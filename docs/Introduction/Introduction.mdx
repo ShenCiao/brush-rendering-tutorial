@@ -26,7 +26,7 @@ So old algorithms may not satisfy your needs for real-time rendering.
 
 In this tutorial, you will learn about the stroke rendering algorithms designed for the GPU graphics pipeline.
 We (I and my mentor [Liyi-Wei](https://www.liyiwei.org/)) name these algorithms as _Articulated_ in our paper (mainly because they look like drawing an articulated arm).
-I assume you are familiar with a graphics API like OpenGL or D3D.
+I assume our readers are already familiar with a graphics API like OpenGL or D3D.
 This tutorial will concentrate more on the high-level algorithms than the implementation details.
 
 Although graphics APIs provide us line primitives, including `LINES`, `LINE_STRIP`, and `LINE_LOOP`,
@@ -44,7 +44,7 @@ If you're unfamiliar with tablets and styluses, you can watch the video below fo
 
 [![Tablet](https://img.youtube.com/vi/83BRMfjJXIk/maxresdefault.jpg)](https://www.youtube.com/watch?app=desktop&v=83BRMfjJXIk)
 
-While you may recognize a brush stroke by its stylization, another crucial property could be ignored: the varying radius along the stroke.
+While you may recognize a brush stroke by its stylization, another crucial property could be ignored: the varying radius along the stroke, we will call it **mutable radius** here.
 The radii are typically generated from the pressure values as a stylus presses and moves on a tablet.
 For experienced artists, one of the highest priorities is to configure the mapping function from pen pressure to brush radius after installing a painting program.
 
@@ -112,6 +112,10 @@ Regular vector drawing datasets don't contain them.
 - Tell me more...
 
 :::
+
+import {ArticulatedLine2D} from "../../src/components/ArticulatedLine2D";
+
+<ArticulatedLine2D/>
 
 [code repository]: https://github.com/ShenCiao/BrushStrokeTutorial
 [Ciallo]: https://github.com/ShenCiao/Ciallo

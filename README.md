@@ -4,7 +4,7 @@ This is the code repository for "Brush Stroke Tutorial," powered by [Docusaurus]
 We may change the host and domain. Remember to star this code repository instead of bookmark the website.
 
 The website will be WIP for a long time since rendering brush strokes with GPU is a newly emerged research topic.
-Shen Ciao continuously update tutorial-style articles on (potentially) influential research works.
+Shen Ciao continuously update tutorials on (potentially) influential research works.
 
 ## Be critical
 The most contents come from Shen Ciao and Li-yi Wei's research *[Ciallo: The next generation vector paint program][Ciallo]*.
@@ -12,14 +12,14 @@ It's impossible to create a perfect tutorial in the first place, so we eagerly n
 We would be grateful for creating issues or pull requests to fix typos, correct facto mistakes, and revise terrible terminology naming in this tutorial.
 
 ## Build and Develop
-Follow the guidance in [Docusaurus's documentation](https://docusaurus.io/docs/installation).
+The textual contents on the website are written in markdown, you can easily modify them without extra web development skills.
 
-The textual contents on the website are written in markdown, you can easily modify them without extra knowledge about web development.
+Follow the guidance in [Docusaurus's documentation](https://docusaurus.io/docs/installation) for further development.
 
 The project is built with javascript libraries include:
 - React
 - Threejs: WebGL wrapper
-- React-codemirror: Code editor
+- monaco-edtior/react: Code editor
 
 While creating this tutorial, shen has just started learning these JavaScript libraries.
 If you are familiar with these libraries and have some engineering suggestions, please raise them in the issue.

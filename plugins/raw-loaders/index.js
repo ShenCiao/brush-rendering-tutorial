@@ -5,9 +5,7 @@ module.exports = function (context, options) {
       return {
         module: {
           rules: [
-            { test: /\.(glsl|vert|frag)$/, type: "asset/source" },
-            { test: /\.m?js$/, resourceQuery: { not: [/raw/] }, use: [ 'babel-loader' ] },
-            { resourceQuery: /raw/, type: 'asset/source' }
+            { test: /\.(glsl|vert|frag|txt)$/, type: 'asset/source' },
           ],
         },
       };
