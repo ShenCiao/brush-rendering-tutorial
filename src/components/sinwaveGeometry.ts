@@ -11,7 +11,7 @@ const pi = Math.PI;
 for(let i = 0; i <= n; ++i){
   let a = i / n;
   let x =  -pi + (2 * pi * a);
-  let y = 1.0 / gr * Math.sin(x);
+  let y = Math.sin(x) / gr;
   let r = Math.cos(x / 2.0) * maxRadius;
 
   position.push(x, y);
