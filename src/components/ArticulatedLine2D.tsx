@@ -50,11 +50,12 @@ export function ArticulatedLine2D({ uniforms = null }) {
     });
     renderer.setClearColor(new THREE.Color(1.0, 1.0, 1.0), 0.0);
     renderer.setSize(canvasWidth, canvasHeight);
-    window.addEventListener("resize", () => {
+    function resizeRenderer(){
       const canvasWidth = canvasContainerRef.current.clientWidth;
-      const canvasHeight = canvasWidth * (0.5 / gr);
-      renderer.setSize(canvasWidth, canvasHeight); // Update size
-    });
+      const canvasHeight = canvasWidth * 0.5 / gr;
+      renderer.setSize(canvasWidth, canvasHeight);
+    }
+    window.addEventListener("resize", resizeRenderer);
     canvasContainerRef.current.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -65,6 +66,9 @@ export function ArticulatedLine2D({ uniforms = null }) {
     controls.addEventListener("change", () => {
       renderer.render(scene, camera);
     });
+    renderSceneFnRef.current = () => renderer.render(scene, camera);
+    // @ts-ignore
+    window.addEventListener("TextureLoaded", renderSceneFnRef.current);
 
     const trapezoidGeometry = new THREE.BufferGeometry();
     const indices = [0, 1, 2, 2, 3, 0];
@@ -103,13 +107,16 @@ export function ArticulatedLine2D({ uniforms = null }) {
     );
     meshRef.current.frustumCulled = false;
     scene.add(meshRef.current);
-
-    renderSceneFnRef.current = () => controls.dispatchEvent({ type: "change" });
     renderSceneFnRef.current();
+
+    console.log("yes");
 
     return () => {
       renderer.dispose();
-      // canvasContainerRef.current.removeChild(renderer.domElement);
+      window.removeEventListener("resize", resizeRenderer);
+      // @ts-ignore
+      window.removeEventListener("TextureLoaded", renderSceneFnRef.current);
+      console.log("unmounted");
     };
   }, []);
 
@@ -122,6 +129,37 @@ export function ArticulatedLine2D({ uniforms = null }) {
     const position1 = [...position.slice(2)];
     const radius0 = [...radius];
     const radius1 = [...radius.slice(1)];
+
+    const lengthRatio: number[] = [];
+    let currLengthRatio = 0.0;
+    for (let i = 0; i < radius.length - 1; ++i) {
+      const stride = 2 * i;
+      const p0 = new THREE.Vector2(position[stride], position[stride + 1]);
+      const p1 = new THREE.Vector2(position[stride + 2], position[stride + 3]);
+      let r0 = radius[i];
+      let r1 = radius[i + 1];
+
+      // When radius is zero index comes to infinity, which is avoided here.
+      const tolerance = 1e-5;
+      if (r0 <= 0 || r0 / r1 < tolerance) {
+        r0 = tolerance * r1;
+        radius0[i] = r0;
+      }
+      if (r1 <= 0 || r1 / r0 < tolerance) {
+        r1 = tolerance * r0;
+        radius1[i] = r1;
+      }
+
+      let l = p0.distanceTo(p1);
+
+      if (r0 <= 0.0 && r1 <= 0.0) currLengthRatio += 0.0;
+      else if (r0 == r1) currLengthRatio += l / r0;
+      else currLengthRatio += (Math.log(r0 / r1) / (r0 - r1)) * l;
+      lengthRatio.push(currLengthRatio);
+    }
+    const lengthRatio0 = [0.0, ...lengthRatio];
+    const lengthRatio1 = [...lengthRatio];
+
     geometry.setAttribute(
       "position0",
       new THREE.InstancedBufferAttribute(new Float32Array(position0), 2),
@@ -138,7 +176,14 @@ export function ArticulatedLine2D({ uniforms = null }) {
       "radius1",
       new THREE.InstancedBufferAttribute(new Float32Array(radius1), 1),
     );
-    //TODO: Compute the length ratio
+    geometry.setAttribute(
+      "summedLength0",
+      new THREE.InstancedBufferAttribute(new Float32Array(lengthRatio0), 1),
+    );
+    geometry.setAttribute(
+      "summedLength1",
+      new THREE.InstancedBufferAttribute(new Float32Array(lengthRatio1), 1),
+    );
   }
 
   function updateMaterial(vert: string, frag: string) {
@@ -193,7 +238,7 @@ export function ArticulatedLine2D({ uniforms = null }) {
     [],
   );
 
-  const editorHeight = "80vh";
+  const editorHeight = "60vh";
 
   return (
     <>
@@ -234,22 +279,24 @@ export function ArticulatedLine2D({ uniforms = null }) {
   );
 }
 
+import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
+
+let pencilBrushTexture = new THREE.Texture();
+if(ExecutionEnvironment.canUseDOM){
+  pencilBrushTexture = new THREE.TextureLoader().load(
+    `/${docusaurusConfig.projectName}/img/stamp2.png`,
+    (texture) => {
+      window.dispatchEvent(new CustomEvent("TextureLoaded"));
+    },
+    undefined,
+    undefined,
+  )
+}
+
 export const pencilBrushUniforms = {
   type: { value: BrushType.Stamp },
   color: { value: [0.0, 0.0, 0.0, 1.0] },
-  footprint: {
-    type: 't',
-    value: new THREE.TextureLoader().load(
-      `/${docusaurusConfig.projectName}/img/stamp2.png`,
-      (texture) => {
-        console.log("Texture is loaded");
-      },
-      undefined,
-      (e: Event) => {
-        console.log("Texture Load Error: " + e.target);
-      },
-    ),
-  },
+  footprint: { value: pencilBrushTexture },
   stampIntervalRatio: { value: 0.4 },
   noiseFactor: { value: 1.2 },
   rotationFactor: { value: 0.75 },

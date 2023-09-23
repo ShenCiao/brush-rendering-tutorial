@@ -24,15 +24,16 @@ But time has changed, now we have modern GPU hardware crafted for graphics and p
 and directly accessing a GPU framebuffer from a CPU can significantly hurt the performance.
 So old algorithms may not satisfy your needs for real-time rendering.
 
-In this tutorial, you will learn about the stroke rendering algorithms designed for the GPU graphics pipeline.
+In this tutorial, you will learn about the brush stroke rendering (or brush rendering, stroke rendering for abbreviation)
+algorithms designed for the GPU graphics pipeline.
 We (I and my mentor [Liyi-Wei](https://www.liyiwei.org/)) name these algorithms as _Articulated_ in our paper (mainly because they look like drawing an articulated arm).
 I assume our readers are already familiar with a graphics API like OpenGL or D3D.
 This tutorial will concentrate more on the high-level algorithms than the implementation details.
 
 Although graphics APIs provide us line primitives, including `LINES`, `LINE_STRIP`, and `LINE_LOOP`,
 there are several well-known issues when using these primitives directly.
-Check out Matt Deslauries' article [Drawing Lines is Hard](https://mattdesl.svbtle.com/drawing-lines-is-hard#line-primitives_1) if you know nothing about them.
-As for us, the most significant issue is the limitation on the maximum line width or stroke radius.
+Check out Matt Deslauries' article [_Drawing Lines is Hard_](https://mattdesl.svbtle.com/drawing-lines-is-hard#line-primitives_1) if you know nothing about them.
+As for the brush rendering, the most significant issue is the limitation on the maximum line width or stroke radius.
 We must be able to fully control the radius values when rendering brush strokes.
 
 ## Brush strokes
@@ -50,7 +51,7 @@ The radii are typically generated from the pressure values as a stylus presses a
 For experienced artists after installing a painting program, one of the highest priorities is to configure the mapping function from pen pressure to brush radius.
 
 In this tutorial, you will learn to render a stroke with mutable radius, and the most popular way to stylize it called "Stamp."
-You cannot find them elsewhere since they come from our own research.
+More than 90 percent of brushes in popular paint software are the stamp brushes.
 Additionally, GPU brush stroke rendering a newly emerged topic.
 Researchers will develop more novel methods in the future.
 So I will continuously update this tutorial series to teach them.
@@ -58,9 +59,9 @@ Make sure to star our [code repository] for easy access to the latest updates.
 
 ## Vector curves
 
-Mutable radius is imperative for the most artists when working on digital painting,
+Mutable radius is imperative for the most artists working on digital painting,
 but it's not defined in public vector standards like SVG.
-This limitation is one of the primary reasons why lots of digital artists don't use vector workflow.
+This limitation is one of the primary reasons that lots of digital artists don't use vector workflow.
 (Another one is filling color.)
 
 To support the mutable radius, we will render a unique type of vector curve:
@@ -76,7 +77,7 @@ Although the algorithms are very straightforward, I know how hard it could be to
 That's why I created this tutorial, designed with a smooth learning curve and providing seamless coding environments.
 
 You should start with the Basic part, which covers the basics of the rendering methods.
-Read the articles in the Basic part in its original order, or you may miss something important.
+Remember to read the articles in the Basic part in its original order, or you may miss something important.
 Next, select your favorite topics to learn.
 I will list the extra prerequisites at the very beginning of each article.
 
@@ -105,7 +106,7 @@ Wish you happy learning!
 
 :::note Research Tip
 
-To demonstrate your research work, select vector drawings have mutable radius or pen pressure data.
+To demonstrate your research work about brush rendering, select vector drawings have mutable radius or pen pressure data.
 Regular vector drawing datasets don't contain them.
 
 - Zeyu Wang's work: [Paper](https://dl.acm.org/doi/10.1145/3450626.3459819) | [Dataset](https://github.com/zachzeyuwang/tracing-vs-freehand)
