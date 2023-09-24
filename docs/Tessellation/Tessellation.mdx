@@ -1,0 +1,32 @@
+---
+sidebar_position: 4
+sidebar_label: Tessellation
+title: Tessellation-based Rendering
+---
+
+There were works trying to tessellate a stroke and render it with GPU.
+You can find them in several papers and online articles.
+
+<details>
+<summary>Paper and article list</summary>
+
+  - [Polar Stroking: New Theory and Methods for Stroking Paths](https://dl.acm.org/doi/abs/10.1145/3386569.3392458) (Very Hard)
+  - [Drawing Lines is Hard](https://mattdesl.svbtle.com/drawing-lines-is-hard)
+  - Instanced Line Rendering: [part1](https://wwwtyro.net/2019/11/18/instanced-lines.html) | [part2](https://wwwtyro.net/2021/10/01/instanced-lines-part-2.html)
+  - ... Tell me more tutorials in the [discussion](https://github.com/ShenCiao/brush-stroke-tutorial/discussions/2)
+
+</details>
+
+To begin with, I would recommend Rye Terrell's [Instanced Line Rendering](https://wwwtyro.net/2019/11/18/instanced-lines.html) to learn
+several simple tessellation methods.
+They may inspire some approaches to optimize the performance of the articulated algorithms.
+
+In this article, I will compare the tessellation-based algorithms with articulated algorithms in detail.
+
+_TODO_
+
+:::note spoiler
+
+The key benefit of the articulated is its self-overlapping in acute angle, which is critical for brush strokes and digital painting.
+
+:::

@@ -8,7 +8,7 @@ import Editor from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 import { GlslEditor } from "@site/src/components/GlslEditor";
 
-import geometryCode from "./sinwaveGeometry";
+import geometryCode from "./sinewaveGeometry";
 import vertexShaderCode from "./shaders/ArticulatedLine2D.vert";
 import fragmentShaderCode from "./shaders/ArticulatedLine2D.frag";
 import docusaurusConfig from "@site/docusaurus.config";
@@ -19,7 +19,7 @@ export enum BrushType {
   Airbrush,
 }
 
-export function ArticulatedLine2D({ uniforms = null }) {
+export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
   const canvasContainerRef = useRef<HTMLDivElement>();
   const renderSceneFnRef = useRef<Function>();
   const meshRef = useRef<THREE.InstancedMesh>();
@@ -50,9 +50,9 @@ export function ArticulatedLine2D({ uniforms = null }) {
     });
     renderer.setClearColor(new THREE.Color(1.0, 1.0, 1.0), 0.0);
     renderer.setSize(canvasWidth, canvasHeight);
-    function resizeRenderer(){
+    function resizeRenderer() {
       const canvasWidth = canvasContainerRef.current.clientWidth;
-      const canvasHeight = canvasWidth * 0.5 / gr;
+      const canvasHeight = (canvasWidth * 0.5) / gr;
       renderer.setSize(canvasWidth, canvasHeight);
     }
     window.addEventListener("resize", resizeRenderer);
@@ -109,14 +109,11 @@ export function ArticulatedLine2D({ uniforms = null }) {
     scene.add(meshRef.current);
     renderSceneFnRef.current();
 
-    console.log("yes");
-
     return () => {
       renderer.dispose();
       window.removeEventListener("resize", resizeRenderer);
       // @ts-ignore
       window.removeEventListener("TextureLoaded", renderSceneFnRef.current);
-      console.log("unmounted");
     };
   }, []);
 
@@ -238,38 +235,54 @@ export function ArticulatedLine2D({ uniforms = null }) {
     [],
   );
 
-  const editorHeight = "60vh";
+  const editorHeight = "40vh";
+  let showGeometryEditor = true,
+    showVertexEditor = true,
+    showFragmentEditor = true;
+  if (Array.isArray(showEditor)) {
+    [showGeometryEditor, showVertexEditor, showFragmentEditor] = showEditor;
+  }
 
   return (
     <>
-      <Tabs>
-        <TabItem value="geometry.js">
-          <Editor
-            height={editorHeight}
-            defaultLanguage="javascript"
-            defaultValue={geometryCode}
-            onChange={onJsEditorChange}
-          />
-        </TabItem>
-        <TabItem value="vertex.glsl">
-          <GlslEditor
-            height={editorHeight}
-            defaultValue={vertexShaderCode}
-            onChange={(value) => {
-              updateMaterial(value, "");
-            }}
-          />
-        </TabItem>
-        <TabItem value="fragment.glsl">
-          <GlslEditor
-            height={editorHeight}
-            defaultValue={fragmentShaderCode}
-            onChange={(value) => {
-              updateMaterial("", value);
-            }}
-          />
-        </TabItem>
-      </Tabs>
+      {
+        <div style={{ display: showEditor ? null : "none" }}>
+          <Tabs defaultValue="">
+            {showGeometryEditor && (
+              <TabItem value="geometry.js">
+                <Editor
+                  height={editorHeight}
+                  defaultLanguage="javascript"
+                  defaultValue={geometryCode}
+                  onChange={onJsEditorChange}
+                />
+              </TabItem>
+            )}
+            {showVertexEditor && (
+              <TabItem value="vertex.glsl">
+                <GlslEditor
+                  height={editorHeight}
+                  defaultValue={vertexShaderCode}
+                  onChange={(value) => {
+                    updateMaterial(value, "");
+                  }}
+                />
+              </TabItem>
+            )}
+            {showFragmentEditor && (
+              <TabItem value="fragment.glsl">
+                <GlslEditor
+                  height={editorHeight}
+                  defaultValue={fragmentShaderCode}
+                  onChange={(value) => {
+                    updateMaterial("", value);
+                  }}
+                />
+              </TabItem>
+            )}
+          </Tabs>
+        </div>
+      }
       <div
         ref={canvasContainerRef}
         style={{ width: "100%" }}
@@ -279,10 +292,10 @@ export function ArticulatedLine2D({ uniforms = null }) {
   );
 }
 
-import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
 let pencilBrushTexture = new THREE.Texture();
-if(ExecutionEnvironment.canUseDOM){
+if (ExecutionEnvironment.canUseDOM) {
   pencilBrushTexture = new THREE.TextureLoader().load(
     `/${docusaurusConfig.projectName}/img/stamp2.png`,
     (texture) => {
@@ -290,8 +303,53 @@ if(ExecutionEnvironment.canUseDOM){
     },
     undefined,
     undefined,
-  )
+  );
 }
+
+let dotBrushTexture = new THREE.Texture();
+if (ExecutionEnvironment.canUseDOM) {
+  dotBrushTexture = new THREE.TextureLoader().load(
+    `/${docusaurusConfig.projectName}/img/dot.png`,
+    (texture) => {
+      window.dispatchEvent(new CustomEvent("TextureLoaded"));
+    },
+    undefined,
+    undefined,
+  );
+}
+
+// Airbrush's bezier curve
+const createGradient = (point1: THREE.Vector2, point2: THREE.Vector2) => {
+  let curve = new THREE.CubicBezierCurve(
+    new THREE.Vector2(0.0, 1.0),
+    point1,
+    point2,
+    new THREE.Vector2(1.0, 0.0),
+  );
+
+  const width = 256;
+  const height = 1;
+  const size = width * height;
+  const data = new Uint8Array(4 * size);
+  const points = curve.getPoints(width * 2);
+
+  // Resample on the polyline generated from the points
+  for (let i = 0; i < width; ++i) {
+    let x = i / width;
+    for (let j = 0; j < width * 2 - 1; ++j) {
+      let p0 = points[j],
+        p1 = points[j + 1];
+      if (x >= p0.x && x <= p1.x) {
+        let y = (p0.y * (p1.x - x) + p1.y * (x - p0.x)) / (p1.x - p0.x);
+        data[i * 4] = Math.floor(y * 255);
+      }
+    }
+  }
+
+  const gradientTexture = new THREE.DataTexture(data, width, height);
+  gradientTexture.needsUpdate = true;
+  return gradientTexture;
+};
 
 export const pencilBrushUniforms = {
   type: { value: BrushType.Stamp },
@@ -301,3 +359,23 @@ export const pencilBrushUniforms = {
   noiseFactor: { value: 1.2 },
   rotationFactor: { value: 0.75 },
 };
+
+const defaultGradient = createGradient(
+  new THREE.Vector2(0.33, 1.0),
+  new THREE.Vector2(0.66, 0.0),
+);
+
+export const airBrushUniforms = {
+  type: { value: BrushType.Airbrush },
+  color: { value: [0.0, 0.0, 0.0, 1.0] },
+  gradient: { value: defaultGradient },
+};
+
+export const dotBrushUniforms = {
+  type: { value: BrushType.Stamp },
+  color: { value: [0.0, 0.0, 0.0, 1.0] },
+  footprint: { value: dotBrushTexture },
+  stampIntervalRatio: { value: 2.0 },
+  noiseFactor: { value: 0.0 },
+  rotationFactor: { value: 0.0 },
+}

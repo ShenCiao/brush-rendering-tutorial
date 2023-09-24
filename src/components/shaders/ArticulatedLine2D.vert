@@ -1,5 +1,5 @@
-precision highp float;
-precision highp int;
+precision mediump float;
+precision mediump int;
 
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;

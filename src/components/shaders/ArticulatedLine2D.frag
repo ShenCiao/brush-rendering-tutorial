@@ -1,5 +1,5 @@
-precision highp float;
-precision highp int;
+precision mediump float;
+precision mediump int;
 
 in vec2 p;
 flat in vec2 p0;
@@ -14,7 +14,7 @@ uniform int type;
 const int Vanilla = 0, Stamp = 1, Airbrush = 2;
 uniform vec4 color;
 // Stamp
-uniform highp sampler2D footprint;
+uniform mediump sampler2D footprint;
 uniform float stampIntervalRatio;
 uniform float noiseFactor;
 uniform float rotationFactor;
@@ -22,7 +22,7 @@ float x2n(float x); // from distance to stamp index.
 float n2x(float n); // from stamp index to distance.
 mat2 rotate(float angle);
 // Airbrush
-uniform highp sampler2D gradient;
+uniform mediump sampler2D gradient;
 float sampleGraident(float distance){ return texture(gradient, vec2(distance, 0.0)).r; }
 
 // Noise helper functions from _The Book of Shader_.
