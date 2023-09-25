@@ -6,20 +6,14 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import Editor from "@monaco-editor/react";
 import { editor } from "monaco-editor";
-import { GlslEditor } from "@site/src/components/GlslEditor";
+import { GlslEditor } from "./GlslEditor";
 
-import geometryCode from "./sinewaveGeometry";
-import vertexShaderCode from "./shaders/ArticulatedLine2D.vert";
-import fragmentShaderCode from "./shaders/ArticulatedLine2D.frag";
-import docusaurusConfig from "@site/docusaurus.config";
-
-export enum BrushType {
-  Vanilla,
-  Stamp,
-  Airbrush,
-}
-
-export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
+export function Stroke({
+  geometry = null,
+  vertexShader = "",
+  fragmentShader = "",
+  showEditor = null,
+}) {
   const canvasContainerRef = useRef<HTMLDivElement>();
   const renderSceneFnRef = useRef<Function>();
   const meshRef = useRef<THREE.InstancedMesh>();
@@ -30,7 +24,7 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
     const canvasWidth = canvasContainerRef.current.clientWidth;
     const canvasHeight = canvasWidth * (0.5 / gr);
 
-    const worldWidth = 4 * gr;
+    const worldWidth = 6 * gr;
     const worldHeight = worldWidth * (0.5 / gr);
     const camera = new THREE.OrthographicCamera(
       worldWidth / -2,
@@ -70,31 +64,25 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
     // @ts-ignore
     window.addEventListener("TextureLoaded", renderSceneFnRef.current);
 
-    const trapezoidGeometry = new THREE.BufferGeometry();
-    const indices = [0, 1, 2, 2, 3, 0];
-    trapezoidGeometry.setIndex(indices);
-    const getGeom = new Function(geometryCode);
-    const [position, radius] = getGeom();
-
-    updateGeometry(trapezoidGeometry, position, radius);
-
-    const defaultUniforms = {
-      // common
-      type: { value: BrushType.Vanilla },
-      color: { value: [0.0, 0.0, 0.0, 1.0] },
-      // Stamp
-      footprint: { value: new THREE.Texture() },
-      stampIntervalRatio: { value: 1.0 },
-      noiseFactor: { value: 0.0 },
-      rotationFactor: { value: 0.0 },
-      // Airbrush
-      gradient: { value: new THREE.DataTexture() },
-    };
+    let trapezoidGeometry = new THREE.BufferGeometry();
+    if (typeof geometry == "string") {
+      // automatically create buffers from position and radius
+      const indices = [0, 1, 2, 2, 3, 0];
+      trapezoidGeometry.setIndex(indices);
+      const getGeom = new Function(geometry);
+      const [position, radius] = getGeom();
+      updateGeometry(trapezoidGeometry, position, radius);
+    } else if (geometry instanceof THREE.BufferGeometry) {
+      // manually create buffers
+      trapezoidGeometry = geometry;
+    } else {
+      console.error("Unrecognized geometry input: " + typeof geometry);
+      return;
+    }
 
     const material = new THREE.RawShaderMaterial({
-      uniforms: uniforms ? uniforms : defaultUniforms,
-      vertexShader: vertexShaderCode,
-      fragmentShader: fragmentShaderCode,
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader,
       side: THREE.DoubleSide,
       transparent: true,
       glslVersion: THREE.GLSL3,
@@ -103,9 +91,8 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
     meshRef.current = new THREE.InstancedMesh(
       trapezoidGeometry,
       material,
-      position.length - 1,
+      trapezoidGeometry.getAttribute("position0").count - 1,
     );
-
     meshRef.current.frustumCulled = false;
     scene.add(meshRef.current);
     renderSceneFnRef.current();
@@ -221,11 +208,11 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
       }
 
       if (!isArrayOfNumbers(position) || !isArrayOfNumbers(radius)) {
-        console.log("return value is not correct");
+        console.error("return value is not correct");
         return;
       }
       if (position.length != radius.length * 2) {
-        console.log("return value is not correct");
+        console.error("return value is not correct");
         return;
       }
 
@@ -244,6 +231,10 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
     [showGeometryEditor, showVertexEditor, showFragmentEditor] = showEditor;
   }
 
+  if (geometry instanceof THREE.BufferGeometry) {
+    showGeometryEditor = false;
+  }
+
   return (
     <>
       {
@@ -254,7 +245,7 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
                 <Editor
                   height={editorHeight}
                   defaultLanguage="javascript"
-                  defaultValue={geometryCode}
+                  defaultValue={geometry}
                   onChange={onGeometryEditorChange}
                 />
               </TabItem>
@@ -263,7 +254,7 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
               <TabItem value="vertex.glsl">
                 <GlslEditor
                   height={editorHeight}
-                  defaultValue={vertexShaderCode}
+                  defaultValue={vertexShader}
                   onChange={(value) => {
                     updateMaterial(value, "");
                   }}
@@ -274,7 +265,7 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
               <TabItem value="fragment.glsl">
                 <GlslEditor
                   height={editorHeight}
-                  defaultValue={fragmentShaderCode}
+                  defaultValue={fragmentShader}
                   onChange={(value) => {
                     updateMaterial("", value);
                   }}
@@ -291,101 +282,4 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
       />
     </>
   );
-}
-
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
-
-let pencilBrushTexture = new THREE.Texture();
-if (ExecutionEnvironment.canUseDOM) {
-  pencilBrushTexture = new THREE.TextureLoader().load(
-    `/${docusaurusConfig.projectName}/img/stamp2.png`,
-    (texture) => {
-      window.dispatchEvent(new CustomEvent("TextureLoaded"));
-    },
-    undefined,
-    undefined,
-  );
-}
-
-let dotBrushTexture = new THREE.Texture();
-if (ExecutionEnvironment.canUseDOM) {
-  dotBrushTexture = new THREE.TextureLoader().load(
-    `/${docusaurusConfig.projectName}/img/dot.png`,
-    (texture) => {
-      window.dispatchEvent(new CustomEvent("TextureLoaded"));
-    },
-    undefined,
-    undefined,
-  );
-}
-
-// Airbrush's bezier curve
-const createGradient = (point1: THREE.Vector2, point2: THREE.Vector2) => {
-  let curve = new THREE.CubicBezierCurve(
-    new THREE.Vector2(0.0, 1.0),
-    point1,
-    point2,
-    new THREE.Vector2(1.0, 0.0),
-  );
-
-  const width = 256;
-  const height = 1;
-  const size = width * height;
-  const data = new Uint8Array(4 * size);
-  const points = curve.getPoints(width * 2);
-
-  // Resample on the polyline generated from the points
-  for (let i = 0; i < width; ++i) {
-    let x = i / width;
-    for (let j = 0; j < width * 2 - 1; ++j) {
-      let p0 = points[j],
-        p1 = points[j + 1];
-      if (x >= p0.x && x <= p1.x) {
-        let y = (p0.y * (p1.x - x) + p1.y * (x - p0.x)) / (p1.x - p0.x);
-        data[i * 4] = Math.floor(y * 255);
-      }
-    }
-  }
-
-  const gradientTexture = new THREE.DataTexture(data, width, height);
-  gradientTexture.needsUpdate = true;
-  return gradientTexture;
-};
-
-export const pencilBrushUniforms = {
-  type: { value: BrushType.Stamp },
-  color: { value: [0.0, 0.0, 0.0, 1.0] },
-  footprint: { value: pencilBrushTexture },
-  stampIntervalRatio: { value: 0.4 },
-  noiseFactor: { value: 1.2 },
-  rotationFactor: { value: 0.75 },
-};
-
-const defaultGradient = createGradient(
-  new THREE.Vector2(0.33, 1.0),
-  new THREE.Vector2(0.66, 0.0),
-);
-
-export const airBrushUniforms = {
-  type: { value: BrushType.Airbrush },
-  color: { value: [0.0, 0.0, 0.0, 1.0] },
-  gradient: { value: defaultGradient },
-};
-
-export const dotBrushUniforms = {
-  type: { value: BrushType.Stamp },
-  color: { value: [0.0, 0.0, 0.0, 0.5] },
-  footprint: { value: dotBrushTexture },
-  stampIntervalRatio: { value: 2.0 },
-  noiseFactor: { value: 0.0 },
-  rotationFactor: { value: 0.0 },
-}
-
-export const dotHalfBrushUniforms = {
-  type: { value: BrushType.Stamp },
-  color: { value: [0.0, 0.0, 0.0, 0.5] },
-  footprint: { value: dotBrushTexture },
-  stampIntervalRatio: { value: 1.0 },
-  noiseFactor: { value: 0.0 },
-  rotationFactor: { value: 0.0 },
 }

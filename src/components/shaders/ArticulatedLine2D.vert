@@ -27,8 +27,8 @@ void main()	{
     l0 = summedLength0;
     l1 = summedLength1;
 
-    vec2 tangentDirection = normalize(position1 - position0);
-    vec2 normalDirection = vec2(-tangentDirection.y, tangentDirection.x);
+    vec2 tangent = normalize(position1 - position0);
+    vec2 normal = vec2(-tangent.y, tangent.x);
     float cosTheta = (r0 - r1)/distance(p0, p1); // theta is the angle stroke tilt, there is a diagram in README to explain this.
     // the vertex1 with radius is fully inside the vertex0.
     if(abs(cosTheta) >= 1.0) return;
@@ -51,8 +51,8 @@ void main()	{
     if(normalTanValue > 10.0 || normalTanValue < 0.1) return;
 
     vec2 trapzoidVertexPosition = position +
-        offsetSign.x * radius * tangentDirection +
-        offsetSign.y * radius * normalDirection * normalTanValue;
+        offsetSign.x * radius * tangent +
+        offsetSign.y * radius * normal * normalTanValue;
     p = trapzoidVertexPosition;
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(trapzoidVertexPosition, 0.0, 1.0);

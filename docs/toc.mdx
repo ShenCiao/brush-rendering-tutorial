@@ -10,6 +10,7 @@ import {
   pencilBrushUniforms,
   airBrushUniforms,
   dotBrushUniforms,
+  dotHalfBrushUniforms,
 } from "../src/components/ArticulatedLine2D";
 
 <div className="row row--no-gutters margin-left--xs">
@@ -26,11 +27,11 @@ import {
     </center>
   </div>
 </div>
-
-<p></p>
+<br/>
 
 This tutorial series will teach you how to render brush strokes with the modern GPU graphics pipeline.
-If you like it, please star the [code repository] instead of bookmark this website since the domain might be changed.
+
+If you like this series, please star the [code repository] instead of bookmark this website since the domain might be changed.
 
 ## Table of Contents
 
@@ -50,16 +51,30 @@ If you like it, please star the [code repository] instead of bookmark this websi
 <ArticulatedLine2D uniforms={airBrushUniforms} />
 
 Airbrush is a special type of stamp brush.
-Here I'm demonstrating a "continuous airbrush".
-You will learn the mathematical derivation of stamp brush from discrete to continuous.
+Here I'm demonstrating a "continuous airbrush", which is mathematically continuous and needs a little bit of calculus to develop.
+You will learn how to generalize a stamp brush into a continuous form.
 
 ### Stamp density and "ratio-distance"
 
-<ArticulatedLine2D uniforms={dotBrushUniforms} />
+<div className="row row--no-gutters margin-left--xs">
+  <div className="col col--6">
+    <ArticulatedLine2D uniforms={dotBrushUniforms} />
+    <center>
+      <em> Adjacent Dots </em>
+    </center>
+  </div>
+  <div className="col col--6">
+    <ArticulatedLine2D uniforms={dotHalfBrushUniforms} />
+    <center>
+      <em> Adjacent with one dot interleaved </em>
+    </center>
+  </div>
+</div>
+<br/>
 
-You can see dots are adjacent to each other consecutively instead of equidistantly
-distributed. The pattern is achieved by setting the intervals between dots to twice
-of their radii. You will learn how to freely control stamp density along a stamp
+You can see dots are adjacent to each other instead of equidistantly distributed.
+The pattern is achieved by setting the intervals between dots proportional to their radii.
+You will learn how to freely control stamp density along a stamp
 stroke. Very important for a serious project.
 
 ### 3D stroke
