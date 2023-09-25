@@ -1,6 +1,6 @@
-# Brush Stroke Tutorial
+# Brush Rendering Tutorial
 
-This is the code repository for "Brush Stroke Tutorial," powered by [Docusaurus](https://docusaurus.io/).
+This is the code repository for "Brush Rendering Tutorial".
 Remember to star this code repository instead of bookmark the website since the host and domain might be changed.
 
 The website will be WIP for a long time since rendering brush strokes with GPU is a newly emerged research topic.
@@ -20,6 +20,7 @@ Follow the guidance in [Docusaurus's documentation](https://docusaurus.io/docs/i
 
 The project is built with javascript libraries include:
 
+- [Docusaurus](https://docusaurus.io/).
 - React
 - Threejs: WebGL wrapper
 - monaco-editor/react: Code editor

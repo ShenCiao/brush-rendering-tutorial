@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Brush Stroke Tutorial',
+  title: 'Brush Rendering Tutorial',
   tagline: 'Learn brush stroke rendering.',
   // favicon: 'img/favicon.ico',
 
@@ -14,12 +14,12 @@ const config = {
   url: 'https://shenciao.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/brush-stroke-tutorial/',
+  baseUrl: '/brush-rendering-tutorial/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'ShenCiao', // Usually your GitHub org/user name.
-  projectName: 'brush-stroke-tutorial', // Usually your repo name.
+  projectName: 'brush-rendering-tutorial', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -43,7 +43,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/ShenCiao/brush-stroke-tutorial/tree/main',
+            'https://github.com/ShenCiao/brush-rendering-tutorial/tree/main',
         },
         blog: false,
         theme: {
@@ -60,7 +60,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/vanilla-stroke.png',
       navbar: {
-        title: 'Brush Stroke Tutorial',
+        title: 'Brush Rendering Tutorial',
         logo: {
           alt: 'logo',
           src: 'img/vanilla-stroke.png'
@@ -81,7 +81,7 @@ const config = {
       },
       footer: {
         style: 'light',
-        copyright: `Copyright © ${new Date().getFullYear()} Brush Stroke Tutorial, under CC BY-SA 4.0 License`,
+        copyright: `Copyright © ${new Date().getFullYear()} Brush Rendering Tutorial, under CC BY-SA 4.0 License`,
       },
       prism: {
         theme: lightCodeTheme,
