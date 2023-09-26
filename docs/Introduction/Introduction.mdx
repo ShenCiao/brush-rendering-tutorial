@@ -3,105 +3,79 @@ title: Introduction
 sidebar_position: 2
 ---
 
-This tutorial series will teach you how to use the **modern GPU** graphics pipeline to render **brush strokes** on **vector curves**.
-The contents mainly come from my research work [Ciallo: The next generation vector paint program][Ciallo].
-I will introduce this tutorial from the three aspects above.
+This tutorial series will teach you how to use the modern GPU graphics pipeline to render **brush strokes**,
+those are commonly seen with a paint tool in graphics design software like Photoshop.
 
-## Modern GPU
+import {
+  ArticulatedLine2D,
+  pencilBrushUniforms,
+} from "@site/src/components/ArticulatedLine2D";
 
-![sketchpad](./sketchpad.gif)
+<div className="row row--no-gutters margin-left--xs">
+  <div className="col col--6">
+    <ArticulatedLine2D />
+    <center>
+      <em> Vanilla </em>
+    </center>
+  </div>
+  <div className="col col--6">
+    <ArticulatedLine2D uniforms={pencilBrushUniforms} />
+    <center>
+      <em> Pencil (Stamp) </em>
+    </center>
+  </div>
+</div>
+<br />
 
-_Draw lines in Ivan Sutherland's Sketchpad._
-
-Drawing lines or rendering strokes is one of the oldest topics in Computer Graphics.
-You can easily find a lot of pioneering works, for example, [Bresenham's line algorithm](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm).
-They emerged from an era with certain conditions:
-
-- Programs ran without the benefit of parallelization.
-- Programs could access framebuffer directly without significant performance penalty.
-
-But time has changed, now we have modern GPU hardware crafted for graphics and parallel computing,
-and directly accessing a GPU framebuffer from a CPU can significantly hurt the performance.
-So old algorithms may not satisfy your needs for real-time rendering.
-
-In this tutorial, you will learn about the brush stroke rendering algorithms designed for the GPU graphics pipeline.
-We (I and my mentor [Liyi-Wei](https://www.liyiwei.org/)) call these algorithms _Articulated_ in our paper, because they look like drawing an articulated arm.
-I assume our readers are already familiar with a graphics API like OpenGL or D3D.
-This tutorial will concentrate more on the high-level algorithms than the implementation details.
-
-Although graphics APIs provide us line primitives, including `LINES`, `LINE_STRIP`, and `LINE_LOOP`,
-there are several well-known issues when using these primitives directly.
-Check out Matt Deslauries' article [_Drawing Lines is Hard_](https://mattdesl.svbtle.com/drawing-lines-is-hard#line-primitives_1) if you know nothing about them.
-As for our brush rendering, the most significant issue is the limitation on the maximum line width or stroke radius (half width).
-We must be able to fully control the radius values when rendering brush strokes.
-
-## Brush strokes
-
-Brush strokes refer to strokes drawn with the paint tool in graphics software such as Photoshop or Krita.
-Artists configure their digital brushes to control stroke properties like radius or stylization,
-then stroke on the canvas with dedicated input devices: Tablet and Stylus.
-If you're unfamiliar with tablets and styluses, you can watch the video below for more information:
-
-[![Tablet](https://img.youtube.com/vi/83BRMfjJXIk/maxresdefault.jpg)](https://www.youtube.com/watch?app=desktop&v=83BRMfjJXIk)
-
-While you may recognize a brush stroke by its stylization, another crucial property could be ignored: the variable radius along the stroke.
-(I ignored it in my paper too.)
-The radii are typically generated from the pressure values as a stylus presses and moves on a tablet.
-For experienced artists after installing a painting program, one of the highest priorities is to configure the mapping function from pen pressure to brush radius.
-
-In this tutorial, you will learn to render a stroke with variable radius, and the most popular way to stylize it called "Stamp."
-More than 90 percent of brushes in popular paint software are the stamp brushes.
-Additionally, GPU brush stroke rendering a newly emerged topic.
-Researchers will develop more novel methods in the future.
-So I will continuously update this tutorial series to teach them.
-Make sure to star our [code repository] for easy access to the latest updates.
-
-## Vector curves
-
-Variable radius is imperative for the most artists working on digital painting,
-but it's not included in public vector standards like [SVG](https://www.w3.org/Graphics/SVG/WG/wiki/Proposals/Variable_width_stroke).
-And since that, configuring the variable width value of vector lines is commonly underdeveloped in popular graphics design software.
-This limitation is one of the primary reasons that lots of digital artists don't use vector workflow.
-(Another one is filling color.)
-
-To support the variable radius, we will render a unique type of vector curve:
-An ordered list of points (polyline) with radius values assigned to each point.
-As a stylus is pressed and moved on a tablet, the program generate a sequence of points to record the trace of movement.
-Additionally, the pen pressure is transformed into the radius value assigned to each point.
-
-We can approximate any type of curve by increasing the number of points in a polyline, whether freehand-drawn or mathematically defined.
-Try to change the `maxRadius` and `segmentCount` value in the code editor below to see how the stroke changes.
-Feel free to change any other parts of the code as long as the function return the `position` and `radius` array correctly.
-
-import { ArticulatedLine2D } from "../../src/components/ArticulatedLine2D";
-
-<ArticulatedLine2D showEditor={[true, false, false]} />
-
-:::info code editor & canvas
-
-The development environment is inspired by [_The Book of Shader_].
-You can watch the rendering result in real time after modifying the code.
+:::note
 
 When hovering your mouse on the canvas you can:
 
 - **Pan**: Left-click and drag the mouse.
 - **Zoom**: Scroll or drag the mouse wheel.
 
+:::
+
+The contents mainly come from my research work [Ciallo: The next generation vector paint program][Ciallo].
+Since there will be more research work on GPU brush stroke rendering,
+I will continuously update this tutorial series to teach you related techniques in (potentially) influential research works.
+
+## Prerequisites
+Decent experience in one of the GPU graphics APIs like OpenGL and D3D is required.
+If you were relatively new to computer graphics, you should at least have rendered your first 3D scene and practiced instanced rendering.
+In this tutorial, we will learn techniques to render and stylize curves.
+
+Though I create all the demos in the web environment, you don't need to know about WebGL or WebGPU.
+We will concentrate on high-level techniques rather than the implementation details.
+No matter which GPU API you are familiar with, utilizing them to render a stroke will be easy after this tutorial series.
+
+## Structure
+
+### Content
+The [Basic](../category/basics/) section covers the basics of the rendering and stylization methods.
+Articles in the Basic part are organized in a linear fashion.
+You may miss something important if skip one of them.
+After learning all stuffs in the Basic section, you can select your favorite topics in the TOC to learn.
+I will list extra prerequisites at the very beginning of each article.
+
+### Live coding
+You will find live code editors like the one below. which is inspired by [_The Book of Shader_].
+The rendering result is updated in real time after modifying the code.
+Try it out by changing the variable `maxRadius` and `segmentCount` and watching the changes in the canvas below.
+
+<ArticulatedLine2D showEditor={[true, false, false]} />
+
+:::note code editor
+
 If there are bugs for common usages, tell me at the [issue](https://github.com/ShenCiao/brush-rendering-tutorial/issues) page.
 
 :::
 
-## Structure
+Feel free to change any other parts of the code as long as it returns the `position` and `radius` array correctly.
 
-Although the algorithms are very straightforward, I know it's hard to learn and reproduce a research work.
-That's why I created this tutorial, designed with a smooth learning curve and providing the seamless development environment.
-
-You should start with the Basic part, which covers the basics of the rendering methods.
-Remember to read the articles in the Basic part in its original order, or you may miss something important.
-Next, select your favorite topics to learn.
-I will list extra prerequisites at the very beginning of each article.
-
-Wish you happy learning!
+Only geometry generation code "geometry.js" is demonstrated here.
+You will find "vertex.glsl" and "fragment.glsl" for vertex and fragment shader code.
+Whether they are hidden or shown will depend on the context.
 
 ## Citation
 
