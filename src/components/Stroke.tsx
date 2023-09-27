@@ -9,14 +9,15 @@ import { editor } from "monaco-editor";
 import { GlslEditor } from "./GlslEditor";
 
 export function Stroke({
-  geometry = null,
-  vertexShader = "",
-  fragmentShader = "",
+  geometry,
+  vertexShader,
+  fragmentShader,
   showEditor = null,
 }) {
   const canvasContainerRef = useRef<HTMLDivElement>();
   const renderSceneFnRef = useRef<Function>();
   const meshRef = useRef<THREE.InstancedMesh>();
+  const rendererRef = useRef<THREE.WebGLRenderer>();
 
   useEffect(() => {
     // Being in doubt when setting parameters? Use golden ratio!
@@ -37,18 +38,22 @@ export function Stroke({
     camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({
+      preserveDrawingBuffer: true,
+      powerPreference: "high-performance",
       antialias: true,
       alpha: true,
       premultipliedAlpha: false,
-      powerPreference: "high-performance",
     });
     renderer.setClearColor(new THREE.Color(1.0, 1.0, 1.0), 0.0);
     renderer.setSize(canvasWidth, canvasHeight);
+    rendererRef.current = renderer;
+
     function resizeRenderer() {
       const canvasWidth = canvasContainerRef.current.clientWidth;
       const canvasHeight = (canvasWidth * 0.5) / gr;
       renderer.setSize(canvasWidth, canvasHeight);
     }
+
     window.addEventListener("resize", resizeRenderer);
     canvasContainerRef.current.appendChild(renderer.domElement);
 
@@ -278,7 +283,12 @@ export function Stroke({
       <div
         ref={canvasContainerRef}
         style={{ width: "100%" }}
-        onMouseDown={(e) => e.preventDefault()}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          if (e.button == 2) {
+            console.log(rendererRef.current.domElement.toDataURL());
+          }
+        }}
       />
     </>
   );

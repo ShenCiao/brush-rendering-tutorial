@@ -4,7 +4,7 @@ sidebar_position: 2
 ---
 
 This tutorial series will teach you how to use the modern GPU graphics pipeline to render **brush strokes**,
-those are commonly seen with a paint tool in graphics design software like Photoshop.
+commonly seen with a paint tool in graphics design software like Photoshop.
 
 import {
   ArticulatedLine2D,
@@ -41,6 +41,7 @@ Since there will be more research work on GPU brush stroke rendering,
 I will continuously update this tutorial series to teach you related techniques in (potentially) influential research works.
 
 ## Prerequisites
+
 Decent experience in one of the GPU graphics APIs like OpenGL and D3D is required.
 If you were relatively new to computer graphics, you should at least have rendered your first 3D scene and practiced instanced rendering.
 In this tutorial, we will learn techniques to render and stylize curves.
@@ -52,6 +53,7 @@ No matter which GPU API you are familiar with, utilizing them to render a stroke
 ## Structure
 
 ### Content
+
 The [Basic](../category/basics/) section covers the basics of the rendering and stylization methods.
 Articles in the Basic part are organized in a linear fashion.
 You may miss something important if skip one of them.
@@ -59,9 +61,10 @@ After learning all stuffs in the Basic section, you can select your favorite top
 I will list extra prerequisites at the very beginning of each article.
 
 ### Live coding
-You will find live code editors like the one below. which is inspired by [_The Book of Shader_].
-The rendering result is updated in real time after modifying the code.
-Try it out by changing the variable `maxRadius` and `segmentCount` and watching the changes in the canvas below.
+
+You will find live code editors similar to the one displayed below. which is inspired by [_The Book of Shader_].
+The rendering result is updated in real-time after modifying the code.
+Give it a try by altering the values of `maxRadius` and `segmentCount`, and watch how the canvas below changes.
 
 <ArticulatedLine2D showEditor={[true, false, false]} />
 
