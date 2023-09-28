@@ -21,11 +21,11 @@ import {
   <div className="col col--6">
     <ArticulatedLine2D uniforms={pencilBrushUniforms} />
     <center>
-      <em> Pencil (Stamp) </em>
+      <em> Pencil </em>
     </center>
   </div>
 </div>
-<br />
+<br/>
 
 :::note
 
@@ -44,11 +44,15 @@ I will continuously update this tutorial series to teach you related techniques 
 
 Decent experience in one of the GPU graphics APIs like OpenGL and D3D is required.
 If you were relatively new to computer graphics, you should at least have rendered your first 3D scene and practiced instanced rendering.
-In this tutorial, we will learn techniques to render and stylize curves.
 
-Though I create all the demos in the web environment, you don't need to know about WebGL or WebGPU.
+It's totally fine if you never heard about `LINES`, `LINE_STRIP`, and `LINE_LOOP` GPU primitives.
+We won't use them directly in this tutorial series.
+If you're interested in learning about their drawbacks, you can check out mattdesl's article titled "Drawing Lines is Hard" [here](https://mattdesl.svbtle.com/drawing-lines-is-hard).
+While reading it isn't a prerequisite, I still recommend it.
+
+Though I create all the demos in the web environment, you don't have to know about WebGL or WebGPU.
 We will concentrate on high-level techniques rather than the implementation details.
-No matter which GPU API you are familiar with, utilizing them to render a stroke will be easy after this tutorial series.
+No matter which GPU API you are familiar with, utilizing them to render a stroke will be easy after this series.
 
 ## Structure
 
