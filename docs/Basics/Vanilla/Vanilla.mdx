@@ -2,15 +2,26 @@
 sidebar_position: 1
 ---
 
-import RGBTriangle from "./RGBTriangle";
 import VanillaStroke from "./VanillaStroke";
 
-<RGBTriangle/>
+## Uni-radius
 
-:::note
+Let's start with a solid stroke with a single radius value.
+Later add variable radius to it.
 
-Shader code will be introduced in this article. Feel free to play with.
+<VanillaStroke />
 
-:::
+We are given a set of vertices forming a polyline, randomly select an edge with two consecutive vertices,
+labeled as $v_i$ and $v_{i+1}$ and displayed in the diagram below.
+Then render a solid capsule on it shown on the left.
+If we render every single edge like this, edges connect to each other naturally, as shown on the right.
 
-# TODO
+| ![edge](./uni-edge.png) | ![edge](./uni-connect.png) |
+| :---------------------: | :------------------------: |
+|        _An edge_        |     _Connected edges_      |
+
+It sounds deadly simple, right?
+The process quite looks like drawing an [articulated arm](https://www.google.com/search?q=articulated+arm+2D+diagram&tbm=isch).
+So we just call it _Articulated_ stroke (Line) rendering.
+
+To draw the capsule, we place four new vertices to form a rectangle.
