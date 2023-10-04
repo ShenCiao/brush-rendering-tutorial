@@ -2,26 +2,62 @@
 sidebar_position: 1
 ---
 
-import VanillaStroke from "./VanillaStroke";
-
 ## Uni-radius
 
 Let's start with a solid stroke with a single radius value.
 Later add variable radius to it.
 
-<VanillaStroke />
+We are given a polyline with a set of vertices.
+In the diagram below, we select an edge with two consecutive vertices, labeled as $v_i$ and $v_{i+1}$.
+We render a capsule on it, as shown on the left.
+If we render every single edge like this, edges will connect to each other naturally, as shown on the right.
 
-We are given a set of vertices forming a polyline, randomly select an edge with two consecutive vertices,
-labeled as $v_i$ and $v_{i+1}$ and displayed in the diagram below.
-Then render a solid capsule on it shown on the left.
-If we render every single edge like this, edges connect to each other naturally, as shown on the right.
+| ![edge](./uni-capsule.png) | ![edge](./uni-connect.png) |
+| :------------------------: | :------------------------: |
+|         _An edge_          |     _Connected edges_      |
 
-| ![edge](./uni-edge.png) | ![edge](./uni-connect.png) |
-| :---------------------: | :------------------------: |
-|        _An edge_        |     _Connected edges_      |
+The diagram quite looks like drawing an [articulated arm](https://www.google.com/search?q=articulated+arm+2D+diagram&tbm=isch).
+Therefore, we call it **articulated** stroke (Line) rendering.
 
-It sounds deadly simple, right?
-The process quite looks like drawing an [articulated arm](https://www.google.com/search?q=articulated+arm+2D+diagram&tbm=isch).
-So we just call it _Articulated_ stroke (Line) rendering.
+The idea is pretty straightforward, also easy to implement with GPU APIs.
+To draw the capsule, we generate four new vertices to make a rectangle, as shown in the left figure below.
+Then discard the pixels in the four corners in fragment shader, as shown in the right figure. All is done!
 
-To draw the capsule, we place four new vertices to form a rectangle.
+|    ![quad](./uni-quad.png)     | ![quad](./uni-quad-capsule.png) |
+| :----------------------------: | :-----------------------------: |
+| _Generate rectangle vertices _ |        _Discard corners_        |
+
+There are several possible ways to generate the rectangle vertices.
+The most elegant one is using geometry shader.
+But sadly, it's not supported on Apple's ecosystem and web platform, many readers are not experienced in it.
+So I will mainly introduce instanced rendering implementation.
+But if you're already familiar with geometry shader, check out the dropdown tab below.
+
+<details>
+  <summary>geometry shader implementation</summary>
+</details>
+
+We use instanced rendering to draw a large number of objects with the same vertex data.
+For drawing a stroke, each instance is the rectangle shown above, and the number of instances is the number of stroke's edges
+(number of polyline vertices minus one).
+To place a rectangle, each vertex invoked by the rectangle needs to know about the positions of polyline vertices $p_0$ and $p_1$, and radius value $r$.
+We will set a local coordinate in the shader program, origin at $p_0$, X and Y axes align to the tangent and normal direction:
+![coo](./coordinate.png)
+
+You will find implementation details in the comments of the shader code below.
+The "vertex.glsl" for the vertex shader and "fragment.glsl" for the fragment shader, feel free to change them:
+
+import VanillaStroke from "./VanillaStroke";
+
+<VanillaStroke showEditor={[false, true, true]} />
+
+<details>
+<summary>
+In case you don't know the `flat` qualifier
+</summary>
+
+Shader variables are interpolated by default in fragment shader.
+The `flat` qualifier tells your shader program don't interpolate the variable in fragment shader.
+If you are still confusing, check out the this [article](https://www.geeks3d.com/20130514/opengl-interpolation-qualifiers-glsl-tutorial/).
+
+</details>

@@ -1,11 +1,10 @@
 precision mediump float;
 precision mediump int;
 
-// Take golbal const values as uniforms to modify freely.
 const float radius = 1.0/10.0;
 
 uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix; // orthogonal projection
+uniform mat4 projectionMatrix;
 
 in vec2 position0;
 in vec2 position1;

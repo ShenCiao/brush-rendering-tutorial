@@ -22,7 +22,7 @@ import {
     </center>
   </div>
 </div>
-<br/>
+<br />
 
 :::note
 
@@ -59,30 +59,37 @@ No matter which GPU API you are familiar with, utilizing them to render a stroke
 ### Content
 
 The [Basic](../category/basics/) section covers the basics of the rendering and stylization methods.
-Articles in the Basic part are organized in a linear fashion.
+Articles in the Basic part are organized in a progressive fashion.
 You may miss something important if skip one of them.
-After learning all stuffs in the Basic section, you can select your favorite topics in the TOC to learn.
+After learning all stuffs in the Basic section, you can freely select your favorite topics to learn.
 I will list extra prerequisites at the very beginning of each article.
 
 ### Live coding
 
 You will find live code editors similar to the one displayed below. which is inspired by [_The Book of Shader_].
 The rendering result is updated in real-time after modifying the code.
-Give it a try by altering the values of `maxRadius` and `segmentCount`, and watch how the canvas below changes.
+Give it a try by altering the values of `maxRadius`, and watch how the canvas below changes.
 
 <ArticulatedLine2D showEditor={[true, false, false]} />
 
-:::note code editor
+:::note
 
-If there are bugs for common usages, tell me at the [issue](https://github.com/ShenCiao/brush-rendering-tutorial/issues) page.
+If there are bugs for common usages in the code editors or canvases, tell me at the [issue](https://github.com/ShenCiao/brush-rendering-tutorial/issues) page.
 
 :::
-
-Feel free to change any other parts of the code as long as it returns the `position` and `radius` array correctly.
 
 Only geometry generation code "geometry.js" is demonstrated here.
 You will find "vertex.glsl" and "fragment.glsl" for vertex and fragment shader code.
 Whether they are hidden or shown will depend on the context.
+
+### Supplementary contents
+
+<details open>
+  <summary>Dropdown tab</summary>
+Some contents are hidden inside a dropdown tab like this.
+They won't affect your understanding of other main contents and usually have unnecessary prerequisites.
+You should skip them unless you are pretty interested in them.
+</details>
 
 ## Citation
 

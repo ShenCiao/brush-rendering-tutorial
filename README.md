@@ -1,5 +1,7 @@
 # Brush Rendering Tutorial
 
+![](./static/img/vanilla-stroke.png)
+
 This is the code repository for "Brush Rendering Tutorial".
 Remember to star this code repository instead of bookmark the website since the host and domain might be changed.
 
@@ -20,9 +22,8 @@ Follow the guidance in [Docusaurus's documentation](https://docusaurus.io/docs/i
 
 The project is built with javascript libraries include:
 
-- [Docusaurus](https://docusaurus.io/).
-- React
-- Threejs: WebGL wrapper
+- [docusaurus](https://docusaurus.io/): Main framework
+- threejs: WebGL wrapper
 - monaco-editor/react: Code editor
 
 While creating this tutorial, shen has just started learning these JavaScript libraries.

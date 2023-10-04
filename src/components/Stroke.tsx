@@ -228,12 +228,13 @@ export function Stroke({
     [],
   );
 
-  const editorHeight = "40vh";
+  const editorHeight = "60vh";
   let showGeometryEditor = true,
     showVertexEditor = true,
     showFragmentEditor = true;
   if (Array.isArray(showEditor)) {
     [showGeometryEditor, showVertexEditor, showFragmentEditor] = showEditor;
+    showEditor = showGeometryEditor || showVertexEditor || showFragmentEditor;
   }
 
   if (geometry instanceof THREE.BufferGeometry) {
@@ -242,8 +243,8 @@ export function Stroke({
 
   return (
     <>
-      {
-        <div style={{ display: showEditor ? null : "none" }}>
+      {showEditor && (
+        <div>
           <Tabs defaultValue="">
             {showGeometryEditor && (
               <TabItem value="geometry.js">
@@ -279,7 +280,7 @@ export function Stroke({
             )}
           </Tabs>
         </div>
-      }
+      )}
       <div
         ref={canvasContainerRef}
         style={{ width: "100%" }}

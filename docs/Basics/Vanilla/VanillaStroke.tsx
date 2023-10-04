@@ -5,13 +5,13 @@ import geomCode from "@site/src/components/sinewaveGeometry"
 import vsCode from './VanillaStroke.vert'
 import fsCode from './VanillaStroke.frag'
 
-export default function (showEditor = false) {
+export default function ({showEditor = [false, false, false]}) {
   return (
     <Stroke
       geometry={geomCode}
       vertexShader={vsCode}
       fragmentShader={fsCode}
-      showEditor={false}
+      showEditor={showEditor}
     />
   );
 }
