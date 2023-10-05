@@ -103,7 +103,7 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
     meshRef.current = new THREE.InstancedMesh(
       trapezoidGeometry,
       material,
-      position.length - 1,
+      radius.length - 1,
     );
 
     meshRef.current.frustumCulled = false;
@@ -230,7 +230,7 @@ export function ArticulatedLine2D({ uniforms = null, showEditor = null }) {
       }
 
       updateGeometry(meshRef.current.geometry, position, radius);
-      meshRef.current.count = position.length - 1;
+      meshRef.current.count = radius.length - 1;
       renderSceneFnRef.current();
     },
     [],

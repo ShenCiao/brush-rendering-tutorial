@@ -2,10 +2,14 @@
 sidebar_position: 1
 ---
 
-## Uni-radius
+## Uni radius
 
 Let's start with a solid stroke with a single radius value.
 Later add variable radius to it.
+
+import Uniradius from "./uni";
+
+<Uniradius />
 
 We are given a polyline with a set of vertices.
 In the diagram below, we select an edge with two consecutive vertices, labeled as $v_i$ and $v_{i+1}$.
@@ -47,9 +51,7 @@ We will set a local coordinate in the shader program, origin at $p_0$, X and Y a
 You will find implementation details in the comments of the shader code below.
 The "vertex.glsl" for the vertex shader and "fragment.glsl" for the fragment shader, feel free to change them:
 
-import VanillaStroke from "./VanillaStroke";
-
-<VanillaStroke showEditor={[false, true, true]} />
+<Uniradius showEditor={[false, true, true]} />
 
 <details>
 <summary>
@@ -61,3 +63,39 @@ The `flat` qualifier tells your shader program don't interpolate the variable in
 If you are still confusing, check out the this [article](https://www.geeks3d.com/20130514/opengl-interpolation-qualifiers-glsl-tutorial/).
 
 </details>
+
+## Opacity
+
+![trans](./transparency.png)
+
+You can replicate this image by setting the `color` variable in the fragment shader above as `const vec4 color = vec4(0.0, 0.0, 0.0, 0.5);`.
+It's obvious that we are not dealing with the transparency correctly.
+The areas where two edges connect are doubly colored.
+We need to fix that.
+
+For clarification, we define "joint" areas, inside the two circles at the start and end of the capsule,
+and the non-joint area is called "bone" area.
+
+![joint](./uni-joint.png)
+
+Joint areas are doubly colored.
+We need to adjust joints' pixels opacity (alpha value) to get the target opacity of bone area.
+Label joint alpha $\alpha_j$ and bone alpha $\alpha_b$.
+Apply it to the alpha compositing formula:
+$\alpha_b = \alpha_j + \alpha_j * (1 - \alpha_j)$, and solve and joint opacity $\alpha_j = 1 - \sqrt{\alpha_b}$.
+Let's see how to implement it:
+
+<details>
+  <summary>About alpha compositing</summary>
+
+I've seen a very experienced graphics engineer is not familiar with the alpha compositing.
+I would recommend two articles [1](https://ciechanow.ski/alpha-compositing/) and [2](https://wiki.edunitas.com/IT/en/114-10/alpha-channels_400_eduNitas.html).
+The topic is so important that I will write a dedicated article to explain it when introducing the airbrush.
+
+</details>
+
+import Opacity from "./opacity";
+
+<Opacity showEditor={[false, false, true]}/>
+
+## Variable radius

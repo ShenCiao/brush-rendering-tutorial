@@ -2,7 +2,7 @@ precision mediump float;
 precision mediump int;
 
 // Take golbal const values like the `radius` here as uniforms. You can modify them freely.
-const float radius = 1.0/5.0;
+const float radius = 1.0/2.0;
 
 uniform mat4 modelViewMatrix;
 // The `projectionMatrix` is a orthogonal projection matrix here, which is the default setting when rendering 2D stuff.
