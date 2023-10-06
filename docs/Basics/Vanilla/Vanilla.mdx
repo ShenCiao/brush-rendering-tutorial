@@ -12,8 +12,7 @@ import Uniradius from "./uni";
 <Uniradius />
 
 We are given a polyline with a set of vertices.
-In the diagram below, we select an edge with two consecutive vertices, labeled as $v_i$ and $v_{i+1}$.
-We render a capsule on it, as shown on the left.
+In the diagram below, we select an edge with two consecutive vertices, labeled as $v_i$ and $v_{i+1}$, then render a capsule on it.
 If we render every single edge like this, edges will connect to each other naturally, as shown on the right.
 
 | ![edge](./uni-capsule.png) | ![edge](./uni-connect.png) |
@@ -25,14 +24,14 @@ Therefore, we call it **articulated** stroke (Line) rendering.
 
 The idea is pretty straightforward, also easy to implement with GPU APIs.
 To draw the capsule, we generate four new vertices to make a rectangle, as shown in the left figure below.
-Then discard the pixels in the four corners in fragment shader, as shown in the right figure. All is done!
+Then discard the pixels in the four corners, as shown on the right. All is done!
 
 |    ![quad](./uni-quad.png)     | ![quad](./uni-quad-capsule.png) |
 | :----------------------------: | :-----------------------------: |
 | _Generate rectangle vertices _ |        _Discard corners_        |
 
 There are several possible ways to generate the rectangle vertices.
-The most elegant one is using geometry shader.
+The most elegant one is to use geometry shader.
 But sadly, it's not supported on Apple's ecosystem and web platform, many readers are not experienced in it.
 So I will mainly introduce instanced rendering implementation.
 But if you're already familiar with geometry shader, check out the dropdown tab below.
@@ -99,3 +98,18 @@ import Opacity from "./opacity";
 <Opacity showEditor={[false, false, true]}/>
 
 ## Variable radius
+
+To render a variable radius stroke, we are given a polyline with radius value at each point.
+The process is basically the same as uni-radius stroke:
+Place four new vertices and discard the four corners, as shown in the figure below.
+
+| ![edge](./var-capsule.png) | ![edge](./var-connect.png) |
+| :------------------------: | :------------------------: |
+|         _An edge_          |     _Connected edges_      |
+
+The vertices form a trapezoid rather than the rectangle for uni radius.
+We need to solve a few extra geometric parameters to place this trapezoid.
+
+![theta](./var-theta.png)
+
+![para](./var-parameters.png)
