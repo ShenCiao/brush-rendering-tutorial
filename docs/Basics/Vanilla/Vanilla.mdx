@@ -5,39 +5,84 @@ sidebar_position: 1
 ## Uni radius
 
 Let's start with a solid stroke with a single radius value.
-Later add variable radius to it.
+Later, add variable radius to it.
 
 import Uniradius from "./uni";
 
 <Uniradius />
 
 We are given a polyline with a set of vertices.
-In the diagram below, we select an edge with two consecutive vertices, labeled as $v_i$ and $v_{i+1}$, then render a capsule on it.
+In the diagram below, we select an edge with two consecutive vertices, labeled as $v_i$ and $v_{i+1}$, then draw a capsule on it.
 If we render every single edge like this, edges will connect to each other naturally, as shown on the right.
 
-| ![edge](./uni-capsule.png) | ![edge](./uni-connect.png) |
-| :------------------------: | :------------------------: |
-|         _An edge_          |     _Connected edges_      |
+| ![edge](./uni-capsule.png)  | ![edge](./uni-connect.png) |
+| :-------------------------: | :------------------------: |
+| _Draw a capsule on an edge_ |    _Connected capsules_    |
 
 The diagram quite looks like drawing an [articulated arm](https://www.google.com/search?q=articulated+arm+2D+diagram&tbm=isch).
 Therefore, we call it **articulated** stroke (Line) rendering.
 
-The idea is pretty straightforward, also easy to implement with GPU APIs.
-To draw the capsule, we generate four new vertices to make a rectangle, as shown in the left figure below.
-Then discard the pixels in the four corners, as shown on the right. All is done!
+Hopefully, the above idea sounds straightforward to you.
+It's also easy to implement with GPU APIs.
+To draw the capsule, we generate four new vertices to invoke a rectangle, as shown in the left figure below.
+Then, discard the pixels in the four corners, as shown on the right. All is done!
 
 |    ![quad](./uni-quad.png)     | ![quad](./uni-quad-capsule.png) |
 | :----------------------------: | :-----------------------------: |
 | _Generate rectangle vertices _ |        _Discard corners_        |
 
 There are several possible ways to generate the rectangle vertices.
-The most elegant one is to use geometry shader.
-But sadly, it's not supported on Apple's ecosystem and web platform, many readers are not experienced in it.
-So I will mainly introduce instanced rendering implementation.
-But if you're already familiar with geometry shader, check out the dropdown tab below.
+The most elegant one is to use a geometry shader.
+But sadly, it's not supported on Apple's ecosystem and web platform, and many readers are not experienced in it.
+So, I will mainly introduce another implementation with instanced rendering.
+But if you're familiar with geometry shader, check out the dropdown tab below.
 
 <details>
-  <summary>geometry shader implementation</summary>
+  <summary>Geometry shader implementation</summary>
+
+Geometry shader is designed for transforming geometry.
+We can write very elegant code on the CPU side, which feels like an OpenGL built-in stroke (line strip) rendering functionality.
+
+```cpp
+glUseProgram(brushStrokeProgram)
+/* set uniforms ... */
+glBindVertexArray(vao);
+glDrawArrays(GL_LINE_STRIP, ...);
+```
+
+Pseudo code in the geometry shader:
+
+```glsl
+layout(lines) in;
+layout(triangle_strip, max_vertices = 4) out;
+
+void main(){
+  /* Set the down left vertex variables */
+  EmitVertex();
+  /* Set the up left vertex variables */
+  EmitVertex();
+  /* Set the down right vertex variables */
+  EmitVertex();
+  /* Set the up right vertex variables */
+  EmitVertex();
+}
+```
+
+You will find the details in the upcoming description.
+
+#### Why is geometry shader elegant?
+
+The variable `vao` is created exactly the same like when drawing a line strip.
+We bind it and draw it as a line strip, then get a custom "line strip"!
+Every line of the code is incredibly descriptive and self-explanatory.
+When mocking geometry shader's behavior with instanced rendering, everything gets obscure.
+Sadly, it's hard for us graphics engineers to enjoy this elegance since Apple's Metal API.
+
+You may argue that geometry shader can cause a lot of performance issues.
+But benefiting from hard work by GPU engineers and manufacturers,
+the computational power is very much superfluous to draw 2D contents with a modern discrete graphics card.
+Writing maintainable and easy-to-understand code is much more important.
+
 </details>
 
 We use instanced rendering to draw a large number of objects with the same vertex data.
@@ -57,9 +102,9 @@ The "vertex.glsl" for the vertex shader and "fragment.glsl" for the fragment sha
 In case you don't know the `flat` qualifier
 </summary>
 
-Shader variables are interpolated by default in fragment shader.
-The `flat` qualifier tells your shader program don't interpolate the variable in fragment shader.
-If you are still confusing, check out the this [article](https://www.geeks3d.com/20130514/opengl-interpolation-qualifiers-glsl-tutorial/).
+Shader variables are interpolated by default when passing to a fragment shader.
+The `flat` qualifier tells your shader program no to interpolate the variable.
+If you still need clarifications, check out this [article](https://www.geeks3d.com/20130514/opengl-interpolation-qualifiers-glsl-tutorial/).
 
 </details>
 
@@ -68,17 +113,17 @@ If you are still confusing, check out the this [article](https://www.geeks3d.com
 ![trans](./transparency.png)
 
 You can replicate this image by setting the `color` variable in the fragment shader above as `const vec4 color = vec4(0.0, 0.0, 0.0, 0.5);`.
-It's obvious that we are not dealing with the transparency correctly.
+It's obvious that we are not dealing with transparency correctly.
 The areas where two edges connect are doubly colored.
 We need to fix that.
 
-For clarification, we define "joint" areas, inside the two circles at the start and end of the capsule,
+For clarification, we define "joint" areas in the two circles at the start and end of the capsule,
 and the non-joint area is called "bone" area.
 
 ![joint](./uni-joint.png)
 
 Joint areas are doubly colored.
-We need to adjust joints' pixels opacity (alpha value) to get the target opacity of bone area.
+We need to adjust joints' pixels opacity (alpha value) to get the target opacity of bone.
 Label joint alpha $\alpha_j$ and bone alpha $\alpha_b$.
 Apply it to the alpha compositing formula:
 $\alpha_b = \alpha_j + \alpha_j * (1 - \alpha_j)$, and solve and joint opacity $\alpha_j = 1 - \sqrt{\alpha_b}$.
@@ -87,29 +132,71 @@ Let's see how to implement it:
 <details>
   <summary>About alpha compositing</summary>
 
-I've seen a very experienced graphics engineer is not familiar with the alpha compositing.
+I've seen very experienced graphics engineers unfamiliar with alpha compositing.
 I would recommend two articles [1](https://ciechanow.ski/alpha-compositing/) and [2](https://wiki.edunitas.com/IT/en/114-10/alpha-channels_400_eduNitas.html).
-The topic is so important that I will write a dedicated article to explain it when introducing the airbrush.
+The topic is so important for 2D rendering that I will write a dedicated article to explain when introducing the airbrush.
 
 </details>
 
 import Opacity from "./opacity";
 
-<Opacity showEditor={[false, false, true]}/>
+<Opacity showEditor={[false, false, true]} />
 
 ## Variable radius
 
-To render a variable radius stroke, we are given a polyline with radius value at each point.
-The process is basically the same as uni-radius stroke:
+We are given a polyline with a radius value at each point to represent the variable radius stroke.
+The rendering process is basically the same as uni-radius stroke:
 Place four new vertices and discard the four corners, as shown in the figure below.
 
 | ![edge](./var-capsule.png) | ![edge](./var-connect.png) |
 | :------------------------: | :------------------------: |
 |         _An edge_          |     _Connected edges_      |
 
-The vertices form a trapezoid rather than the rectangle for uni radius.
-We need to solve a few extra geometric parameters to place this trapezoid.
+The new vertices form a trapezoid rather than a rectangle to cover the whole capsule.
+We need to solve a few extra geometric parameters in this trapezoid.
+First solve the angle $\theta$ in the diagrams.
+As the figure below shows, draw a perpendicular from $p_1$ to the radius at $p_0$.
+The distance between $p_0$ and $p_1$ is known.
+So $\cos\theta = (r_0 - r_1)/||p_0 - p_1||$.
 
 ![theta](./var-theta.png)
 
+The line between trapezoid corners and polyline points are bisectors, drawn in solid black line,
+so the corners' offset along the normal direction can be calculated.
+You can easily know the parameters in the lower half part with symmetry.
+
 ![para](./var-parameters.png)
+
+Shader code implementation:
+
+import Varradius from "./var";
+
+<Varradius showEditor={[false, true, true]} />
+
+## Corner case
+
+In the vertex shader, we discard edges in the two corner conditions.
+But in fact, they represent one corner case, as shown in the figures below.
+
+![near](./var-near.png)
+
+```glsl
+// Corner case: one circle very near and small to another, discard the edge
+    if(normalTanValue > 10.0 || normalTanValue < 0.1) return;
+```
+
+When the small circle is very close to the big one, we get large `normalTanValue` value and invoked triangles will cover large areas of pixels,
+which can hurt the performance.
+
+![inside](./var-inside.png)
+
+```glsl
+// Coner case: One circle is entirely inside the another, discard the edge.
+    if(abs(cosTheta) >= 1.0) return;
+```
+
+When the small circle gets closer and entirely inside the big one, how to place vertices is undefined.
+The two corner `if` conditions happened with the same situation.
+The corner case happens when the radius changes in a short distance between points.
+The corner case rarely happens for stroke in 2D space but commonly in 3D.
+I will introduce the solution together with 3D stroke rendering.

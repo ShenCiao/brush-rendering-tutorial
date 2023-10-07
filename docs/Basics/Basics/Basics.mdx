@@ -14,10 +14,10 @@ Even if stylized strokes don't interest you,
 this tutorial will provide methods to render a simple solid curve with GPU, which is useful when drawing UIs or debugging your 3D scene.
 
 Over thousands of brushes are available online, which can be overwhelming to explore.
-But more than 90% of the brushes are designed under the "stamp" model, and we call them "stamp brushes."
-In the upcoming Stamp section, I will introduce the stamp model and how to implement it with shader code.
-Before that, I will introduce the basic solid stroke called Vanilla
-since our vanilla and stamp strokes share the exact same vertex placement methods.
+But more than 90% of the brushes are designed under the "stamp" model, and we call them "stamp brushes".
+In the upcoming Stamp section, I will introduce the stamp model and how to implement it in a shader program.
+Before that, I will introduce the basic solid stroke called "vanilla".
+Vanilla and stamp share the exact same vertex placement methods, but the vanilla stroke is easier to implement.
 
 While you may recognize a brush stroke by its stylization, another crucial property could be ignored: the "variable radius" along the stroke.
 (I also ignored it in my paper.)
@@ -27,7 +27,7 @@ For experienced artists, after installing a new painting program, one of the hig
 <details>
   <summary>In case you don't know about tablets and styluses</summary>
 
-Digital artists paint on the canvas with dedicated input devices: Tablet and Stylus.
+Digital artists paint with dedicated input devices: Tablet and Stylus.
 If you're unfamiliar with tablets and styluses, you can watch the video below for more information:
 
 [![Tablet](https://img.youtube.com/vi/83BRMfjJXIk/maxresdefault.jpg)](https://www.youtube.com/watch?app=desktop&v=83BRMfjJXIk)
@@ -43,17 +43,16 @@ To store the variable radius in brush stroke, we will render a unique type of ve
 An ordered list of points (polyline) with radius values assigned to each point.
 As a user presses a stylus on a tablet and moves, a paint program generates a sequence of points to record the trace of movement.
 Meanwhile, the pen pressure is transformed into the radius value assigned to each point.
-After rendering the polyline and showing the stroke, the user feels like drawing on canvas.
+After rendering the stroke on the polyline, the user feels like drawing on canvas.
 
 ![Monkey](./monkey.png)
 _The monkey Suzanne in Blender (Grease Pencil), the orange dots on the right side show polylines' points (vertices)._
 
 We can approximate any type of curve by increasing the number of points in a polyline, whether freehand-drawn or mathematically defined.
-Try to change the `maxRadius` and `segmentCount` values in the code editor below to see how the stroke changes.
+Try to change the `maxRadius` and `segmentCount` values in the code editor below to see how the vanilla stroke changes.
+I will elaborate on how to render this stroke in the next section.
 Feel free to change any other parts of the code as long as the function returns the `position` and `radius` array correctly.
 
 import { ArticulatedLine2D } from "@site/src/components/ArticulatedLine2D";
 
 <ArticulatedLine2D showEditor={[true, false, false]} />
-
-I will introduce the rendering method of the above solid stroke in the next section.
