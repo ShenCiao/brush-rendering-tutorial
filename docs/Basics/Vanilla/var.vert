@@ -43,7 +43,7 @@ void main(){
     float tanHalfTheta = sqrt((1.0+cosTheta) / (1.0-cosTheta));
     float cotHalfTheta = 1.0 / tanHalfTheta;
     float normalTanValue = vec4(tanHalfTheta, tanHalfTheta, cotHalfTheta, cotHalfTheta)[gl_VertexID];
-    // Corner case: one circle very near and small to another, discard the edge
+    // Corner case: The small circle is very close to the big one, casuing large offset in the normal direction, discard the edge
     if(normalTanValue > 10.0 || normalTanValue < 0.1) return;
 
     vec2 trapzoidVertexPosition = position +

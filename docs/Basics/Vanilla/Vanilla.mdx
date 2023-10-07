@@ -88,7 +88,7 @@ Writing maintainable and easy-to-understand code is much more important.
 We use instanced rendering to draw a large number of objects with the same vertex data.
 For drawing a stroke, each instance is the rectangle shown above, and the number of instances is the number of stroke's edges
 (number of polyline vertices minus one).
-To place a rectangle, each vertex invoked by the rectangle needs to know about the positions of polyline vertices $p_0$ and $p_1$, and radius value $r$.
+To place a rectangle, all rectangle's vertices need to know the positions of polyline vertices $p_0$ and $p_1$ and radius value $r$.
 We will set a local coordinate in the shader program, origin at $p_0$, X and Y axes align to the tangent and normal direction:
 ![coo](./coordinate.png)
 
@@ -112,10 +112,10 @@ If you still need clarifications, check out this [article](https://www.geeks3d.c
 
 ![trans](./transparency.png)
 
-You can replicate this image by setting the `color` variable in the fragment shader above as `const vec4 color = vec4(0.0, 0.0, 0.0, 0.5);`.
-It's obvious that we are not dealing with transparency correctly.
+Obviously, we are not dealing with transparency correctly in image above.
+You can replicate it by setting the `color` variable in the fragment shader above as `const vec4 color = vec4(0.0, 0.0, 0.0, 0.5);`.
 The areas where two edges connect are doubly colored.
-We need to fix that.
+We need to fix it.
 
 For clarification, we define "joint" areas in the two circles at the start and end of the capsule,
 and the non-joint area is called "bone" area.
@@ -125,7 +125,7 @@ and the non-joint area is called "bone" area.
 Joint areas are doubly colored.
 We need to adjust joints' pixels opacity (alpha value) to get the target opacity of bone.
 Label joint alpha $\alpha_j$ and bone alpha $\alpha_b$.
-Apply it to the alpha compositing formula:
+Since rgb values from previous and next edge are the same, we can apply alpha compositing formula:
 $\alpha_b = \alpha_j + \alpha_j * (1 - \alpha_j)$, and solve and joint opacity $\alpha_j = 1 - \sqrt{\alpha_b}$.
 Let's see how to implement it:
 
@@ -181,11 +181,11 @@ But in fact, they represent one corner case, as shown in the figures below.
 ![near](./var-near.png)
 
 ```glsl
-// Corner case: one circle very near and small to another, discard the edge
+// Corner case: The small circle is very close to the big one, casuing large offset in the normal direction, discard the edge
     if(normalTanValue > 10.0 || normalTanValue < 0.1) return;
 ```
 
-When the small circle is very close to the big one, we get large `normalTanValue` value and invoked triangles will cover large areas of pixels,
+When the small circle is very close to the big one, we get a large `normalTanValue` value and invoked triangles will cover large areas of pixels,
 which can hurt the performance.
 
 ![inside](./var-inside.png)
@@ -196,7 +196,7 @@ which can hurt the performance.
 ```
 
 When the small circle gets closer and entirely inside the big one, how to place vertices is undefined.
-The two corner `if` conditions happened with the same situation.
-The corner case happens when the radius changes in a short distance between points.
-The corner case rarely happens for stroke in 2D space but commonly in 3D.
-I will introduce the solution together with 3D stroke rendering.
+The two `if` conditions happened in the same situation: the radius changes drastically in a short distance between points.
+It rarely happens for the geometry data comes from a 2D canvas.
+Modern tablets are stable enough to avoid generating the ill data.
+But the corner case is common in 3D, I will introduce the solution together with 3D stroke rendering.
