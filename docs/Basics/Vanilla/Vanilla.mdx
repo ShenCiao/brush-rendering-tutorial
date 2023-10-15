@@ -70,18 +70,19 @@ void main(){
 
 You will find the details in the upcoming description.
 
-#### Why is geometry shader elegant?
+#### Geometry shader implementation is elegant
 
-The variable `vao` is created exactly the same like when drawing a line strip.
+The vertex array buffer object `vao` is created like drawing a line strip.
 We bind it and draw it as a line strip, then get a custom "line strip"!
 Every line of the code is incredibly descriptive and self-explanatory.
-When mocking geometry shader's behavior with instanced rendering, everything gets obscure.
-Sadly, it's hard for us graphics engineers to enjoy this elegance since Apple's Metal API.
+When mocking geometry shader's behavior with instanced rendering, the code gets obscure.
+Sadly, graphics engineers cannot easily enjoy this elegance because of Apple's Metal API.
 
 You may argue that geometry shader can cause a lot of performance issues.
 But benefiting from hard work by GPU engineers and manufacturers,
 the computational power is very much superfluous to draw 2D contents with a modern discrete graphics card.
-Writing maintainable and easy-to-understand code is much more important.
+Performance is not everything.
+Writing maintainable and easy-to-understand code is much more critical in some cases.
 
 </details>
 
@@ -196,6 +197,7 @@ which can hurt the performance.
 ```
 
 When the small circle gets closer and entirely inside the big one, how to place vertices is undefined.
+
 The two `if` conditions happened in the same situation: the radius changes drastically in a short distance between points.
 It rarely happens for the geometry data comes from a 2D canvas.
 Modern tablets are stable enough to avoid generating the ill data.

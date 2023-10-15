@@ -1,0 +1,70 @@
+---
+sidebar_position: 2
+---
+
+## Intro
+
+The basic stamp stroke rendering is pretty intuitive.
+We are given a texture called stamp texture or footprint.
+While a user paints on a canvas, we render the texture onto the canvas equidistantly along the drawing trace.
+When the textures are close enough, they seem continuous and form a stroke.
+
+todo: figure
+
+Artists love to create stamp brush since it's expressive and intuitive.
+More than 90% of brushes in popular paint software are stamp brushes.
+Researchers and developers have developed dozens of extra parameters
+that can apply various aspects of stylization on a stroke.
+How to replicate these parameters with GPU-acceleration is under researched.
+Therefore, we will focus on the most critical technique, how to place the stamp textures within a shader program.
+
+A naive solution is to place the stamp texture at each vertex. The vertices are shown with the dots the figure with  below:
+![naive](./dotted-monkey.png)
+But it's not good enough for the most usage.
+The rendering result of strokes depends on polylines' vertex density.
+After subdividing, simplify or deforming the polylines, the strokes get denser or sparser appearance, which ruins the rendering result.
+We must develop methods that rendering is independent of vertex density, just like rendering 3D meshes.
+Therefore, I will introduce you how to place stamp textures equidistantly along a polyline.
+
+## Locate stamps
+
+When rendering with CPU, calculating where to place stamp (stamp position) on a polyline is pretty straightforward.
+Start from the very first vertex of the polyline, loop to move with a preset stamp interval at each step
+until reach the end of polyline.
+
+todo: diagram
+
+To render with GPU, we use the same method as rendering vanilla stroke:
+Placing the four new vertices for each edge and discard corners.
+And we will calculate the stamp positions in the fragment shader for each invoked pixel.
+At each polyline vertex, we compute its distance to the first vertex along the polyline, which is the prefix sum of edge lengths.
+Since we place stamps equidistantly starting from the first vertex,
+the stamp positions can be calculated in all pixels invoked by each edge.
+Then a pixel can sample the stamp textures and determine its color.
+We compute the texture coordinate with the pixel's distance to the stamp positions and radii.
+
+todo: diagram
+
+<details>
+<summary> Parallel prefix sum </summary>
+
+There are parallel prefix sum algorithms can be implemented with compute shaders.
+[Wiki](https://en.wikipedia.org/wiki/Prefix_sum#Parallel_algorithms).
+By implementing one of them, the whole rendering process is GPU-accelerated.
+
+The best tutorial about prefix sum I've ever found is this free course [High Performance Computing](https://www.udacity.com/course/high-performance-computing--ud281)
+by Prof. Rich Vuduc.
+The course introduces prefix sum in Lesson 6.
+
+</details>
+
+But an edge can be very long and has many unnecessary stamps for a pixel to loop through.
+We constrain the calculation within only a segment of the edge, within which stamps can cover the current pixel.
+Given the pixel's coordinate, we can calculate the min and max point of the segment.
+An extra geometry puzzle to solve:
+
+todo: diagram
+
+From the diagram, we can set a quadratic polynomial.
+Two roots of it are the min and max points of the segment.
+
