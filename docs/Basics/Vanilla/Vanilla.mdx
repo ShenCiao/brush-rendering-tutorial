@@ -170,7 +170,7 @@ You can easily know the parameters in the lower half part with symmetry.
 
 Shader code implementation:
 
-import Varradius from "./var";
+import Varradius from "./Var";
 
 <Varradius showEditor={[false, true, true]} />
 
@@ -187,7 +187,7 @@ But in fact, they represent one corner case, as shown in the figures below.
 ```
 
 When the small circle is very close to the big one, we get a large `normalTanValue` value and invoked triangles will cover large areas of pixels,
-which can hurt the performance.
+It can hurt the performance badly.
 
 ![inside](./var-inside.png)
 
@@ -200,5 +200,5 @@ When the small circle gets closer and entirely inside the big one, how to place 
 
 The two `if` conditions happened in the same situation: the radius changes drastically in a short distance between points.
 It rarely happens for the geometry data comes from a 2D canvas.
-Modern tablets are stable enough to avoid generating the ill data.
-But the corner case is common in 3D, I will introduce the solution together with 3D stroke rendering.
+Modern tablets are stable enough to avoid generating this ill data.
+But it is common in 3D, I will introduce the solution together with 3D stroke rendering.

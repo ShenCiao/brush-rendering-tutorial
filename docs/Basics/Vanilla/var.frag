@@ -31,7 +31,7 @@ void main() {
     if(d0cos < cosTheta && d0 > r0) discard;
     if(d1cos > cosTheta && d1 > r1) discard;
 
-    // Change to corresponding radius value
+    // Deal with opactiy
     float A = color.a;
     if (d0 < r0 && d1 < r1) discard;
     if (d0 < r0 || d1 < r1) A = 1.0 - sqrt(1.0 - A);

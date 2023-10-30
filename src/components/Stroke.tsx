@@ -120,8 +120,8 @@ export function Stroke({
     const radius0 = [...radius];
     const radius1 = [...radius.slice(1)];
 
-    const lengthRatio: number[] = [];
-    let currLengthRatio = 0.0;
+    const length: number[] = [];
+    let currLength = 0.0;
     for (let i = 0; i < radius.length - 1; ++i) {
       const stride = 2 * i;
       const p0 = new THREE.Vector2(position[stride], position[stride + 1]);
@@ -129,26 +129,15 @@ export function Stroke({
       let r0 = radius[i];
       let r1 = radius[i + 1];
 
-      // When radius is zero index comes to infinity, which is avoided here.
-      const tolerance = 1e-5;
-      if (r0 <= 0 || r0 / r1 < tolerance) {
-        r0 = tolerance * r1;
-        radius0[i] = r0;
-      }
-      if (r1 <= 0 || r1 / r0 < tolerance) {
-        r1 = tolerance * r0;
-        radius1[i] = r1;
-      }
-
       let l = p0.distanceTo(p1);
 
-      if (r0 <= 0.0 && r1 <= 0.0) currLengthRatio += 0.0;
-      else if (r0 == r1) currLengthRatio += l / r0;
-      else currLengthRatio += (Math.log(r0 / r1) / (r0 - r1)) * l;
-      lengthRatio.push(currLengthRatio);
+      currLength += l;
+      length.push(currLength);
     }
-    const lengthRatio0 = [0.0, ...lengthRatio];
-    const lengthRatio1 = [...lengthRatio];
+    const length0 = [0.0, ...length];
+    const length1 = [...length];
+
+    console.log(length0);
 
     geometry.setAttribute(
       "position0",
@@ -167,12 +156,12 @@ export function Stroke({
       new THREE.InstancedBufferAttribute(new Float32Array(radius1), 1),
     );
     geometry.setAttribute(
-      "summedLength0",
-      new THREE.InstancedBufferAttribute(new Float32Array(lengthRatio0), 1),
+      "length0",
+      new THREE.InstancedBufferAttribute(new Float32Array(length0), 1),
     );
     geometry.setAttribute(
-      "summedLength1",
-      new THREE.InstancedBufferAttribute(new Float32Array(lengthRatio1), 1),
+      "length1",
+      new THREE.InstancedBufferAttribute(new Float32Array(length1), 1),
     );
   }
 

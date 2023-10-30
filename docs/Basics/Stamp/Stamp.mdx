@@ -16,9 +16,9 @@ More than 90% of brushes in popular paint software are stamp brushes.
 Researchers and developers have developed dozens of extra parameters
 that can apply various aspects of stylization on a stroke.
 How to replicate these parameters with GPU acceleration is under-researched.
-Therefore, we will focus on the most critical technique, how to place the stamp textures in a shader program.
+Therefore, we will focus on the most critical technique, how to place the footprints in a shader program.
 
-A naive solution is to place a stamp texture at each vertex.
+A naive solution is to place a footprint at each vertex.
 ![naive](./dotted-monkey.png)
 _Place a dot texture at each vertex._
 
@@ -26,21 +26,22 @@ But it's not good enough for the most usages.
 The rendering result of strokes depends on polylines' vertex density.
 After subdivision, simplification, or deformation of the polylines, the strokes get denser or sparser appearance, which ruins the rendering result.
 We must develop methods that rendering is independent of vertex density, just like rendering 3D meshes.
-Therefore, I will introduce you how to place stamp textures equidistantly along a polyline.
+Therefore, I will introduce how to place footprints equidistantly along a polyline.
 
 ## Locate stamps
 
-When rendering with CPU, calculating where to place stamp (stamp position) on a polyline is pretty straightforward.
-Start from the very first vertex of the polyline, loop and move an interval at a time
-until reach the end of polyline.
-Implementing the process is trivial for experienced developers.
+When rendering with CPU, calculating where to place stamp (stamp positions) on a polyline is pretty straightforward.
+Start from the very first vertex of the polyline,
+move along the polyline with the stamp interval to the next stamp position,
+loop until reach the end of polyline.
+It is trivial for experienced developers to implement the process above.
 
 ![pos](./stamp-position.png)
 
-Implementation with a GPU graphics api is more challenging, but still relatively straightforward.
+GPU implementation is more challenging, but still relatively straightforward.
 We use the same approach as rendering a vanilla stroke:
-Placing the four new vertices for each edge.
-The difference only comes to the fragment shader in practice.
+Placing the four new vertices for each edge in the vertex shader (or the geometry shader).
+The difference only comes to the fragment shader.
 
 We will calculate the stamp positions in the fragment shader.
 At each polyline vertex, we compute its distance to the first vertex along the polyline.
@@ -87,17 +88,17 @@ As the figure shows, we set up the same local coordinate as vanilla stroke in th
 $p_0$ as the origin and X and Y axes align to the tangent and normal direction,
 $(x_p, y_p)$ as the pixel's local coordinate.
 $x$ is the furthest point's x value.
-By solving it, we know the position of farthest point.
-The distance from the pixel and the furthest point $r(x)$ is the radius of the furthest point, whose value is determined by x.`
+By calculating it, we know the position of farthest point.
+The distance from the pixel and the furthest point $r(x)$ is the radius of the furthest point, whose value is determined by x.
 To solve the unknown $x$, we can set an equation from the dashed right triangle $r(x)^2 = (x_p - x)^2 + y_p^2$.
 
 It's not hard to derive $r(x) = r_1 * x/l + r_0 * (1-x/l)$ from the figure below.
-$l$ is the length of current edge.
+$l$ is the length of the current edge.
 ![xradius](./stamp-xradius.png)
 By replacing $r(x)$, we get a quadratic equation $ax^2 + bx + c = 0$:
 
 $a = 1 - \cos^2\theta$;
-$b = 2 * (r_0 * \cos\theta - x_p)$;
+$b = 2 * (r_0\cos\theta - x_p)$;
 $c = x_p^2 + y_p^2 - r_0^2$
 
 Remind that $\cos\theta = (r_0 - r_1)/l$.
@@ -105,21 +106,38 @@ Applying the formula for solving quadratic equations,
 two roots of the equation are the X value of min and max points of the segment.
 
 Therefore, pixels in the fragment shader only loop through stamps that can cover it.
-You can use RGBA values sampled from stamp textures directly.
+You can use RGBA values sampled from footprints directly.
 But for the most common scenario,
-we set RGB values with users' brush setting and sample alpha values from a monochrome stamp texture,
+we set RGB values with users' brush setting and sample alpha values from a monochrome texture,
 whose pixel's gray scale determines the opacity.
 
-todo: code and canvas
+import StampRound from "./StampRound";
 
-## Square stamp texture
-I introduce the brush rendering with the assumption that stamp textures are constrained within a dot area,
+<StampRound/>
+
+## (Optional) Square footprint
+I introduce the brush rendering with the assumption that footprints are constrained within a dot area,
 which is the most common case in practice.
-But it's not for all, area outside the dot plays a critical role sometimes.
-There is a tricky approach to rendering the whole square and improving rendering performance,
-but break the "correctness" of geometry.
+But it's not for all.
+Area outside the dot area plays a critical role sometimes.
+If necessary to render square footprints, I guess experienced graphics developers can instantly get some ideas on
+new approaches to placing the vertices and determining stamp positions.
+But the ideas may not be good for performance and have complex logic to implement.
+
+I will introduce a very tricky approach to rendering the square footprint.
+Meanwhile, improve the rendering performance and reduce the complexity of the shader code.
+All we have to sacrifice is the "correctness" of geometry, which is trivial for artists.
 
 We place vertices a little bit differently from before.
-Instead of offset vertices by $r_i\tan\frac{\theta}{2}$ along the normal direction, we
+Instead of offset vertices by $r_i\tan\frac{\theta}{2}$ along the normal direction, we just offset $r_i$ value,
+as the figure below shows.
+![square](./stamp-square.png)
+We put the radius value $r_0$ to the left two vertices, $r_1$ to the right two vertices
+and let fragment shader interpolate the values for us.
+Then we get an interpolated radius value $r_p$ in the fragment shader.
+You can prove this $r_p$ is the stroke radius value across the current pixel.
+We assume the whole stroke is uni-radius and program the shader it with $r_p$.
+Each stamp is a square, so we don't need to discard the corners.
 
+todo: code and canvas
 
