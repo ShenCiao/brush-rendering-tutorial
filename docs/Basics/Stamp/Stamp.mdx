@@ -115,29 +115,33 @@ import StampRound from "./StampRound";
 
 <StampRound/>
 
-## (Optional) Square footprint
+## Square footprint
 I introduce the brush rendering with the assumption that footprints are constrained within a dot area,
 which is the most common case in practice.
 But it's not for all.
 Area outside the dot area plays a critical role sometimes.
-If necessary to render square footprints, I guess experienced graphics developers can instantly get some ideas on
+If it is necessary to render square footprints, I guess experienced graphics developers can instantly get some ideas on
 new approaches to placing the vertices and determining stamp positions.
-But the ideas may not be good for performance and have complex logic to implement.
+But they may hurt the performance and have complex logic to implement.
 
 I will introduce a very tricky approach to rendering the square footprint.
 Meanwhile, improve the rendering performance and reduce the complexity of the shader code.
 All we have to sacrifice is the "correctness" of geometry, which is trivial for artists.
 
 We place vertices a little bit differently from before.
-Instead of offset vertices by $r_i\tan\frac{\theta}{2}$ along the normal direction, we just offset $r_i$ value,
-as the figure below shows.
+Instead of offset vertices by $r_0\tan\frac{\theta}{2}$ and $r_1\cot\frac{\theta}{2}$ along the normal direction,
+we just offset $r_0$ and $r_1$ value, as the figure below shows.
+
 ![square](./stamp-square.png)
-We put the radius value $r_0$ to the left two vertices, $r_1$ to the right two vertices
+
+In the vertex or geometry shader, we put the radius value $r_0$ to the left two vertices, $r_1$ to the right two vertices
 and let fragment shader interpolate the values for us.
 Then we get an interpolated radius value $r_p$ in the fragment shader.
 You can prove this $r_p$ is the stroke radius value across the current pixel.
 We assume the whole stroke is uni-radius and program the shader it with $r_p$.
 Each stamp is a square, so we don't need to discard the corners.
 
-todo: code and canvas
+import StampSquare from "./StampSquare";
+
+<StampSquare/>
 
