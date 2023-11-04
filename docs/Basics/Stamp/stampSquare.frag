@@ -22,9 +22,13 @@ void main() {
     vec2 pLocal = vec2(dot(p-p0, tangent), dot(p-p0, normal));
     float d0 = distance(p, p0);
     float d1 = distance(p, p1);
-    // -------------------------------------------
+
+    // Each stamp is a square, so we don't have to discard the corners.
+//    if(pLocal.x < 0.0 && d0 > rp) discard;
+//    if(pLocal.x > 0.0 && d1 > rp) discard;
+
     // Obviously, we are rendering a stroke with variable width, but we just assume it's a uni-width stroke with radius value `rp`.
-    // The two furthest points can touch the current pixel is much easier to compute.
+    // The two furthest points, x1 and x2, can touch the current pixel is much easier to compute.
     // We don't need to solve the quadratic equation for each pixel, which is the main source of the performance benefit.
     float x1 = pLocal.x - rp;
     float x2 = pLocal.x + rp;
@@ -42,7 +46,6 @@ void main() {
     endIndex = index1 < backIndex ? index1 : backIndex;
     if(startIndex > endIndex) discard;
 
-    // The main loop to sample and blend color from the footprint.
     int MAX_i = 128; float currIndex = startIndex;
     float A = 0.0;
     for(int i = 0; i < MAX_i; i++){
