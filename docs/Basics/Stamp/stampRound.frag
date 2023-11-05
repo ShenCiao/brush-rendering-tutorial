@@ -4,7 +4,7 @@ precision mediump int;
 out vec4 outColor;
 
 const float interval = 0.2;
-uniform mediump sampler2D footprint;
+uniform highp sampler2D footprint; // The stamp texture, linear filter
 
 in vec2 p;
 
@@ -48,12 +48,7 @@ void main() {
     // With the distance to the polyline's first vertex, we can compute a "stamp index" value.
     float index0 = l0/interval; // The stamp index of vertex0.
     float startIndex, endIndex;
-    if (x1 <= 0.0){
-        startIndex = ceil(index0);
-    }
-    else{
-        startIndex = ceil(index0 + x1/interval);
-    }
+    startIndex = x1 < 0.0 ? ceil(index0):ceil(index0 + x1/interval);
     float index1 = l1/interval;
     float backIndex = x2/interval + index0;
     endIndex = index1 < backIndex ? index1 : backIndex;
@@ -61,12 +56,23 @@ void main() {
 
     // The main loop to sample and blend color from the footprint.
     int MAX_i = 128; float currIndex = startIndex;
-    float A = 0.0;
+    vec4 currColor = vec4(0.0);
     for(int i = 0; i < MAX_i; i++){
+        float currStampLocalX = interval * (currIndex - index0);
+        float currStampRadius = r0 - cosTheta * currStampLocalX;
+        vec2 pToCurrStamp = pLocal - vec2(currStampLocalX, 0.0);
+        vec2 textureCoordinate = (pToCurrStamp/currStampRadius + 1.0)/2.0;
+        vec4 sampledColor = texture(footprint, textureCoordinate);
 
+        // The alpha blending function
+        vec4 color;
+        color.a = sampledColor.a + currColor.a * (1.0 - sampledColor.a);
+        color.rgb = (sampledColor.rgb * sampledColor.a + currColor.rgb * currColor.a * (1.0 - sampledColor.a))/color.a;
+
+        currColor = color;
         currIndex += 1.0;
         if(currIndex > endIndex) break;
     }
-    outColor = vec4(0.0, 0.0, 0.0, 1.0);
+    outColor = currColor;
     return;
 }

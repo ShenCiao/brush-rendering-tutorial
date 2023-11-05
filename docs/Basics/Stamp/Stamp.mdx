@@ -104,16 +104,20 @@ $c = x_p^2 + y_p^2 - r_0^2$
 Remind that $\cos\theta = (r_0 - r_1)/l$.
 Applying the formula for solving quadratic equations,
 two roots of the equation are the X value of min and max points of the segment.
-
-Therefore, pixels in the fragment shader only loop through stamps that can cover it.
-You can use RGBA values sampled from footprints directly.
-But for the most common scenario,
-we set RGB values with users' brush setting and sample alpha values from a monochrome texture,
-whose pixel's gray scale determines the opacity.
+Therefore, we know the range in the fragment shader and pixels only loop through stamps that can cover it.
 
 import StampRound from "./StampRound";
 
-<StampRound/>
+<StampRound showEditor={[false, true, true]}/>
+
+![texture](@site/static/img/stamp86.png)
+
+You can use RGBA values sampled from footprints directly, like what I did.
+But for the most common scenario,
+we set RGB values with users' brush setting and sample alpha values from a monochrome texture,
+whose pixel's gray scale determines the opacity.
+Then apply random rotation and noise on each footprint to further stylize the stroke.
+The stamp index values `currIndex` are helpful to generate consistent random numbers as seed values.
 
 ## Square footprint
 I introduce the brush rendering with the assumption that footprints are constrained within a dot area,
@@ -134,13 +138,16 @@ we just offset $r_0$ and $r_1$ value, as the figure below shows.
 
 ![square](./stamp-square.png)
 
-In the vertex or geometry shader, we put the radius value $r_0$ to the left two vertices, $r_1$ to the right two vertices,
-and let fragment shader interpolate the values for us.
+In the vertex shader or geometry shader, we put the radius value $r_0$ to the left two vertices,
+$r_1$ to the right two vertices, and let fragment shader interpolate the values for us.
 Then we get an interpolated radius value $r_p$ in the fragment shader.
 You can prove this $r_p$ is the stroke radius value across the current pixel as the figure shows.
-We assume the whole stroke is uni-radius and program the shader it with $r_p$.
+We assume the whole stroke is uni-radius and program the shader with $r_p$.
 
 import StampSquare from "./StampSquare";
 
-<StampSquare/>
+<StampSquare showEditor={[false, true, true]}/>
+
+I basically cannot perceive the deformation caused by the trick at the first glance.
+
 

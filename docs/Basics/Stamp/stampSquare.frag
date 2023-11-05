@@ -18,12 +18,11 @@ void main() {
     vec2 tangent = normalize(p1 - p0);
     vec2 normal = vec2(-tangent.y, tangent.x);
     float len = distance(p1, p0);
-
     vec2 pLocal = vec2(dot(p-p0, tangent), dot(p-p0, normal));
-    float d0 = distance(p, p0);
-    float d1 = distance(p, p1);
 
     // Each stamp is a square, so we don't have to discard the corners.
+//    float d0 = distance(p, p0);
+//    float d1 = distance(p, p1);
 //    if(pLocal.x < 0.0 && d0 > rp) discard;
 //    if(pLocal.x > 0.0 && d1 > rp) discard;
 
@@ -47,12 +46,21 @@ void main() {
     if(startIndex > endIndex) discard;
 
     int MAX_i = 128; float currIndex = startIndex;
-    float A = 0.0;
+    vec4 currColor = vec4(0.0);
     for(int i = 0; i < MAX_i; i++){
+        float currStampLocalX = interval * (currIndex - index0);
+        vec2 pToCurrStamp = pLocal - vec2(currStampLocalX, 0.0);
+        vec2 textureCoordinate = (pToCurrStamp/rp + 1.0)/2.0;
+        vec4 sampledColor = texture(footprint, textureCoordinate);
+        // The alpha blending function
+        vec4 color;
+        color.a = sampledColor.a + currColor.a * (1.0 - sampledColor.a);
+        color.rgb = (sampledColor.rgb * sampledColor.a + currColor.rgb * currColor.a * (1.0 - sampledColor.a))/color.a;
 
+        currColor = color;
         currIndex += 1.0;
         if(currIndex > endIndex) break;
     }
-    outColor = vec4(0.0, 0.0, 0.0, 1.0);
+    outColor = currColor;
     return;
 }

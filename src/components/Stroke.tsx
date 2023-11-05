@@ -7,6 +7,9 @@ import TabItem from "@theme/TabItem";
 import Editor from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 import { GlslEditor } from "./GlslEditor";
+import {BrushType} from "@site/src/components/ArticulatedLine2D";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import docusaurusConfig from "@site/docusaurus.config";
 
 export function Stroke({
   geometry,
@@ -85,12 +88,29 @@ export function Stroke({
       return;
     }
 
+    let texture = new THREE.Texture();
+    if (ExecutionEnvironment.canUseDOM) {
+      texture = new THREE.TextureLoader().load(
+        `/${docusaurusConfig.projectName}/img/stamp86.png`,
+        (texture) => {
+          window.dispatchEvent(new CustomEvent("TextureLoaded"));
+        },
+        undefined,
+        undefined,
+      );
+    }
+
+    const textureUniforms = {
+      footprint: { value: texture }
+    }
+
     const material = new THREE.RawShaderMaterial({
       vertexShader: vertexShader,
       fragmentShader: fragmentShader,
       side: THREE.DoubleSide,
       transparent: true,
       glslVersion: THREE.GLSL3,
+      uniforms: textureUniforms,
     });
 
     meshRef.current = new THREE.InstancedMesh(
@@ -136,8 +156,6 @@ export function Stroke({
     }
     const length0 = [0.0, ...length];
     const length1 = [...length];
-
-    console.log(length0);
 
     geometry.setAttribute(
       "position0",
