@@ -10,24 +10,27 @@ _Open-source [brush presets by Raghavendra](https://gitlab.com/raghukamath/krita
 
 In graphics design software such as Photoshop and Krita, you can use a wide range of brushes within the paint tool.
 Learning how to render these stylized strokes with GPU is valuable.
-Even if stylized strokes don't interest you,
-this tutorial will provide methods to render a simple solid curve with GPU, which is useful when drawing UIs or debugging your 3D scene.
+However, there are over thousands of brushes available in Photoshop, which can be overwhelming to explore.
+Luckily, more than 90% of the brushes are designed under the "stamp model", and we call them "stamp brushes".
 
-Over thousands of brushes are available online, which can be overwhelming to explore.
-But more than 90% of the brushes are designed under the "stamp" model, and we call them "stamp brushes".
 In the upcoming Stamp section, I will introduce the stamp model and how to implement it in a shader program.
-Before that, I will introduce the basic solid stroke called "vanilla".
-Vanilla and stamp share the exact same vertex placement methods, but the vanilla stroke is easier to implement.
+But for your better understanding, I will introduce the basic solid stroke called "vanilla" first.
+The vanilla and stamp strokes share the exact same vertex placement method.
+It's much easier to start with the vanilla stroke, later the stamp stroke.
+Maybe the stamp strokes with various styles don't interest you, feel free to ignore it and learn the vanilla stroke only.
+It's very useful when drawing UIs or debugging your 3D scenes.
 
 While you may recognize a brush stroke by its stylization, another crucial property could be ignored: the "variable radius" along the stroke.
 (I also ignored it in my paper.)
 The radii are typically generated from the pressure values as a stylus presses and moves on a tablet.
-For experienced artists, after installing a new painting program, one of the highest priorities is to configure the mapping function from pen pressure to brush radius.
+The property is critical for experienced artists drawing professional illustrations or animations.
+After the artists install a new painting program,
+one of the highest priorities is to configure the mapping function from pen pressure to brush radius.
 
 <details>
   <summary>In case you don't know about tablets and styluses</summary>
 
-Digital artists paint with dedicated input devices: Tablet and Stylus.
+Digital artists paint with dedicated devices: Tablet and Stylus.
 If you're unfamiliar with tablets and styluses, you can watch the video below for more information:
 
 [![Tablet](https://img.youtube.com/vi/83BRMfjJXIk/maxresdefault.jpg)](https://www.youtube.com/watch?app=desktop&v=83BRMfjJXIk)
@@ -35,6 +38,7 @@ If you're unfamiliar with tablets and styluses, you can watch the video below fo
 </details>
 
 ![variable radius](./variable-radius.png)
+
 _Variable radius along a stroke._
 
 ## Geometric data
