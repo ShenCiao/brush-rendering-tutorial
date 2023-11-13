@@ -8,6 +8,8 @@ Remember to star this code repository instead of bookmark the website since the 
 The website will be WIP for a long time since rendering brush strokes with GPU is a newly emerged research topic.
 I (Shen Ciao) will continuously update tutorials on (potentially) influential research works.
 
+The official tutorial page: https://shenciao.github.io/brush-rendering-tutorial/
+
 ## Be critical
 
 The most contents come from Shen Ciao and Li-yi Wei's research _[Ciallo: The next generation vector paint program][Ciallo]_.
