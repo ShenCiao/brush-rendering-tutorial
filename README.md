@@ -1,4 +1,5 @@
-# The official tutorial page: https://shenciao.github.io/brush-rendering-tutorial/
+# The official tutorial page
+https://shenciao.github.io/brush-rendering-tutorial/
 # Brush Rendering Tutorial
 
 ![](./static/img/vanilla-stroke.png)
