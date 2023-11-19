@@ -33,7 +33,7 @@ void main() {
     // The quadratic equation
     float a, b, c, delta;
     a = 1.0 - pow(cosTheta, 2.0);
-    b = 2.0 * (r0 * cosTheta - pLocal.x);
+    b = - 2.0 * (r0 * cosTheta + pLocal.x);
     c = pow(pLocal.x, 2.0) + pow(pLocal.y, 2.0) - pow(r0, 2.0);
     delta = pow(b, 2.0) - 4.0*a*c;
     if(delta <= 0.0) discard;
