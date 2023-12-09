@@ -56,7 +56,7 @@ void main() {
 
     // The main loop to sample and blend color from the footprint.
     int MAX_i = 128; float currIndex = startIndex;
-    vec4 currColor = vec4(0.0);
+    vec4 currColor = vec4(0.0,0.0,0.0,1e-10);
     for(int i = 0; i < MAX_i; i++){
         float currStampLocalX = interval * (currIndex - index0);
         float currStampRadius = r0 - cosTheta * currStampLocalX;
