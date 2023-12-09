@@ -33,7 +33,7 @@ void main() {
     // The quadratic equation
     float a, b, c, delta;
     a = 1.0 - pow(cosTheta, 2.0);
-    b = - 2.0 * (r0 * cosTheta + pLocal.x);
+    b = 2.0 * (r0 * cosTheta - pLocal.x);
     c = pow(pLocal.x, 2.0) + pow(pLocal.y, 2.0) - pow(r0, 2.0);
     delta = pow(b, 2.0) - 4.0*a*c;
     if(delta <= 0.0) discard;
@@ -56,7 +56,7 @@ void main() {
 
     // The main loop to sample and blend color from the footprint.
     int MAX_i = 128; float currIndex = startIndex;
-    vec4 currColor = vec4(0.0);
+    vec4 currColor = vec4(0.0,0.0,0.0,1e-10);    // set alpha as 1e-10 to avoid numerical error
     for(int i = 0; i < MAX_i; i++){
         float currStampLocalX = interval * (currIndex - index0);
         float currStampRadius = r0 - cosTheta * currStampLocalX;
