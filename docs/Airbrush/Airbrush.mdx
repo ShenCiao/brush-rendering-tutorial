@@ -1,0 +1,41 @@
+---
+sidebar_position: 5
+sidebar_label: Airbrush
+title: Airbrush
+---
+
+Airbrush is a special type of brush.
+An airbrush stroke looks like a solid vanilla stroke.
+The main difference is its transparency gradient from middle axis to rim, as the figure shows.
+
+When artists draw 2D anime style illustrations or animations, airbrush has special usages.
+While other brushes are mostly used for drawing outlines, airbrush for coloring, shading or highlighting.
+
+Therefore, airbrush strokes commonly cover large areas of pixels comparing to outline strokes.
+Optimizing airbrush strokes rendering algorithm can effectively improve the rendering performance.
+In this tutorial, I will introduce how to render regular airbrush strokes, and a fancy theory to optimize it.
+
+Technologically, traditional airbrush is a special type of stamp brush whose footprint is a transparent dot.
+When the footprints are very close and blend each other, they form an airbrush stroke with the transparency gradient, as the figure shows.
+If you've learned the previous chapter, rendering an airbrush is nothing more than creating a transparent dot as footprint.
+
+To get a desirable result like the above figure shows, stamp interval should be very small.
+A pixel on the stroke samples the footprint more than 30 times at maximum, which hurts the rendering performance.
+To address the issue, we want to model this process with calculus, let the stamp interval infinite small, and derive a mathematically continuous stroke.
+
+Imagine there are infinite number of stamps on an edge whose length is $L$.
+The number of stamps is denoted with $n$, and the interval between stamps is $\Delta L = L/n$.
+For each pixel $\mathbf{p}$ invoked by the edge, its alpha value $\Alpha(p)$ is equal to blend all the alpha values $\Alpha_s(p-p_i)$ from all the stamps on the edge.
+The $p - p_i$ is the vector from stamp $i$ and current pixel.
+
+$\Alpha(p) = 1-\prod_{i=1}^n \left(1-\Alpha_s(p-p_i)\right)$
+
+We define "alpha density" value, denoted with small alpha $\alpha$.
+And let $\Alpha_s = \alpha_s \Delta L$, whose $\alpha_s(p)$ is called alpha density field and define by the footprint.
+Hopefully, the notations remind you of the probability density and probability values (or uniformly distributed charge on a bar).
+They are following the same idea.
+
+Replace the $\Alpha_s(p-p_i)$ and we get $\Alpha(p) = 1-\prod_{i=1}^n (1-\alpha_s(p-p_i) \Delta L)$.
+As $n\rightarrow \infty$ and $\Delta L \rightarrow 0$, we apply [product integral](https://en.wikipedia.org/wiki/Product_integral) (Volterra Integral) on the formula.
+
+$A(p) = 1 - \exp\left(-\int_0^L \alpha(p - l) dl \right)$

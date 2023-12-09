@@ -85,7 +85,7 @@ const config = {
       },
       footer: {
         style: 'light',
-        copyright: `Copyright © ${new Date().getFullYear()} Brush Rendering Tutorial by Shen Ciao, under CC BY-SA 4.0 License`,
+        copyright: `Copyright © ${new Date().getFullYear()} Brush Rendering Tutorial, under CC BY-SA 4.0 License`,
       },
       prism: {
         theme: lightCodeTheme,

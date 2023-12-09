@@ -8,7 +8,7 @@ This is the code repository for "Brush Rendering Tutorial".
 Remember to star this code repository instead of bookmark the website since the host and domain might be changed.
 
 The website will be WIP for a long time since rendering brush strokes with GPU is a newly emerged research topic.
-I (Shen Ciao) will continuously update tutorials on (potentially) influential research works.
+We (Shen Ciao, Zhongyue Guan) will continuously update tutorials on (potentially) influential research works.
 
 ## Be critical
 
