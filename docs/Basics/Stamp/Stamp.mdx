@@ -90,16 +90,25 @@ $(x_p, y_p)$ as the pixel's local coordinate.
 $x$ is the furthest point's x value.
 By calculating it, we know the position of farthest point.
 The distance from the pixel and the furthest point $r(x)$ is the radius of the furthest point, whose value is determined by x.
-To solve the unknown $x$, we can set an equation from the dashed right triangle $r(x)^2 = (x_p - x)^2 + y_p^2$.
+To solve the unknown $x$, we can set an equation from the dashed right triangle.
 
-It's not hard to derive $r(x) = r_1 * x/l + r_0 * (1-x/l)$ from the figure below.
+$$
+r(x)^2 = (x_p - x)^2 + y_p^2
+$$
+
+It's not hard to derive $r(x)$ from the figure below.
+$$
+r(x) = \frac{x}{l}r_1 + \left(1-\frac{x}{l}\right)r_0
+$$
 $l$ is the length of the current edge.
 ![xradius](./stamp-xradius.png)
 By replacing $r(x)$, we get a quadratic equation $ax^2 + bx + c = 0$:
 
-$a = 1 - \cos^2\theta$;
-$b = - 2 * (r_0\cos\theta + x_p)$;
-$c = x_p^2 + y_p^2 - r_0^2$
+$$
+a = 1 - \cos^2\theta;
+b = - 2 * (r_0\cos\theta + x_p);
+c = x_p^2 + y_p^2 - r_0^2
+$$
 
 Remind that $\cos\theta = (r_0 - r_1)/l$.
 Applying the formula for solving quadratic equations,

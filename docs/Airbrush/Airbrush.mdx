@@ -28,7 +28,9 @@ The number of stamps is denoted with $n$, and the interval between stamps is $\D
 For each pixel $\mathbf{p}$ invoked by the edge, its alpha value $\Alpha(p)$ is equal to blend all the alpha values $\Alpha_s(p-p_i)$ from all the stamps on the edge.
 The $p - p_i$ is the vector from stamp $i$ and current pixel.
 
-$\Alpha(p) = 1-\prod_{i=1}^n \left(1-\Alpha_s(p-p_i)\right)$
+$$
+\Alpha(p) = 1-\prod_{i=1}^n \left(1-\Alpha_s(p-p_i)\right)
+$$
 
 We define "alpha density" value, denoted with small alpha $\alpha$.
 And let $\Alpha_s = \alpha_s \Delta L$, whose $\alpha_s(p)$ is called alpha density field and define by the footprint.
@@ -38,4 +40,6 @@ They are following the same idea.
 Replace the $\Alpha_s(p-p_i)$ and we get $\Alpha(p) = 1-\prod_{i=1}^n (1-\alpha_s(p-p_i) \Delta L)$.
 As $n\rightarrow \infty$ and $\Delta L \rightarrow 0$, we apply [product integral](https://en.wikipedia.org/wiki/Product_integral) (Volterra Integral) on the formula.
 
-$A(p) = 1 - \exp\left(-\int_0^L \alpha(p - l) dl \right)$
+$$
+A(p) = 1 - \exp\left(-\int_0^L \alpha(p - l) dl \right)
+$$

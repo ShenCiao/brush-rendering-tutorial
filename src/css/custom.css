@@ -34,3 +34,7 @@
 .katex-html{
   display: none
 }
+
+.katex-mathml{
+  font-size: 18px;
+}
