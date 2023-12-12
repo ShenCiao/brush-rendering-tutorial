@@ -121,12 +121,29 @@ import StampRound from "./StampRound";
 
 ![texture](@site/static/img/stamp86.png)
 
-You can use RGBA values sampled from footprints directly, like what I did.
+You can use RGBA values sampled from footprints directly, like what I did here.
 But for the most common scenario,
 we set RGB values with users' brush setting and sample alpha values from a monochrome texture,
 whose pixel's gray scale determines the opacity.
-Then apply random rotation and noise on each footprint to further stylize the stroke.
-The stamp index values `currIndex` are helpful to generate consistent random numbers as seed values.
+Here is the pseudocode in the fragment shader:
+
+```
+uniform vec3 RGB; // Users' brush setting
+void main(){
+    float A = 0.0;
+    for each stamp
+    {
+        // Only sample opacity value from the footprint.
+        float opacity = texture(footprint, textureCoordinate);
+        // Apply alpha compositing to get the final alpha value.
+        A = A * (1.0-opacity) + opacity;
+    }
+    outColor = vec4(RGB, A);
+}
+```
+
+Furthermore, we can apply random rotation or noise on each footprint to stylize the stroke.
+The stamp index values `currIndex` are very helpful to generate consistent random numbers as seed values.
 
 ## Square footprint
 I introduce the brush rendering with the assumption that footprints are constrained within a dot area,
@@ -157,6 +174,4 @@ import StampSquare from "./StampSquare";
 
 <StampSquare showEditor={[false, true, true]}/>
 
-I basically cannot perceive the deformation caused by the trick at the first glance.
-
-
+I cannot perceive the deformation caused by the trick without careful investigation.
