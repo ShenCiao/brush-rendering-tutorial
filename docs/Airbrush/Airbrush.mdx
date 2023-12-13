@@ -22,18 +22,18 @@ It is commonly used for coloring, shading, or highlighting, while other brushes 
 ![shade](shade-highlight.gif)
 
 Therefore, airbrush strokes typically cover larger areas of pixels compared to outline strokes.
-Optimizing airbrush stroke rendering algorithms can significantly improve rendering performance.
-In this tutorial, I will present a fancy but efficient way for optimization and explain the theory behind it.
+Optimizing airbrush rendering algorithms can significantly improve rendering performance.
+In this tutorial, I will present a fancy and efficient way of rendering and explain the theory behind it.
 
 ## Theory
 
 If we render airbrush strokes as a regular stamp strokes, stamp interval should be extremely small, as shown in the above GIF images.
 A pixel on the stroke samples the footprint more than 30 times at maximum, which can significantly impact rendering performance.
-To address the issue, we can model this process using calculus.
-Let's assume the stamp interval is infinitely small, and derive a mathematically continuous stroke.
+To address the issue, we can model this process using calculus, and derive a mathematically continuous stroke.
 
 Imagine there are infinite number of stamps on an edge whose length is $L$.
 The number of stamps is denoted with $n$, and the interval between stamps is $\Delta L = L/n$.
+We continue the idea of "articulated", calculate edges individually and blend them together.
 For each pixel whose position is $\pmb p$ invoked by the edge,
 its alpha value $\Alpha(\pmb p)$ is equal to blend all the alpha values $\Alpha_s(\pmb p_i)$ from all the stamps on the edge.
 The $\pmb{p_i}$ is the vector from stamp $i$ and the current pixel.
@@ -45,7 +45,7 @@ $$
 We define "alpha density" value, denoted with small alpha $\alpha$.
 Let $\Alpha_s(\pmb p_i) = \alpha_s(\pmb p_i) \Delta L$, $\alpha_s(\pmb p_i)$ is called alpha density field and defined by the footprint.
 Hopefully, the notations remind you of the probability density and probability values
-(or uniformly distributed charge on a bar, and we are calculating its electric field).
+(or uniformly distributed charge on a bar, and we are integrating its electric field).
 
 Replace the $\Alpha_s(\pmb p_i)$ and we get:
 
@@ -53,11 +53,11 @@ $$
 \Alpha(\pmb p) = 1-\prod_{i=1}^n (1-\alpha_s(\pmb p_i) \Delta L)
 $$
 
-So, given any footprint defines a $\alpha_s(\pmb p_i)$ function (2D field),
-we can calculate the stamp strokes' continuous form by substituting the footprint function into the formula.
+So, given any $\alpha_s(\pmb p_i)$ function,
+we can calculate the stamp strokes' continuous form by substituting the function into the formula.
 
-We use the old local coordinate. Origin at $p_0$, X and Y axes align to the tangent and normal direction.
-So $\pmb p = (x, y)$ and $\pmb p_i = (x - l_i, y)$ in the coordinate.
+We reuse the old local coordinate, originating at $p_0$, and X and Y axes align to the tangent and normal direction.
+So, $\pmb p = (x, y)$ and $\pmb p_i = (x - l_i, y)$ in the coordinate.
 The $l_i$ is the X position of stamp i.
 As $n\rightarrow \infty$ and $\Delta L \rightarrow 0$, and apply [product integral](https://en.wikipedia.org/wiki/Product_integral) (Volterra Integral) on the formula.
 
@@ -101,7 +101,7 @@ $$
 $$
 
 In practice, the segment's length $L_r$ can be calculated with the two roots of the equation.
-We are following the same idea as the vanilla or stamp stroke, rendering an edge correctly
+We have already learned it when rendering stamp stroke, and we will reuse that part of code.
 Here is the implementation:
 
 import StampRound from "./StampRound";
