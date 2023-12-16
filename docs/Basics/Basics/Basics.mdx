@@ -1,5 +1,6 @@
 ---
 sidebar_position: 0
+title: Problem Statement
 ---
 
 ## Brush strokes
@@ -13,17 +14,23 @@ Learning how to render these stylized strokes with GPU is valuable.
 However, there are over thousands of brushes available in Photoshop, which can be overwhelming to explore.
 Luckily, more than 90% of the brushes are designed under the "stamp model", and we call them "stamp brushes".
 
-In the upcoming Stamp section, I will introduce the stamp model and how to implement it in a shader program.
-But for your better understanding, I will introduce the basic solid stroke called "vanilla" first.
+In the upcoming Stamp section, I will introduce the basic solid stroke called "vanilla" first,
+then the stamp model and how to implement it in a shader program.
 The vanilla and stamp strokes share the exact same vertex placement method.
-It's much easier to start with the vanilla stroke, later the stamp stroke.
-Maybe the stamp strokes with various styles don't interest you, feel free to ignore it and learn the vanilla stroke only.
-It's very useful when drawing UIs or debugging your 3D scenes.
+For your better understanding, avoid jumping right into the stamp part.
 
-While you may recognize a brush stroke by its stylization, another crucial property could be ignored: the "variable radius" along the stroke.
-(I also ignored it in my paper.)
-The radii are typically generated from the pressure values as a stylus presses and moves on a tablet.
+Maybe the stamp strokes with various styles don't interest you, feel free to ignore it and learn the vanilla stroke only.
+Knowing how to render a line is very handy when drawing UIs or debugging your 3D scenes.
+
+While you may recognize a brush stroke by its stylization, another crucial property could be ignored:
+the "variable width" along the stroke.
 The property is critical for experienced artists drawing professional illustrations or animations.
+For instance, you can tell the difference from the figure below.
+The one with variable width on the right has much better appearance.
+
+![bunny](./bunny-compare.png)
+
+The width values are typically generated from the pressure values as a stylus presses and moves on a tablet.
 After the artists install a new painting program,
 one of the highest priorities is to configure the mapping function from pen pressure to brush radius.
 
@@ -37,13 +44,9 @@ If you're unfamiliar with tablets and styluses, you can watch the video below fo
 
 </details>
 
-![variable radius](./variable-radius.png)
-
-_Variable radius along a stroke._
-
 ## Geometric data
 
-To store the variable radius in brush stroke, we will render a unique type of vector curve:
+To store the variable radius in brush stroke, we will render an uncommon type of vector curve:
 An ordered list of points (polyline) with radius values assigned to each point.
 As a user presses a stylus on a tablet and moves, a paint program generates a sequence of points to record the trace of movement.
 Meanwhile, the pen pressure is transformed into the radius value assigned to each point.
@@ -61,5 +64,5 @@ import { ArticulatedLine2D } from "@site/src/components/ArticulatedLine2D";
 
 <ArticulatedLine2D showEditor={[true, false, false]} />
 
-Blender Grease Pencil team has developed a lot of novel tools to edit this polyline with radius representation.
+Blender Grease Pencil team has developed a lot of novel tools to edit polylines.
 Remember to check out if you were a researcher and want to develop novel techniques for digital painting.

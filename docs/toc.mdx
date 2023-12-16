@@ -12,30 +12,24 @@ import {
   dotHalfBrushUniforms,
 } from "../src/components/ArticulatedLine2D";
 
-This tutorial series will teach you how to render brush strokes with the modern GPU graphics pipeline.
+![eye-catcher](./brushes.jpg)
 
+This tutorial series will teach you how to render brush strokes with the modern GPU graphics pipeline.
 If you like this series, please star the [code repository] instead of bookmark this website since the domain might be changed.
 
 ## Table of Contents
 
 - [Introduction](./introduction)
 - Basics
-  - [Basics](./Basics/Basics)
+  - [Problem Statement](./Basics/Basics)
   - [Vanilla](./Basics/Vanilla)
   - [Stamp](./Basics/Stamp)
+- [Airbrush](./Airbrush)
 
 <details>
 <summary>Future Contents</summary>
 
-### Airbrush
-
-<ArticulatedLine2D uniforms={airBrushUniforms} />
-
-Airbrush is a special type of stamp brush.
-Here I'm demonstrating a "continuous airbrush", which is mathematically continuous and needs a little bit of calculus to develop.
-You will learn how to generalize a stamp brush into its continuous form.
-
-### Stamp density and "ratio-distance"
+**Stamp density and "ratio-distance"**
 
 <div className="row row--no-gutters margin-left--xs">
   <div className="col col--6">
@@ -58,7 +52,7 @@ The pattern is achieved by setting the intervals between dots proportional to th
 You will learn how to freely control stamp density along a stamp
 stroke. Very important for a serious project.
 
-### 3D stroke
+**3D stroke**
 
 Learn how to extend the algorithms to 3D space.
 
