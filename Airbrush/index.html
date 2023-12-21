@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.0.1">
 <title data-rh="true">Airbrush | Brush Rendering Tutorial</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://shenciao.github.io/brush-rendering-tutorial/img/vanilla-stroke.png"><meta data-rh="true" name="twitter:image" content="https://shenciao.github.io/brush-rendering-tutorial/img/vanilla-stroke.png"><meta data-rh="true" property="og:url" content="https://shenciao.github.io/brush-rendering-tutorial/Airbrush/"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Airbrush | Brush Rendering Tutorial"><meta data-rh="true" name="description" content="toairbrush0"><meta data-rh="true" property="og:description" content="toairbrush0"><link data-rh="true" rel="icon" href="/brush-rendering-tutorial/img/favicon.png"><link data-rh="true" rel="canonical" href="https://shenciao.github.io/brush-rendering-tutorial/Airbrush/"><link data-rh="true" rel="alternate" href="https://shenciao.github.io/brush-rendering-tutorial/Airbrush/" hreflang="en"><link data-rh="true" rel="alternate" href="https://shenciao.github.io/brush-rendering-tutorial/Airbrush/" hreflang="x-default"><link rel="stylesheet" href="/brush-rendering-tutorial/assets/css/styles.50f0c7cb.css">
-<script src="/brush-rendering-tutorial/assets/js/runtime~main.13891849.js" defer="defer"></script>
+<script src="/brush-rendering-tutorial/assets/js/runtime~main.53438a2b.js" defer="defer"></script>
 <script src="/brush-rendering-tutorial/assets/js/main.bcb69fa9.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -16,8 +16,8 @@ When the footprints are very close and blend each other, they form an airbrush s
 If you&#x27;ve learned the previous chapter, rendering an airbrush is nothing more than creating a transparent dot as footprint.</p>
 <p><img loading="lazy" alt="toairbrush0" src="/brush-rendering-tutorial/assets/images/to-air0-1d2835efb51403f64c27a2a385a4e8cc.gif" width="640" height="217" class="img_ev3q">
 <img loading="lazy" alt="toairbrush1" src="/brush-rendering-tutorial/assets/images/to-air1-6b925b893d3530bb3f90067666cb0888.gif" width="640" height="217" class="img_ev3q"></p>
-<p>When artists draw illustrations or animations, airbrush has special uses.
-It is commonly used for coloring, shading, or highlighting, while other brushes are typically used for drawing outlines.</p>
+<p>When artists draw illustrations or animations, airbrush has special usages like coloring, shading, or highlighting an illustration,
+while other brushes are typically used for drawing outlines.</p>
 <p><img loading="lazy" alt="shade" src="/brush-rendering-tutorial/assets/images/shade-highlight-8a13896d45d7bcd39766d66c2bcc53b1.gif" width="640" height="640" class="img_ev3q"></p>
 <p>Therefore, airbrush strokes typically cover larger areas of pixels compared to outline strokes.
 Optimizing airbrush rendering algorithms can significantly improve rendering performance.
@@ -50,7 +50,7 @@ As <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org
 But the dot is transparent, and we need to know the alpha value associated with each vector in the final vector set.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="special-alpha-density">Special Alpha Density<a href="#special-alpha-density" class="hash-link" aria-label="Direct link to Special Alpha Density" title="Direct link to Special Alpha Density">​</a></h2>
 <p>To get a clearer comprehension of the theory, let&#x27;s examine a special case.
-Consider the alpha density value to be a point with a constant value,
+Consider the alpha density value is a constant,
 indicating that a stamp stroke&#x27;s footprint is a consistently transparent dot, defined by the function</p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>α</mi><mi>s</mi></msub><mo stretchy="false">(</mo><mi>d</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>α</mi><mi>c</mi></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>d</mi><mo>≤</mo><mi>R</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>d</mi><mo>&gt;</mo><mi>R</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\alpha_s(d) =
 \begin{cases}
