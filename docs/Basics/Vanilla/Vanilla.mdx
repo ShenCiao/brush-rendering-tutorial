@@ -127,7 +127,7 @@ Joint areas are doubly colored.
 We need to adjust joints' pixels opacity (alpha value) to get the target opacity of bone.
 Label joint alpha $\Alpha_j$ and bone alpha $\Alpha_b$.
 Since rgb values from previous and next edge are the same, we can apply alpha compositing formula:
-$\Alpha_b = \Alpha_j + \Alpha_j * (1 - \Alpha_j)$, and solve and joint opacity
+$\Alpha_b = \Alpha_j + \Alpha_j(1 - \Alpha_j)$, and solve and joint opacity
 $$
 \Alpha_j = 1 - \sqrt{1 - \Alpha_b}
 $$
