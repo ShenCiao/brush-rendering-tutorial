@@ -1,0 +1,85 @@
+# Alpha Blending
+
+Previously, we touched upon alpha compositing formula in the Vanilla -> Opacity section. In this section, we delve deeper to offer a more detailed derivation of alpha blending through two distinct approaches.
+
+## Via Compositing Algebra
+
+Let's define the color of an object as $a=(C_a,A_a)$, where $C_a$ represents the RGB color components, $A_a$ represents the alpha value. If the object is opaque ($A_a=1$), the color is represented by $\widehat{a}$. Otherwise when the object has variable transparency ($A_x \neq 1$), the color is simply represented by $a$.
+
+We use the notation $a \odot b$ to denote the alpha blending of colors $a$ and $b$. The associative property of blending dictates:
+
+$$
+(a \odot b) \odot c =  a \odot (b \odot c)
+$$
+
+In scenarios where a foreground object with color $x$, is blended over an opaque background with color $\widehat{y}$, the resulting color $\widehat{o}$ can be expressed as:
+
+$$
+\widehat{o} = x \odot \widehat{y}
+$$
+
+And $C_o$ is given by:
+
+$$
+C_o = A_xC_x + (1 - A_x)C_y \tag{1}
+$$
+
+To calculate the output color $o$ by alpha blending two colors $a$ and $b$, $o = a \odot b$, where $a$ and $b$ both have variable opacity, we further blend the color with an opaque background $\widehat{c}$, which leads to:
+$$o \odot \widehat{c} = a \odot (b \odot \widehat{c})$$
+
+Substituting both sides with Equation $(1)$ gives us:
+
+$$
+A_oC_o+(1-A_o)C_c =a \odot(A_bC_b+(1-A_b)C_c)
+$$
+
+$$
+=A_aC_a+(1-A_a)(A_bC_b+(1-A_b)C_c)
+$$
+
+$$
+=A_aC_a+(1-A_a)A_bC_b+(1-A_a)(1-A_b)C_c
+$$
+
+This leads to an equation of the form $X_0+Y_0C_c=X_1+Y_1C_c$.
+
+By setting $X_0=X_1$ and $Y_0=Y_1$, we can get:
+
+$$
+C_o=\frac{A_aC_a+(1-A_a)A_bC_b}{A_o}
+$$
+
+$$
+A_o=1-(1-A_a)(1-A_b)
+$$
+
+## Via Transparency
+Opacity and transparency are critical properties in 2D graphics, influencing how objects are visually percieved. Opacity is the measure of the extent to which an object blocks light, while transparency is its inverse, representing the object's see-through quality. To quantify these, consider the alpha value of an pixel, $A \in [0.0, 1.0]$. The transparency $T$ of this pixel is then calculated as:
+
+$$
+T = 1 - A \tag{2}
+$$
+
+To calculate the result transparency $T_o$ by composing two objects with transparencies $T_a$ and $T_b$ separately, we can simply multiply them:
+$$T_o = T_a \times T_b$$
+To transition from transparency to opacity, we substitute with Equation $(2)$, arriving at:
+
+$$
+1 - A_o = (1 - A_a)(1 - A_b)
+$$
+
+$$
+A_o = 1 - (1 - A_a)(1 - A_b)
+$$
+
+As for the composition of multiple transparencies, it is a straightforward multiplication of the individual transparencies:
+
+$$
+T_o=\prod_{i=0}^n{T_i}
+$$
+
+Similar to previous deriviation, we can get:
+
+$$
+A_o=1-\prod_{i=0}^n{(1-A_i)}
+$$
