@@ -91,7 +91,7 @@ export function Stroke({
     let texture = new THREE.Texture();
     if (ExecutionEnvironment.canUseDOM) {
       texture = new THREE.TextureLoader().load(
-        `/${docusaurusConfig.projectName}/img/stamp86.png`,
+        `/img/stamp86.png`,
         (texture) => {
           window.dispatchEvent(new CustomEvent("TextureLoaded"));
         },

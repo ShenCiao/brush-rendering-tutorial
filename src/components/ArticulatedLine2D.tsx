@@ -298,7 +298,7 @@ import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 let pencilBrushTexture = new THREE.Texture();
 if (ExecutionEnvironment.canUseDOM) {
   pencilBrushTexture = new THREE.TextureLoader().load(
-    `/${docusaurusConfig.projectName}/img/stamp2.png`,
+    `/img/stamp2.png`,
     (texture) => {
       window.dispatchEvent(new CustomEvent("TextureLoaded"));
     },
@@ -310,7 +310,7 @@ if (ExecutionEnvironment.canUseDOM) {
 let dotBrushTexture = new THREE.Texture();
 if (ExecutionEnvironment.canUseDOM) {
   dotBrushTexture = new THREE.TextureLoader().load(
-    `/${docusaurusConfig.projectName}/img/dot.png`,
+    `/img/dot.png`,
     (texture) => {
       window.dispatchEvent(new CustomEvent("TextureLoaded"));
     },

@@ -73,11 +73,6 @@ export default {
             position: 'right',
             label: 'Tutorial',
           },
-          {
-            href: 'https://github.com/anonymous/brush-stroke-tutorial',
-            label: 'GitHub',
-            position: 'right',
-          },
         ],
       },
       footer: {
