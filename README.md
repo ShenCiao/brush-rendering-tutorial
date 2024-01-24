@@ -1,5 +1,5 @@
 # The official tutorial page
-https://shenciao.github.io/brush-rendering-tutorial/
+anonymous
 # Brush Rendering Tutorial
 
 ![](./static/img/vanilla-stroke.png)
@@ -12,9 +12,6 @@ We (Shen Ciao, Zhongyue Guan) will continuously update tutorials on (potentially
 
 ## Be critical
 
-The most contents come from Shen Ciao and Li-yi Wei's research _[Ciallo: The next generation vector paint program][Ciallo]_.
-It's impossible to create a perfect tutorial in the first place, so we eagerly need critiques and suggestions.
-You can create issues or pull requests to fix typos, correct facto mistakes, and revise terrible terminology naming in this tutorial.
 
 ## Build and Develop
 
@@ -34,22 +31,7 @@ Welcome any helps to improve the code editor.
 
 ## Citation
 
-    @inproceedings{Ciallo,
-        author = {Ciao, Shen and Wei, Li-Yi},
-        title = {Ciallo: The next-Generation Vector Paint Program},
-        year = {2023},
-        isbn = {9798400701436},
-        publisher = {Association for Computing Machinery},
-        address = {New York, NY, USA},
-        url = {https://doi.org/10.1145/3587421.3595418},
-        doi = {10.1145/3587421.3595418},
-        booktitle = {ACM SIGGRAPH 2023 Talks},
-        articleno = {67},
-        numpages = {2},
-        keywords = {Digital painting, stylized stroke, arrangement, vector graphics. coloring, graphics processing unit (GPU)},
-        location = {Los Angeles, CA, USA},
-        series = {SIGGRAPH '23}
-    }
+anonymous
 
 ## License
 
@@ -67,4 +49,3 @@ The project will change into a copyleft license after updating the content about
 [cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/
 [cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
 [cc-by-sa-shield]: https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg
-[Ciallo]: https://github.com/ShenCiao/Ciallo

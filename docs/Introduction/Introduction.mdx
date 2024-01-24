@@ -35,9 +35,7 @@ When hovering your mouse on the canvas you can:
 
 This tutorial series will teach you how to use the modern GPU graphics pipeline to render brush strokes,
 commonly seen with a paint tool in graphics design software like Photoshop.
-The contents mainly come from my research work [Ciallo: The next generation vector paint program][Ciallo],
-and a textbook "Image and Video-Based Artistic Stylisation" edited by Paul Rosin, John Collomosse.
-The book introduces brush stroke rendering in its second chapter, authored by Stephen DiVerdi.
+The contents mainly come from **Anonymous**.
 Since there will be more research work on GPU brush stroke rendering,
 I will continuously update this tutorial series to teach you related techniques in (potentially) influential research works.
 
@@ -74,12 +72,6 @@ Give it a try by altering the values of `maxRadius`, and watch how the canvas be
 
 <ArticulatedLine2D showEditor={[true, false, false]} />
 
-:::note
-
-If there are bugs for common usages in the code editors or canvases, tell me at the [issue](https://github.com/ShenCiao/brush-rendering-tutorial/issues) page.
-
-:::
-
 Only geometry generation code "geometry.js" is demonstrated here.
 You will find "vertex.glsl" and "fragment.glsl" for vertex and fragment shader code.
 Whether they are hidden or shown will depend on the context.
@@ -87,7 +79,8 @@ Whether they are hidden or shown will depend on the context.
 ### Supplementary contents
 
 <details open>
-  <summary>Dropdown tab</summary>
+<summary>Dropdown tab</summary>
+
 Some contents are hidden inside a dropdown tab like this.
 They are complementary to the main contents.
 Feel free to skip them.
@@ -95,36 +88,6 @@ Feel free to skip them.
 
 ## Citation
 
-```
-@inproceedings{Ciallo2023,
-    author = {Ciao, Shen and Wei, Li-Yi},
-    title = {Ciallo: The next-Generation Vector Paint Program},
-    year = {2023},
-    isbn = {9798400701436},
-    publisher = {Association for Computing Machinery},
-    address = {New York, NY, USA},
-    url = {https://doi.org/10.1145/3587421.3595418},
-    doi = {10.1145/3587421.3595418},
-    booktitle = {ACM SIGGRAPH 2023 Talks},
-    articleno = {67},
-    numpages = {2},
-    keywords = {Digital painting, stylized stroke, arrangement, vector graphics. coloring, graphics processing unit (GPU)},
-    location = {Los Angeles, CA, USA},
-    series = {SIGGRAPH '23}
-}
-```
+**Anonymous**
 
-:::note Research Tip
-
-To demonstrate your research work about brush rendering, select vector drawings have variable radius or pen pressure data.
-Regular vector drawing datasets don't contain them.
-
-- Zeyu Wang's work: [Paper](https://dl.acm.org/doi/10.1145/3450626.3459819) | [Dataset](https://github.com/zachzeyuwang/tracing-vs-freehand)
-- [Blender Grease Pencil](https://cloud.blender.org/p/gallery/5b642e25bf419c1042056fc6)
-- ... Tell me more in the [discussion](https://github.com/ShenCiao/brush-rendering-tutorial/discussions/1).
-
-:::
-
-[code repository]: https://github.com/ShenCiao/brush-rendering-tutorial
-[Ciallo]: https://github.com/ShenCiao/Ciallo
 [_The Book of Shader_]: https://thebookofshaders.com/

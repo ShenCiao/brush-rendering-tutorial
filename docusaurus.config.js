@@ -11,14 +11,14 @@ export default {
   favicon: 'img/favicon.png',
 
   // Set the production url of your site here
-  url: 'https://shenciao.github.io',
+  url: 'https://anonymous.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/brush-rendering-tutorial/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'ShenCiao', // Usually your GitHub org/user name.
+  organizationName: 'anonymous', // Usually your GitHub org/user name.
   projectName: 'brush-rendering-tutorial', // Usually your repo name.
 
   onBrokenLinks: 'throw',
@@ -45,7 +45,7 @@ export default {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/ShenCiao/brush-rendering-tutorial/tree/main',
+            'https://github.com/anonymous',
         },
         blog: false,
         theme: {
@@ -75,7 +75,7 @@ export default {
             label: 'Tutorial',
           },
           {
-            href: 'https://github.com/ShenCiao/brush-stroke-tutorial',
+            href: 'anonymous',
             label: 'GitHub',
             position: 'right',
           },
