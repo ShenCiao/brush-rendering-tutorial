@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex';
 
 /** @type {import('@docusaurus/types').Config} */
 export default {
-  title: 'Brush Rendering Tutorial',
+  title: 'Anonymous Tutorial',
   tagline: 'Learn brush stroke rendering.',
   favicon: 'img/favicon.png',
 
@@ -20,7 +20,7 @@ export default {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'anonymous', // Usually your GitHub org/user name.
-  projectName: 'brush-rendering-tutorial', // Usually your repo name.
+  // projectName: 'brush-rendering-tutorial', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -61,7 +61,7 @@ export default {
       // Replace with your project's social card
       image: 'img/vanilla-stroke.png',
       navbar: {
-        title: 'Brush Rendering Tutorial',
+        title: 'Anonymous Tutorial',
         logo: {
           alt: 'logo',
           src: 'img/vanilla-stroke.png'
@@ -82,7 +82,7 @@ export default {
       },
       footer: {
         style: 'light',
-        copyright: `Copyright © ${new Date().getFullYear()} Brush Rendering Tutorial, under CC BY-SA 4.0 License`,
+        copyright: `Copyright © ${new Date().getFullYear()} Anonymous Tutorial, under CC BY-SA 4.0 License`,
       },
       docs: {
         sidebar: {
