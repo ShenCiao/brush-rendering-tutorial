@@ -11,7 +11,7 @@ export default {
   favicon: 'img/favicon.png',
 
   // Set the production url of your site here
-  url: 'https://anonymous.io',
+  url: 'https://anonymous.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/brush-rendering-tutorial/',
@@ -44,8 +44,6 @@ export default {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/anonymous',
         },
         blog: false,
         theme: {
@@ -75,7 +73,7 @@ export default {
             label: 'Tutorial',
           },
           {
-            href: 'anonymous',
+            href: 'https://github.com/anonymous/brush-stroke-tutorial',
             label: 'GitHub',
             position: 'right',
           },
