@@ -1,4 +1,3 @@
-import React from "react";
 import * as THREE from "three";
 import { Stroke } from "@site/src/components/Stroke";
 import vsCode from "./RGBTriangle.vert";

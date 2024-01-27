@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as THREE from "three";
 // @ts-ignore
 import { MapControls } from "three/examples/jsm/controls/MapControls.js";
@@ -11,7 +11,7 @@ import { GlslEditor } from "@site/src/components/GlslEditor";
 import geometryCode from "./sinewaveGeometry";
 import vertexShaderCode from "./shaders/ArticulatedLine2D.vert";
 import fragmentShaderCode from "./shaders/ArticulatedLine2D.frag";
-import docusaurusConfig from "@site/docusaurus.config";
+import docusaurusConfig from "@site/docusaurus.config.js";
 
 export enum BrushType {
   Vanilla,

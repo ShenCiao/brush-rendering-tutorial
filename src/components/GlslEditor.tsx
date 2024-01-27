@@ -1,4 +1,3 @@
-import React from "react";
 import { conf, language } from "./glslLanguageConfiguration";
 import { Editor } from "@monaco-editor/react";
 import type { EditorProps } from "@monaco-editor/react";
