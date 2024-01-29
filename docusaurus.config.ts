@@ -3,8 +3,8 @@
 
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import type {Config} from '@docusaurus/types'
 
-/** @type {import('@docusaurus/types').Config} */
 export default {
   title: 'Brush Rendering Tutorial',
   tagline: 'Learn brush stroke rendering.',
@@ -56,7 +56,6 @@ export default {
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       colorMode: {disableSwitch: true},
       // Replace with your project's social card
@@ -105,4 +104,4 @@ export default {
     'raw-loaders',
   ],
   trailingSlash : true
-};
+} satisfies Config;
