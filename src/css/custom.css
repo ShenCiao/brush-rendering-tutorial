@@ -38,3 +38,9 @@
 .katex-mathml{
   font-size: 18px;
 }
+
+figcaption{
+  text-after-overflow: 0;
+  padding-bottom: 0.5em;
+  font-style: italic;
+}

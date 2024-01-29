@@ -16,8 +16,9 @@ If you've learned the previous chapter, rendering an airbrush is nothing more th
 ![toairbrush0](to-air0.gif)
 ![toairbrush1](to-air1.gif)
 
-When artists draw illustrations or animations, airbrush has special usages like coloring, shading, or highlighting an illustration,
-while other brushes are typically used for drawing outlines.
+When artists draw illustrations or animations, airbrush has special usages.
+While other brushes are commonly used for drawing outlines, airbrush is used for coloring or drawing shadow and highlight regions.
+As the image below shows, the artist repeatedly stroke on the sphere with airbrushes to draw shadow or highlight.
 
 ![shade](shade-highlight.gif)
 
@@ -35,29 +36,29 @@ Imagine there are infinite number of stamps on an edge whose length is $L$.
 The number of stamps is denoted with $n$, and the interval between stamps is $\Delta L = L/n$.
 We continue the idea of "articulated", calculate edges individually and blend them together.
 For each pixel whose position is $\pmb p$ invoked by the edge,
-its alpha value $\Alpha(\pmb p)$ is equal to blend all the alpha values $\Alpha_s(\pmb p_i)$ from all the stamps on the edge.
-The $\pmb{p_i}$ is the vector from stamp $i$ and the current pixel.
+its alpha value $\Alpha(\pmb p)$ is equal to blend all the alpha values $\Alpha_s(\pmb d_i)$ from all the stamps on the edge.
+The $\pmb d_i$ is the vector from stamp $i$ and the current pixel.
 
 $$
-\Alpha(\pmb p) = 1-\prod_{i=1}^n \left(1-\Alpha_s(\pmb p_i)\right)
+\Alpha(\pmb p) = 1-\prod_{i=1}^n \left(1-\Alpha_s(\pmb d_i)\right)
 $$
 
 We define "alpha density" value, denoted with small alpha $\alpha$.
-Let $\Alpha_s(\pmb p_i) = \alpha_s(\pmb p_i) \Delta L$, $\alpha_s(\pmb p_i)$ is called alpha density field and defined by the footprint.
+Let $\Alpha_s(\pmb d_i) = \alpha_s(\pmb d_i) \Delta L$, $\alpha_s(\pmb d_i)$ is called alpha density field and defined by the footprint.
 Hopefully, the notations remind you of the probability density and probability values
 (or uniformly distributed charge on a bar, and we are integrating its electric field).
 
-Replace the $\Alpha_s(\pmb p_i)$ and we get:
+Replace the $\Alpha_s(\pmb d_i)$ and we get:
 
 $$
-\Alpha(\pmb p) = 1-\prod_{i=1}^n (1-\alpha_s(\pmb p_i) \Delta L)
+\Alpha(\pmb p) = 1-\prod_{i=1}^n (1-\alpha_s(\pmb d_i) \Delta L)
 $$
 
-So, given any $\alpha_s(\pmb p_i)$ function,
+So, given any $\alpha_s(\pmb d_i)$ function,
 we can calculate the stamp strokes' continuous form by substituting the function into the formula.
 
 We reuse the old local coordinate, originating at $p_0$, and X and Y axes align to the tangent and normal direction.
-So, $\pmb p = (x, y)$ and $\pmb p_i = (x - l_i, y)$ in the coordinate.
+So, $\pmb p = (x, y)$ and $\pmb d_i = (x - l_i, y)$ in the coordinate.
 The $l_i$ is the X position of stamp i.
 As $n\rightarrow \infty$ and $\Delta L \rightarrow 0$, and apply [product integral](https://en.wikipedia.org/wiki/Product_integral) (Volterra Integral) on the formula.
 

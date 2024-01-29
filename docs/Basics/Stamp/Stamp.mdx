@@ -30,11 +30,13 @@ Therefore, I will introduce how to place footprints equidistantly along a polyli
 
 ## Locate stamps
 
-When rendering with CPU, calculating where to place stamp (stamp positions) on a polyline is pretty straightforward.
+When rendering with CPU, calculating where to place footprint (stamp positions) on a polyline is pretty straightforward.
 Start from the very first vertex of the polyline,
+place the footprint on the canvas,
 move along the polyline with the stamp interval to the next stamp position,
 loop until reach the end of polyline.
-It is trivial for experienced developers to implement the process above.
+If we use an image processing library and therefore don't worry about details in placing the footprint,
+the whole process can programmed within 10 lines of code.
 
 ![pos](./stamp-position.png)
 
@@ -45,7 +47,7 @@ The difference only comes to the fragment shader.
 
 We will calculate the stamp positions in the fragment shader.
 At each polyline vertex, we compute its distance to the first vertex along the polyline.
-The distances represent the cumulative length of the edges, and we calculated them with Prefix Sum algorithm.
+The distances represent the cumulative length of the edges, and we calculated them with [Prefix Sum][wiki](https://www.geeksforgeeks.org/prefix-sum-array-implementation-applications-competitive-programming/) algorithm.
 
 ![len](./stamp-length.png)
 
@@ -156,13 +158,17 @@ But they may hurt the performance and have complex logic to implement.
 
 I will introduce a very tricky approach to rendering the square footprint.
 Meanwhile, improve the rendering performance and reduce the complexity of the shader code.
-All we have to sacrifice is the "correctness" of geometry, which is trivial for artists.
+All we have to sacrifice is the "correctness" of geometry, which is a minor concern for artists.
 
 We place vertices a little bit differently from before.
 Instead of offset vertices by $r_0\tan\frac{\theta}{2}$ and $r_1\cot\frac{\theta}{2}$ along the normal direction,
 we just offset $r_0$ and $r_1$ value, as the figure below shows.
 
 ![square](./stamp-square.png)
+<figcaption>
+    The solid line trapezoid shows the new approach to place vertices.
+    Dashed grey line trapezoid shows the original approach.
+</figcaption>
 
 In the vertex shader or geometry shader, we put the radius value $r_0$ to the left two vertices,
 $r_1$ to the right two vertices, and let fragment shader interpolate the values for us.
@@ -174,4 +180,5 @@ import StampSquare from "./StampSquare";
 
 <StampSquare showEditor={[false, true, true]}/>
 
-I cannot perceive the deformation caused by the trick without careful investigation.
+You can find the shader code is simplified because we don't need to compute two roots of the quadratic equation.
+I cannot perceive any deformation caused by the trick without careful investigation.

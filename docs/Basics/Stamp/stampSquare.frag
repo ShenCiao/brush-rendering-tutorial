@@ -32,6 +32,7 @@ void main() {
     float x1 = pLocal.x - rp;
     float x2 = pLocal.x + rp;
 
+    // --- The rest of code is exactly same. ---
     float index0 = l0/interval;
     float startIndex, endIndex;
     if (x1 <= 0.0){

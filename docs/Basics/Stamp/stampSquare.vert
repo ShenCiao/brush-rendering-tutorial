@@ -4,9 +4,6 @@ precision mediump int;
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 
-// Every lines of code are the same, except for the length.
-// `length` is the distance from the current vertex to the very first vertex of the polyline
-// (the result of prefix sum on edge length).
 in float length0;
 in float length1;
 in float radius0;

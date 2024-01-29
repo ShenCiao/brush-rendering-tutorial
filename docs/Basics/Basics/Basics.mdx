@@ -7,7 +7,9 @@ title: Problem Statement
 
 ![krita](https://gitlab.com/raghukamath/krita-brush-presets/-/raw/master/preview.png)
 
-_Open-source [brush presets by Raghavendra](https://gitlab.com/raghukamath/krita-brush-presets) in Krita._
+<figcaption>
+Open-source [brush presets by Raghavendra](https://gitlab.com/raghukamath/krita-brush-presets) in Krita.
+</figcaption>
 
 In graphics design software such as Photoshop and Krita, you can use a wide range of brushes within the paint tool.
 Learning how to render these stylized strokes with GPU is valuable.
@@ -25,10 +27,14 @@ Knowing how to render a line is very handy when drawing UIs or debugging your 3D
 While you may recognize a brush stroke by its stylization, another crucial property could be ignored:
 the "variable width" along the stroke.
 The property is critical for experienced artists drawing professional illustrations or animations.
-For instance, you can tell the difference from the figure below.
-The one with variable width on the right has much better appearance.
+For instance, you can tell the significant difference from the figure below.
+The one with variable width on the right has more expressive appearance.
 
-![bunny](./bunny-compare.png)
+![butterfly](./butterfly-compare.png)
+
+<figcaption>
+    Butterfly by [Qianxi Liu](https://qianxi-folio.vercel.app/index.html).
+</figcaption>
 
 The width values are typically generated from the pressure values as a stylus presses and moves on a tablet.
 After the artists install a new painting program,
@@ -53,7 +59,10 @@ Meanwhile, the pen pressure is transformed into the radius value assigned to eac
 After rendering the stroke on the polyline, the user feels like drawing on canvas.
 
 ![Monkey](./monkey.png)
-_The monkey Suzanne in Blender (Grease Pencil), the orange dots on the right side show polylines' points (vertices)._
+
+<figcaption>
+The monkey Suzanne in Blender (Grease Pencil), the orange dots on the right side show polylines' points (vertices).
+</figcaption>
 
 We can approximate any type of curve by increasing the number of points in a polyline, whether freehand-drawn or mathematically defined.
 Try to change the `maxRadius` and `segmentCount` values in the code editor below to see how the vanilla stroke changes.
@@ -64,5 +73,6 @@ import { ArticulatedLine2D } from "@site/src/components/ArticulatedLine2D";
 
 <ArticulatedLine2D showEditor={[true, false, false]} />
 
-Blender Grease Pencil team has developed a lot of novel tools to edit polylines.
-Remember to check out if you were a researcher and want to develop novel techniques for digital painting.
+Blender Grease Pencil team has developed many novel tools to edit polylines.
+I recommend that everyone researching digital painting techniques learn about them.
+https://www.youtube.com/watch?v=nZyB30-xZFs
