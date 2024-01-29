@@ -152,12 +152,12 @@ I introduce the brush rendering with the assumption that footprints are constrai
 which is the most common case in practice.
 But it's not for all.
 Area outside the dot area plays a critical role sometimes.
-If it is necessary to render square footprints, I guess experienced graphics developers can instantly get some ideas on
-new approaches to placing the vertices and determining stamp positions.
+If it is necessary to render square footprints, I guess you can instantly come up with
+a new approach to placing the vertices and determining stamp positions.
 But they may hurt the performance and have complex logic to implement.
 
-I will introduce a very tricky approach to rendering the square footprint.
-Meanwhile, improve the rendering performance and reduce the complexity of the shader code.
+I will introduce a very tricky approach to rendering the square footprint,
+and meanwhile, improving the rendering performance and reducing the complexity of the shader code.
 All we have to sacrifice is the "correctness" of geometry, which is a minor concern for artists.
 
 We place vertices a little bit differently from before.
@@ -176,9 +176,20 @@ Then we get an interpolated radius value $r_p$ in the fragment shader.
 You can prove this $r_p$ is the stroke radius value across the current pixel as the figure shows.
 We assume the whole stroke is uni-radius and program the shader with $r_p$.
 
-import StampSquare from "./StampSquare";
+import SquareOrigin from "./SquareOrigin";
 
-<StampSquare showEditor={[false, true, true]}/>
+<SquareOrigin showEditor={[false, true, true]}/>
 
 You can find the shader code is simplified because we don't need to compute two roots of the quadratic equation.
-I cannot perceive any deformation caused by the trick without careful investigation.
+Besides, I cannot perceive any deformation caused by the trick without careful investigation.
+
+To see the deformation more clearly, I replace the footprint with a wireframe square.
+Obviously the squares are squeezed or extruded along the stroke.
+
+![texture](@site/static/img/stamp-square.png)
+
+import StampSquare from "./StampSquare";
+
+<StampSquare showEditor={false}/>
+
+It's hard to explain the deformation mathematically, but for the common practice, the result is better since we can render square footprint.

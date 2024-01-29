@@ -16,6 +16,7 @@ export function Stroke({
   vertexShader,
   fragmentShader,
   showEditor = null,
+  uniforms = null,
 }) {
   const canvasContainerRef = useRef<HTMLDivElement>();
   const renderSceneFnRef = useRef<Function>();
@@ -28,7 +29,7 @@ export function Stroke({
     const canvasWidth = canvasContainerRef.current.clientWidth;
     const canvasHeight = canvasWidth * (0.5 / gr);
 
-    const worldWidth = 6 * gr;
+    const worldWidth = 5 * gr;
     const worldHeight = worldWidth * (0.5 / gr);
     const camera = new THREE.OrthographicCamera(
       worldWidth / -2,
@@ -100,8 +101,12 @@ export function Stroke({
       );
     }
 
-    const textureUniforms = {
-      footprint: { value: texture }
+    let textureUniforms = {
+      footprint: {value: texture}
+    };
+
+    if(uniforms){
+      textureUniforms = uniforms;
     }
 
     const material = new THREE.RawShaderMaterial({
