@@ -34,9 +34,8 @@ export default {
 
   presets: [
     [
-      'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      '@docusaurus/preset-classic',
+      {
         docs: {
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
@@ -51,7 +50,11 @@ export default {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-      }),
+        gtag: {
+          trackingID: 'G-CGVJD5P2PP',
+          anonymizeIP: true,
+        },
+      },
     ],
   ],
 
