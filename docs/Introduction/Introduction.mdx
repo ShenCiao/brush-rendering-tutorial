@@ -36,8 +36,8 @@ When hovering your mouse on the canvas you can:
 This tutorial series will teach you how to use the modern GPU graphics pipeline to render brush strokes,
 commonly seen with a paint tool in graphics design software like Photoshop.
 The contents mainly come from my research work [Ciallo: The next generation vector paint program][Ciallo],
-and a textbook "Image and Video-Based Artistic Stylisation" edited by Paul Rosin, John Collomosse.
-The book introduces brush stroke rendering in its second chapter, authored by Stephen DiVerdi.
+and the second chapter of the textbook "Image and Video-Based Artistic Stylisation" edited by Paul Rosin, John Collomosse.
+The chapter introduces classical stroke rendering methods, authored by Stephen DiVerdi.
 Since there will be more research work on GPU brush stroke rendering,
 I will continuously update this tutorial series to teach you related techniques in (potentially) influential research works.
 
@@ -62,7 +62,7 @@ No matter which GPU API you are familiar with, utilizing them to render a stroke
 
 The [Basic](../category/basics/) section covers the basics of the rendering and stylization methods.
 Articles in the Basic part are organized in a progressive fashion.
-You may miss something important if skip one of them.
+Don't jump right into one of them, or you may miss something important.
 After learning the Basic section, you can freely select your favorite topics.
 I will list extra prerequisites at the very beginning of each article.
 
@@ -117,9 +117,11 @@ Feel free to skip them.
 :::note Research Tip
 
 To demonstrate your research work about brush rendering, select vector drawings have variable radius or pen pressure data.
-Regular vector drawing datasets don't contain them.
+Regular vector graphics datasets don't contain them.
 
-- Zeyu Wang's work: [Paper](https://dl.acm.org/doi/10.1145/3450626.3459819) | [Dataset](https://github.com/zachzeyuwang/tracing-vs-freehand)
+- OpenSketch: [Paper](https://dl.acm.org/doi/10.1145/3355089.3356533)
+- [Tracing versus freehand](https://zachzeyuwang.github.io/tracing-vs-freehand.html)
+- [DifferSketching](https://chufengxiao.github.io/DifferSketching/)
 - [Blender Grease Pencil](https://cloud.blender.org/p/gallery/5b642e25bf419c1042056fc6)
 - ... Tell me more in the [discussion](https://github.com/ShenCiao/brush-rendering-tutorial/discussions/1).
 

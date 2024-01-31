@@ -12,7 +12,7 @@ import { GlslEditor } from "@site/src/components/GlslEditor";
 import geometryCode from "./sinewaveGeometry";
 import vertexShaderCode from "./shaders/ArticulatedLine2D.vert";
 import fragmentShaderCode from "./shaders/ArticulatedLine2D.frag";
-import docusaurusConfig from "@site/docusaurus.config.ts";
+import docusaurusConfig from "@site/docusaurus.config";
 
 export enum BrushType {
   Vanilla,

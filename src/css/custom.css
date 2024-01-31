@@ -35,12 +35,27 @@
   display: none
 }
 
-.katex-mathml{
+span.katex-mathml{
   font-size: 18px;
+}
+
+span.katex-display math{
+  padding-bottom: 0.7em;
 }
 
 figcaption{
   text-after-overflow: 0;
   padding-bottom: 0.5em;
   font-style: italic;
+}
+
+mstyle {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.hidden {
+  display: none !important;
 }
