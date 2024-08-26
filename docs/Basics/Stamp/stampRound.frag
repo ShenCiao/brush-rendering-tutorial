@@ -38,6 +38,9 @@ void main() {
     delta = pow(b, 2.0) - 4.0*a*c;
     if(delta <= 0.0) discard;
 
+    // Solve the quadratic equation
+    // Need to learn how to solve a quadratic equation? Check this talk by Cem Yuksel:
+    // https://www.youtube.com/watch?v=ok0EZ0fBCMA
     float tempMathBlock = b + sign(b) * sqrt(delta);
     float x1 = -2.0 * c / tempMathBlock;
     float x2 = -tempMathBlock / (2.0*a);
