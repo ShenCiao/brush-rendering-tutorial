@@ -1,6 +1,7 @@
-# The official tutorial page
-https://shenciao.github.io/brush-rendering-tutorial/
 # Brush Rendering Tutorial
+We provide very detailed technical description with interactive code blocks here: https://shenciao.github.io/brush-rendering-tutorial/
+
+# Introduction
 
 ![](./static/img/vanilla-stroke.png)
 
@@ -12,7 +13,7 @@ We (Shen Ciao, Zhongyue Guan) will continuously update tutorials on (potentially
 
 ## Be critical
 
-The most contents come from Shen Ciao and Li-yi Wei's research _[Ciallo: The next generation vector paint program][Ciallo]_.
+The most contents come from Shen Ciao and Li-yi Wei's research _[Ciallo][Ciallo]_ with title **_Ciallo: GPU-Accelerated Rendering of Vector Brush Strokes_** in SIGGRAPH 2024, and title **_Ciallo: The next-generation vector paint program_** in SIGGRAPH 2023.
 It's impossible to create a perfect tutorial in the first place, so we eagerly need critiques and suggestions.
 You can create issues or pull requests to fix typos, correct facto mistakes, and revise terrible terminology naming in this tutorial.
 
@@ -33,6 +34,22 @@ If you are familiar with these libraries and have some engineering suggestions, 
 Welcome any helps to improve the code editor.
 
 ## Citation
+SIGGRAPH 2024 Technical Paper (Conference Track)
+
+    @inproceedings{Ciallo2024,
+      author    = {Shen Ciao and Zhongyue Guan and Qianxi Liu and Li-Yi Wei and Zeyu Wang},
+      title     = {{Ciallo: GPU-Accelerated Rendering of Vector Brush Strokes}},
+      booktitle = {Special Interest Group on Computer Graphics and Interactive Techniques Conference Conference Papers '24 (SIGGRAPH Conference Papers '24)},
+      year      = {2024},
+      date      = {2024-07-27/2024-08-01},
+      venue     = {Denver, CO, USA},
+      publisher = {ACM},
+      address   = {New York, NY, USA},
+      pages     = {1--11},
+      doi       = {10.1145/3641519.3657418},
+      url       = {https://doi.org/10.1145/3641519.3657418}
+
+SIGGRAPH 2023 Talk
 
     @inproceedings{Ciallo,
         author = {Ciao, Shen and Wei, Li-Yi},
