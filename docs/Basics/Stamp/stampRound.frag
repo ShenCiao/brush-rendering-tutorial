@@ -49,25 +49,26 @@ void main() {
     x2 = temp.y;
 
     // With the distance to the polyline's first vertex, we can compute a "stamp index" value.
+    // which indicate the number of stamp from the first vertex.
     float index0 = l0/interval; // The stamp index of vertex0.
-    float startIndex, endIndex;
-    startIndex = x1 < 0.0 ? ceil(index0):ceil(index0 + x1/interval);
+    float startIndex, endIndex; // The stamp index's begin and end integral values
+    startIndex = x1 < 0.0 ? ceil(index0):ceil(index0 + x1/interval); // if x1 is less than zero, start the loop from vertex0.
     float index1 = l1/interval;
     float backIndex = x2/interval + index0;
-    endIndex = index1 < backIndex ? index1 : backIndex;
+    endIndex = index1 < backIndex ? index1 : backIndex; // if x2 is larger than L, end the loop at vertex1.
     if(startIndex > endIndex) discard;
 
-    // The main loop to sample and blend color from the footprint.
-    int MAX_i = 128; float currIndex = startIndex;
+    // The main loop to sample and blend color from the footprint, from `startIndex` to `endIndex`
+    int MAX_i = 128; float currIndex = startIndex; // set `MAX_i` to avoid infinite loop
     vec4 currColor = vec4(0.0,0.0,0.0,1e-10);    // set alpha as 1e-10 to avoid numerical error
     for(int i = 0; i < MAX_i; i++){
         float currStampLocalX = interval * (currIndex - index0);
         float currStampRadius = r0 - cosTheta * currStampLocalX;
         vec2 pToCurrStamp = pLocal - vec2(currStampLocalX, 0.0);
-        vec2 textureCoordinate = (pToCurrStamp/currStampRadius + 1.0)/2.0;
+        vec2 textureCoordinate = (pToCurrStamp/currStampRadius + 1.0)/2.0; // uv coordinate
         vec4 sampledColor = texture(footprint, textureCoordinate);
 
-        // The alpha blending function
+        // The alpha compositing function, https://en.wikipedia.org/wiki/Alpha_compositing
         vec4 color;
         color.a = sampledColor.a + currColor.a * (1.0 - sampledColor.a);
         color.rgb = (sampledColor.rgb * sampledColor.a + currColor.rgb * currColor.a * (1.0 - sampledColor.a))/color.a;

@@ -11,13 +11,13 @@ If you want to develop a basic paint program like what I did, the next logical s
 _Vector fill demo_
 
 We've found that filling color is precisely the _2D Arrangement_ and _Point Location_ problem in computational geometry (plus rendering a polygon).
-Basically all textbooks about computational geometry cover these problems and the corresponding algorithms to solve them.
+Basically, all textbooks about computational geometry cover these problems and the corresponding algorithms to solve them.
 It's very straightforward how to apply once you've learned about them.
 But before you delve into the intricate details in a textbook, I will offer a brief overview to provide a general understanding.
 
 We are given a set of 2D polylines (our vector drawings) and a query point,
 the problem is to find the region enclosed by polylines and contains the query point.
-To achieve this, we need first construct a 2D arrangement object whose official definition is:
+To achieve this, we need to first construct a 2D arrangement object whose official definition is:
 A subdivision of the plane induced by the curves into vertices, edges, and faces,
 which is typically stored in a doubly-connected edge list (DCEL) data structure.
 

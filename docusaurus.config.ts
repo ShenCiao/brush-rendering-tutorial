@@ -4,6 +4,7 @@
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import type {Config} from '@docusaurus/types'
+import {themes as prismThemes} from 'prism-react-renderer';
 
 export default {
   title: 'Brush Rendering Tutorial',
@@ -58,51 +59,53 @@ export default {
     ],
   ],
 
-  themeConfig:
-    ({
-      colorMode: {disableSwitch: true},
-      // Replace with your project's social card
-      image: 'img/vanilla-stroke.png',
-      navbar: {
-        title: 'Brush Rendering Tutorial',
-        logo: {
-          alt: 'logo',
-          src: 'img/vanilla-stroke.png'
-        },
-        items: [
-          {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'right',
-            label: 'Tutorial',
-          },
-          {
-            href: 'https://github.com/ShenCiao/brush-stroke-tutorial',
-            label: 'GitHub',
-            position: 'right',
-          },
-        ],
+  themeConfig:{
+    prism:{
+      theme: prismThemes.github,
+      additionalLanguages: ['c', 'cpp', 'glsl'],
+    },
+    colorMode: {disableSwitch: true},
+    // Replace with your project's social card
+    image: 'img/vanilla-stroke.png',
+    navbar: {
+      title: 'Brush Rendering Tutorial',
+      logo: {
+        alt: 'logo',
+        src: 'img/vanilla-stroke.png'
       },
-      footer: {
-        style: 'light',
-        copyright: `Copyright © ${new Date().getFullYear()} Brush Rendering Tutorial, under CC BY-SA 4.0 License`,
-      },
-      docs: {
-        sidebar: {
-          hideable: true,
-        },
-      },
-      stylesheets: [
+      items: [
         {
-          href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
-          type: 'text/css',
-          integrity:
-            'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
-          crossorigin: 'anonymous',
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
+          position: 'right',
+          label: 'Tutorial',
+        },
+        {
+          href: 'https://github.com/ShenCiao/brush-stroke-tutorial',
+          label: 'GitHub',
+          position: 'right',
         },
       ],
-    }),
-
+    },
+    footer: {
+      style: 'light',
+      copyright: `Copyright © ${new Date().getFullYear()} Brush Rendering Tutorial, under CC BY-SA 4.0 License`,
+    },
+    docs: {
+      sidebar: {
+        hideable: true,
+      },
+    },
+    stylesheets: [
+      {
+        href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
+        type: 'text/css',
+        integrity:
+          'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+        crossorigin: 'anonymous',
+      },
+    ],
+  },
   plugins: [
     'raw-loaders',
   ],
