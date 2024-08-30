@@ -45,7 +45,7 @@ In contrast, the interval in the resulting stroke is smaller than its radius.
 So, the result stroke's dots are aligned more densely than those in the first stroke.
 
 As we change the stroke radius, the interval between the dots has not been adjusted accordingly.
-The change in interval leads to the change in appearance.
+This leads to the change in appearance.
 This is unintuitive since artists expect the concept of "brush" controls the stroke appearance.
 Copying and pasting a brush imply the source and target stroke have the same appearance.
 
@@ -54,8 +54,7 @@ For example, imagine a case that we export vector drawings from a paint program 
 When rendering the drawings,
 the game engine may need to scale the strokes' position and radius to translate them from local space to world space.
 Unluckily, a careless programmer like me forgets to scale the stamp interval accordingly.
-In the worst case, the interval is larger than the length of strokes.
-So, nothing shows the canvas and I would spend a whole day to debug it.
+In the worst case, nothing shows the canvas and I would spend a whole day to debug it.
 
 To avoid the issue, we rarely use a fixed length value as a brush parameter for artist to adjust.
 Instead, we make the stamp interval be proportional to the stroke radius,
@@ -66,10 +65,17 @@ $$
 $$
 For a paint program on the market like Krita, you can definitely find this parameter in its brush editor.
 The parameter might be half of the value as defined in our system, because the program uses width value rather than radius value.
+We will use radius here for the convenience of mathematical derivation.
 
 ![krita-interval](./krita-interval.png)
+<figcaption>
+  Brush editor in Krita.
+</figcaption>
 
 ![krita-stroke](./krita-stroke.png)
+<figcaption>
+  Draw two strokes with different brush size in Krita.
+</figcaption>
 
 The "spacing: 1.0" means the stamp interval is the stroke width, or 2x radius.
 So the footprints connect to each other in a row, even though the stroke radius is changed.
@@ -84,11 +90,48 @@ float interval = interval_ratio * radius; // The stroke without variable width h
 // Everything else remains the same......
 ```
 
-However, things are tricky when rendering variable width strokes.
-We have varying radius value, so which radius value should be used to calculate the interval?
-In a paint program like Krita, user-specified brush size in the figure above is a prefect choice.
-But we cannot easily get a user-specified radius value except in a paint program.
-There is a better solution, we let the stamp interval vary together with the stroke radius.
+However, things get tricky when rendering variable-width strokes.
+With varying radius values, which one should be used to calculate the interval?
+Perhaps the maximum radius of a stroke?
+It's a reasonable compromise.
+I did it in Ciallo's paper when conducting performance tests (and it seems I forgot about mentioning it).
+In a paint program like Krita, the user-specified stroke size, as shown in the figure above, is the perfect choice.
+But outside a paint program, it's not easy to get a user-specified radius value.
+A better solution is to let the stamp interval vary along with the stroke radius.
 
 ### Proportional interval
 
+We will learn how to render the "Proportional interval" stroke shown in the figure below.
+Its interval is not fixed but vary along with the stroke radius.
+Meanwhile, the interval is always proportional to the radius.
+
+![Proportional interval](./proportional-interval-demo.png)
+<figcaption>
+  Proportional interval stamp stroke.
+</figcaption>
+
+![fixed interval](./fixed-interval-demo.png)
+<figcaption>
+  Fixed interval stamp stroke.
+</figcaption>
+
+You might be confused by the statement "always proportional to the radius."
+Though it's intuitively correct as the animation below shows.
+I'll soon explain it with precise mathematical formulas, so don't worry about it too much for now.
+
+![interval animation](./interval-ratio-animation.gif)
+<figcaption>
+  Proportional interval stamp stroke animation by reducing the interval ratio $\eta$.
+</figcaption>
+
+Proportional interval has another benefit: Strokes have more consistent appearance!
+Watch the start and end points of the fixed interval stroke.
+Because the stroke radius drops to zero at these points, these dots are too sparser to keep a continuous feeling.
+In contrast, the proportional interval is consistent all along the stroke.
+Actually, it's a [fractal](https://en.wikipedia.org/wiki/Fractal) like mandelbrot set.
+
+Krita supports the proportional interval.
+We can find the "Auto" toggle button under the "Spacing" setting, as shown in the figure below.
+When enabled, the brush draws proportional interval strokes; when disabled, it draws fixed interval stroke.
+
+![spacing auto setting](./krita-spacing-auto.png)

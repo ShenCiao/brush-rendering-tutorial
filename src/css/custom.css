@@ -45,8 +45,10 @@ span.katex-display math{
 
 figcaption{
   text-after-overflow: 0;
-  padding-bottom: 0.5em;
+  padding-bottom: 0.0em;
   font-style: italic;
+  text-align: center;
+  color: #828282;
 }
 
 mstyle {
