@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CGVJD5P2PP"></script>
 <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-CGVJD5P2PP",{anonymize_ip:!0})</script><link rel="stylesheet" href="/brush-rendering-tutorial/assets/css/styles.9d58935d.css">
-<script src="/brush-rendering-tutorial/assets/js/runtime~main.45789c19.js" defer="defer"></script>
+<script src="/brush-rendering-tutorial/assets/js/runtime~main.fd5fb0d7.js" defer="defer"></script>
 <script src="/brush-rendering-tutorial/assets/js/main.9df8c662.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -23,7 +23,7 @@ then the stamp model and how to implement it in a shader program.
 The vanilla and stamp strokes share the exact same vertex placement method.
 For your better understanding, avoid jumping right into the stamp part.</p>
 <p>Maybe the stamp strokes with various styles don&#x27;t interest you, feel free to ignore it and learn the vanilla stroke only.
-Knowing how to render a line is very handy when drawing UIs or debugging your 3D scenes,
+Knowing how to render a line is very handy when drawing GUIs or debugging your 3D scenes,
 and our method may be one of the simplest and most elegant ways of line rendering.</p>
 <p>While you may recognize a brush stroke by its stylization, another crucial property could be ignored:
 the &quot;variable width&quot; along the stroke.
@@ -33,26 +33,26 @@ The one with variable width on the right has more expressive appearance.</p>
 <p><img decoding="async" loading="lazy" alt="butterfly" src="/brush-rendering-tutorial/assets/images/butterfly-compare-3cd8e503fc180752e2444bbbc3cbd414.png" width="765" height="414" class="img_ev3q"></p>
 <figcaption><p>Butterfly by <a href="https://qianxi-folio.vercel.app/index.html" target="_blank" rel="noopener noreferrer">Qianxi Liu</a>.</p></figcaption>
 <p>The width values are typically generated from the pressure values as a stylus presses and moves on a tablet.
-After the artists install a new painting program,
-one of the highest priorities is to configure the mapping function from pen pressure to brush radius.</p>
+After the artists install a new paint program,
+one of the highest priorities is to configure the mapping function from pen pressure to stroke width.</p>
 <details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>In case you don&#x27;t know about tablets and styluses</summary><div><div class="collapsibleContent_i85q"><p>Digital artists paint with dedicated devices: Graphics Tablet and Stylus.
 If you&#x27;re unfamiliar with tablets and styluses, you can watch the video below for more information:</p><p><a href="https://www.youtube.com/watch?app=desktop&amp;v=83BRMfjJXIk" target="_blank" rel="noopener noreferrer"><img decoding="async" loading="lazy" src="https://img.youtube.com/vi/83BRMfjJXIk/maxresdefault.jpg" alt="Tablet" class="img_ev3q"></a></p></div></div></details>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="geometric-data">Geometric data<a href="#geometric-data" class="hash-link" aria-label="Direct link to Geometric data" title="Direct link to Geometric data">​</a></h2>
 <p>To store the variable radius in brush stroke, we will render an uncommon type of vector curve:
 An ordered list of points (polyline) with radius values assigned to each point.
 As a user presses a stylus on a tablet and moves, a paint program generates a sequence of points to record the trace of movement.
-Meanwhile, the pen pressure is transformed into the radius value assigned to each point.
-After rendering the stroke on the polyline, the user feels like drawing on canvas.</p>
+Meanwhile, the pen pressure is transformed into the stroke width value assigned to each point.
+After rendering the stroke on the polyline, the user feels like drawing on a canvas.</p>
 <p><img decoding="async" loading="lazy" alt="Monkey" src="/brush-rendering-tutorial/assets/images/monkey-218688e42a5da691e375e0bfea2ea753.png" width="1243" height="931" class="img_ev3q"></p>
 <figcaption><p>The monkey Suzanne in Blender (Grease Pencil), the orange dots on the right side show polylines&#x27; points (vertices).</p></figcaption>
 <p>We can approximate any type of curve by increasing the number of points in a polyline, whether freehand-drawn or mathematically defined.
-Try to change the <code>maxRadius</code> and <code>segmentCount</code> values in the code editor below to see how the vanilla stroke changes.
+Try to change the <code>maxRadius</code> (radius is half width) and <code>segmentCount</code> values in the code editor below to see how the vanilla stroke changes.
 I will elaborate on how to render this stroke in the next section.
 Feel free to change any other parts of the code as long as the function returns the <code>position</code> and <code>radius</code> array correctly.</p>
 <!-- -->
 <div><div class="tabs-container tabList__CuJ"><ul role="tablist" aria-orientation="horizontal" class="tabs"><li role="tab" tabindex="0" aria-selected="true" class="tabs__item tabItem_LNqP tabs__item--active">geometry.js</li></ul><div class="margin-top--md"><div role="tabpanel" class="tabItem_Ymn6"><section style="display:flex;position:relative;text-align:initial;width:100%;height:40vh"><div style="display:flex;height:100%;width:100%;justify-content:center;align-items:center">Loading...</div><div style="width:100%;display:none"></div></section></div></div></div></div><div style="width:100%"></div>
 <p>Blender Grease Pencil team has developed many novel tools to edit polylines.
 I recommend that everyone researching digital painting techniques learn about them.
-<a href="https://www.youtube.com/watch?v=nZyB30-xZFs" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=nZyB30-xZFs</a></p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/ShenCiao/brush-rendering-tutorial/tree/main/docs/Basics/Basics/Basics.mdx" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/brush-rendering-tutorial/category/basics/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Basics</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/brush-rendering-tutorial/Basics/Vanilla/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Vanilla</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#brush-strokes" class="table-of-contents__link toc-highlight">Brush strokes</a></li><li><a href="#geometric-data" class="table-of-contents__link toc-highlight">Geometric data</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Brush Rendering Tutorial, under CC BY-SA 4.0 License</div></div></div></footer></div>
+Here is a tutorial video on how to use blender grease pencil: <a href="https://www.youtube.com/watch?v=nZyB30-xZFs" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=nZyB30-xZFs</a></p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/ShenCiao/brush-rendering-tutorial/tree/main/docs/Basics/Basics/Basics.mdx" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/brush-rendering-tutorial/category/basics/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Basics</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/brush-rendering-tutorial/Basics/Vanilla/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Vanilla</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#brush-strokes" class="table-of-contents__link toc-highlight">Brush strokes</a></li><li><a href="#geometric-data" class="table-of-contents__link toc-highlight">Geometric data</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 Brush Rendering Tutorial, under CC BY-SA 4.0 License</div></div></div></footer></div>
 </body>
 </html>
