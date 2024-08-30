@@ -20,7 +20,7 @@ Therefore, we will focus on the most critical technique, how to place the footpr
 
 A naive solution is to place a footprint at each vertex.
 ![naive](./dotted-monkey.png)
-_Place a dot texture at each vertex._
+<figcaption> Place a dot texture at each vertex. </figcaption>
 
 But it's not good enough for the most usages.
 The rendering result of strokes depends on polylines' vertex density.
@@ -79,7 +79,7 @@ Given the pixel $p$, we can get this segment by solving the geometry shown in th
 
 I label the segment can cover the pixel $p$ with the thicker black line.
 The two dashed circles intersect at $p$.
-I label their centers with vertical line ticks, which are the start and end points of the segment.
+Their centers are labeled with vertical line ticks, which are the start and end points of the segment.
 The centers are the farthest points where a stamp placed can cover the pixel $p$.
 Any stamps outside the segment have no chance to affect the pixel's color.
 
@@ -100,9 +100,9 @@ $$
 
 It's not hard to derive $r(x)$ from the figure below.
 $$
-r(x) = \frac{x}{l}r_1 + \left(1-\frac{x}{l}\right)r_0
+r(x) = \frac{x}{L}r_1 + \left(1-\frac{x}{L}\right)r_0
 $$
-$l$ is the length of the current edge.
+$L$ is the length of the current edge.
 ![xradius](./stamp-xradius.png)
 By replacing $r(x)$, we get a quadratic equation $ax^2 + bx + c = 0$:
 
@@ -112,7 +112,7 @@ b = - 2 * (r_0\cos\theta + x_p);
 c = x_p^2 + y_p^2 - r_0^2
 $$
 
-Remind that $\cos\theta = (r_0 - r_1)/l$.
+Remind that $\cos\theta = (r_0 - r_1)/L$.
 Applying the formula for solving quadratic equations,
 two roots of the equation are the X value of min and max points of the segment.
 Therefore, we know the range in the fragment shader and pixels only loop through stamps that can cover it.
@@ -129,7 +129,7 @@ we set RGB values with users' brush setting and sample alpha values from a monoc
 whose pixel's gray scale determines the opacity.
 Here is the pseudocode in the fragment shader:
 
-```
+``` glsl
 uniform vec3 RGB; // Users' brush setting
 void main(){
     float A = 0.0;

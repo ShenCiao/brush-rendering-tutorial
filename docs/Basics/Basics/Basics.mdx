@@ -22,7 +22,7 @@ The vanilla and stamp strokes share the exact same vertex placement method.
 For your better understanding, avoid jumping right into the stamp part.
 
 Maybe the stamp strokes with various styles don't interest you, feel free to ignore it and learn the vanilla stroke only.
-Knowing how to render a line is very handy when drawing UIs or debugging your 3D scenes,
+Knowing how to render a line is very handy when drawing GUIs or debugging your 3D scenes,
 and our method may be one of the simplest and most elegant ways of line rendering.
 
 While you may recognize a brush stroke by its stylization, another crucial property could be ignored:
@@ -38,8 +38,8 @@ The one with variable width on the right has more expressive appearance.
 </figcaption>
 
 The width values are typically generated from the pressure values as a stylus presses and moves on a tablet.
-After the artists install a new painting program,
-one of the highest priorities is to configure the mapping function from pen pressure to brush radius.
+After the artists install a new paint program,
+one of the highest priorities is to configure the mapping function from pen pressure to stroke width.
 
 <details>
   <summary>In case you don't know about tablets and styluses</summary>
@@ -56,8 +56,8 @@ If you're unfamiliar with tablets and styluses, you can watch the video below fo
 To store the variable radius in brush stroke, we will render an uncommon type of vector curve:
 An ordered list of points (polyline) with radius values assigned to each point.
 As a user presses a stylus on a tablet and moves, a paint program generates a sequence of points to record the trace of movement.
-Meanwhile, the pen pressure is transformed into the radius value assigned to each point.
-After rendering the stroke on the polyline, the user feels like drawing on canvas.
+Meanwhile, the pen pressure is transformed into the stroke width value assigned to each point.
+After rendering the stroke on the polyline, the user feels like drawing on a canvas.
 
 ![Monkey](./monkey.png)
 
@@ -66,7 +66,7 @@ The monkey Suzanne in Blender (Grease Pencil), the orange dots on the right side
 </figcaption>
 
 We can approximate any type of curve by increasing the number of points in a polyline, whether freehand-drawn or mathematically defined.
-Try to change the `maxRadius` and `segmentCount` values in the code editor below to see how the vanilla stroke changes.
+Try to change the `maxRadius` (radius is half width) and `segmentCount` values in the code editor below to see how the vanilla stroke changes.
 I will elaborate on how to render this stroke in the next section.
 Feel free to change any other parts of the code as long as the function returns the `position` and `radius` array correctly.
 
@@ -76,4 +76,4 @@ import { ArticulatedLine2D } from "@site/src/components/ArticulatedLine2D";
 
 Blender Grease Pencil team has developed many novel tools to edit polylines.
 I recommend that everyone researching digital painting techniques learn about them.
-https://www.youtube.com/watch?v=nZyB30-xZFs
+Here is a tutorial video on how to use blender grease pencil: https://www.youtube.com/watch?v=nZyB30-xZFs

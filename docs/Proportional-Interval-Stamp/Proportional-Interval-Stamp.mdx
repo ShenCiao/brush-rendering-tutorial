@@ -19,12 +19,22 @@ This content is under construction and not peer-reviewed. Learn it under your ow
 
 </details>
 
+
+<figcaption>
+
+© 2024 Shen Ciao. All rights reserved on this webpage.
+
+Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited.
+Excerpts and links may be used, provided that full and clear credit is given to Shen Ciao with appropriate and specific direction to the original content.
+
+</figcaption>
+
 :::
 
 ## Introduction to stamp patterns
 
 ### Fixed interval
-In the [Stamp](../Basics/Stamp) section, I introduced stamp brush and methods to render it.
+In the [Stamp](../Basics/Stamp) section, we learned stamp brush and methods to render it.
 We assumed the interval between stamp is a fixed value along a stroke.
 
 > While a user paints on a canvas, we render the texture onto the canvas **equidistantly** along the drawing trace.
@@ -121,7 +131,7 @@ I'll soon explain it with precise mathematical formulas, so don't worry about it
 
 ![interval animation](./interval-ratio-animation.gif)
 <figcaption>
-  Proportional interval stamp stroke animation by reducing the interval ratio $\eta$.
+  Proportional interval animation by reducing the interval ratio $\eta$.
 </figcaption>
 
 Proportional interval has another benefit: Strokes have more consistent appearance!
@@ -132,6 +142,40 @@ Actually, it's a [fractal](https://en.wikipedia.org/wiki/Fractal) like mandelbro
 
 Krita supports the proportional interval.
 We can find the "Auto" toggle button under the "Spacing" setting, as shown in the figure below.
-When enabled, the brush draws proportional interval strokes; when disabled, it draws fixed interval stroke.
+When enabled, the brush draws proportional interval strokes; when disabled, it draws fixed interval strokes.
 
 ![spacing auto setting](./krita-spacing-auto.png)
+
+Implementing the proportional interval on the CPU is straightforward.
+The interval can be computed dynamically using the current drawn footprint.
+Here's the pseudocode for the process:
+
+``` cpp
+vec2 currPos = firstStampPosition;
+float currRadius = firstStampRadius;
+while (currPos != endPos){
+  drawFootprint(currPos, currRadius);
+  // highlight-next-line
+  float interval = currRadius * interval_ratio;
+  vec2 nextPos = addAlongThePolyline(currPos, interval);
+  vec2 nextRadius = radius(nextPos);
+  currPos = nextPos; currRadius = nextRadius;
+}
+```
+
+The `nextPos` depends on `currPos`, so the process cannot be GPU-accelerated.
+To overcome this, we need to eliminate this dependency while maintaining the appearance of the stroke.
+It's a significant challenge and will require some calculus to solve it.
+
+## Theory
+We want the interval to be proportional to radius.
+Let's define this in a calculus way!
+
+Given a polyline and pick one of its edges, cut the edge into infinite small segments with length $\Delta L$.
+Each segment has its local coordinate $x$, and we know its radius $r(x) = r_0 - \cos\theta x$.
+Within a small segment, define the stamp interval as $\eta r(x)$.
+So the number of stamps $\Delta n$ in this segment is $\frac{\Delta L}{\eta r(x)}$.
+Sum $\Delta n$ over the edge, we get the number of stamps $n(x)$ on this edge;
+sum the number on all edges, we get the count of stamps on the polyline.
+So we have the stamp number $n$ grows along the polyline.
+Every time this $n$ value hits an integer, we stamp on that point.
