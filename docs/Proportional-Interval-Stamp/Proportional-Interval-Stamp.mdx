@@ -19,10 +19,9 @@ This content is under construction and not peer-reviewed. Learn it under your ow
 
 </details>
 
-
 <figcaption>
 
-© 2024 Shen Ciao. All rights reserved on this webpage.
+© 2024 Shen Ciao. All rights reserved on this webpage (until Shen publishes the paper).
 
 Unauthorized use and/or duplication of this material without express and written permission from this site’s author and/or owner is strictly prohibited.
 Excerpts and links may be used, provided that full and clear credit is given to Shen Ciao with appropriate and specific direction to the original content.
@@ -31,7 +30,7 @@ Excerpts and links may be used, provided that full and clear credit is given to 
 
 :::
 
-## Introduction to stamp patterns
+## Stamp patterns
 
 ### Fixed interval
 In the [Stamp](../Basics/Stamp) section, we learned stamp brush and methods to render it.
@@ -168,14 +167,59 @@ To overcome this, we need to eliminate this dependency while maintaining the app
 It's a significant challenge and will require some calculus to solve it.
 
 ## Theory
-We want the interval to be proportional to radius.
-Let's define this in a calculus way!
+Given a polyline, pick one of its edges and divide it into infinitely small segments of length $\Delta x$.
+We reuse the old local coordinate system, so each segment has its local coordinate $x$,
+and we already know the radius at a segment $r(x) = r_0 - \cos\theta x$.
 
-Given a polyline and pick one of its edges, cut the edge into infinite small segments with length $\Delta L$.
-Each segment has its local coordinate $x$, and we know its radius $r(x) = r_0 - \cos\theta x$.
-Within a small segment, define the stamp interval as $\eta r(x)$.
-So the number of stamps $\Delta n$ in this segment is $\frac{\Delta L}{\eta r(x)}$.
-Sum $\Delta n$ over the edge, we get the number of stamps $n(x)$ on this edge;
-sum the number on all edges, we get the count of stamps on the polyline.
-So we have the stamp number $n$ grows along the polyline.
-Every time this $n$ value hits an integer, we stamp on that point.
+![small segment](./small-segment.png)
+
+We need the stamp interval to be proportional to radius.
+Therefore, for each segment, define the stamp interval as $\eta r(x)$.
+To find the number of stamps $\Delta N$ in a segment, divide the length by the interval:
+
+$$
+\Delta n = \frac{\Delta x}{\eta r(x)}
+$$
+
+To find the number of stamps $\Delta n$ over the edge, we need to integrate $\Delta n$ from 0 to x.
+
+$$
+n(x) = \int_0^{x} \frac{dx}{\eta r(x)}
+$$
+
+Given $r(x) = r_0 - \cos\theta x$, we substitute this into the integral and get:
+
+$$
+\tag{1} n(x) = \frac{1}{\eta \cos\theta} \ln(r_0 - \cos\theta x) \bigg|_0^x = \frac{1}{\eta \cos\theta} \ln (1 - \frac{\cos\theta x}{r_0})
+$$
+
+Exchange the dependent and independent variable in formula (1) and get:
+
+$$
+\tag{2} x(n) = \frac{r_0}{\cos\theta}(1 - e^{\eta\cos\theta n})
+$$
+
+As $x = L$, we know the total stamp number on the edge, remind that $\cos\theta L = r_0-r_1$:
+
+$$
+\tag{3} n(L) = \frac{1}{\eta \cos\theta}\ln \frac{r_0}{r_1}
+$$
+
+Soon we will use the formula (1)(2)(3) in our code.
+
+![store](store-n.png)
+
+How do we place footprint on the polyline?
+Imagine a point starts from the first vertex and moves along the polyline.
+The stamp number to the first vertex grows with its movement.
+Every time the number hits an integer, we place a footprint at this point.
+
+Remind the figure below in the Stamp section.
+Given a point or pixel, we calculate a range on the edge that can cover the point.
+We label the two roots with $x_1$ and $x_2$.
+
+![locate stamp](./locate-stamp.png)
+
+With the stamp number of each edge $n(L)$, we can prefix sum $n(L)$ the number of stamps from each vertex to the first vertex.
+We will store the number into each vertex.
+For the current edge, we use $n_0$ and $n_1$ to indicate the stamp number at vertex0 and vertex1.

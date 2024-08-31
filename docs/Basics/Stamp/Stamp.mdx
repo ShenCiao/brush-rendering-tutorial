@@ -59,7 +59,7 @@ The distances represent the cumulative length of the edges, and we calculated th
   By using one of them, the whole rendering process is GPU-accelerated.
 
   The best tutorial about parallel prefix sum I've ever found is this free course
-  [High Performance Computing](https://www.udacity.com/course/high-performance-computing--ud281) by Prof. Rich Vuduc.
+  [High Performance Computing](https://www.udacity.com/catalog/all/any-price/any-school/any-skill/any-difficulty/any-duration/any-type/relevance/page-1?searchValue=High%20Performance%20Computing) by Prof. Rich Vuduc.
   The course introduces prefix sum in Lesson 6.
 
 </details>
@@ -100,16 +100,18 @@ $$
 
 It's not hard to derive $r(x)$ from the figure below.
 $$
-r(x) = \frac{x}{L}r_1 + \left(1-\frac{x}{L}\right)r_0
+r(x) = \left(1-\frac{x}{L}\right)r_0 + \frac{x}{L}r_1 = r_0 - \cos\theta x
 $$
 $L$ is the length of the current edge.
 ![xradius](./stamp-xradius.png)
 By replacing $r(x)$, we get a quadratic equation $ax^2 + bx + c = 0$:
 
 $$
-a = 1 - \cos^2\theta;
-b = - 2 * (r_0\cos\theta + x_p);
-c = x_p^2 + y_p^2 - r_0^2
+\begin{align}
+a &= 1 - \cos^2\theta \\
+b &= - 2(r_0\cos\theta + x_p) \\
+c &= x_p^2 + y_p^2 - r_0^2
+\end{align}
 $$
 
 Remind that $\cos\theta = (r_0 - r_1)/L$.

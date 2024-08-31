@@ -31,16 +31,8 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-.katex-html{
-  display: none
-}
-
 span.katex-mathml{
   font-size: 18px;
-}
-
-span.katex-display math{
-  padding-bottom: 0.7em;
 }
 
 figcaption{

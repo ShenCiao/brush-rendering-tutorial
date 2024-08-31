@@ -31,6 +31,7 @@ void main(){
     l0 = length0;
     l1 = length1;
 
+    // ----------There's nothing new underneath-------------
     float cosTheta = (r0 - r1)/distance(p0, p1);
     if(abs(cosTheta) >= 1.0) return;
 

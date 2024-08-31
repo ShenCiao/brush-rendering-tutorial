@@ -68,7 +68,7 @@ void main() {
         vec2 textureCoordinate = (pToCurrStamp/currStampRadius + 1.0)/2.0; // uv coordinate
         vec4 sampledColor = texture(footprint, textureCoordinate);
 
-        // The alpha compositing function, https://en.wikipedia.org/wiki/Alpha_compositing
+        // The alpha compositing function, wiki: https://en.wikipedia.org/wiki/Alpha_compositing
         vec4 color;
         color.a = sampledColor.a + currColor.a * (1.0 - sampledColor.a);
         color.rgb = (sampledColor.rgb * sampledColor.a + currColor.rgb * currColor.a * (1.0 - sampledColor.a))/color.a;
