@@ -9,14 +9,13 @@ title: Proportional Interval Stamp
 This content is under construction and not peer-reviewed. Learn it under your own risk!
 
 <details>
-  <summary>I'm kidding!</summary>
+<summary>I'm kidding!</summary>
 
-  There’s no risk in learning something incorrectly.
-  I'm 100% sure that all the theories are logically correct.
+There’s no risk in learning something incorrectly.
+I'm 100% sure that all the theory and code are correct.
 
-  The only risk is that I might change the terminology or math symbols to use.
-  Hopefully this won't confuse you in the future.
-
+The only risk is that I might change the terminology or math symbols to use.
+Hopefully this won't confuse you in the future.
 </details>
 
 <figcaption>
@@ -70,7 +69,7 @@ Instead, we make the stamp interval be proportional to the stroke radius,
 and use their ratio as the brush parameter.
 Here, I call this value **interval ratio**, and denote it with the symbol $\eta$.
 $$
-\eta = \frac{Interval}{Radius}
+\eta \vcentcolon= \frac{\mathrm{Interval}}{\mathrm{Radius}}
 $$
 For a paint program on the market like Krita, you can definitely find this parameter in its brush editor.
 The parameter might be half of the value as defined in our system, because the program uses width value rather than radius value.
@@ -168,13 +167,13 @@ It's a significant challenge and will require some calculus to solve it.
 
 ## Theory
 Given a polyline, pick one of its edges and divide it into infinitely small segments of length $\Delta x$.
-We reuse the old local coordinate system, so each segment has its local coordinate $x$,
+We reuse the old local coordinate system, each segment has its local coordinate $x$,
 and we already know the radius at a segment $r(x) = r_0 - \cos\theta x$.
 
 ![small segment](./small-segment.png)
 
-We need the stamp interval to be proportional to radius.
-Therefore, for each segment, define the stamp interval as $\eta r(x)$.
+We need the stamp interval to be proportional to radius, so we simply define it as such!
+For each small segment, define the stamp interval as $\eta r(x)$.
 To find the number of stamps $\Delta n$ in a segment, divide the length by the interval:
 
 $$
@@ -245,9 +244,14 @@ In the Stamp Pattern subsection, we claim that "stamp interval is always proport
 Though they are intuitively correct, it's time to prove them mathematically!
 
 ### Proportional interval
+According to the definition in the Theory subsection, the intervals are proportional to the radius "continuously" along the stroke.
+However, what happens to these intervals after the discretization (place footprint as $n$ hits integers)?
+Let's explore the visual spacing between two footprints.
+
 **Conclusion:**
 Pick two consecutive footprints on an edge.
-Label their stamp indices as $n$ and $n+1$, positions as $x(n)$ and $x(n+1)$, radii as $r(n)$ and $r(n+1)$.
+Label their stamp indices on current edge as $n$ and $n+1$.
+So, their positions are $x(n)$ and $x(n+1)$, radii are $r(n)$ and $r(n+1)$.
 Their interval $x(n+1) - x(n)$ is proportional to both $r(n)$ and $r(n+1)$:
 $$
 \begin{aligned}
@@ -257,15 +261,77 @@ $$
 $$
 
 **Proof:**
-Take the formula (3) into $r(x) = r_0 - \cos\theta x$ to get $r(n) = r_0e^{-\eta\cos\theta n}$.
-The rest of proof is straightforward.
+Substitute formula (3) into $r(x) = r_0 - \cos\theta x$ to obtain $r(n) = r_0e^{-\eta\cos\theta n}$.
+The remainder of proof is straightforward.
 
-Notice the ratios do not depend on variable $n$.
-I was amazed by this result.
-Even now, it still fascinates me that how a naive rule (interval is proportional to the radius continuously) can produce an elegant result.
+Note that these ratios are independent of $n$ or $x$,
+indicating that they don't depend on the position of the footprints along the edge.
+This confirms our intuition that "the stamp interval is always proportional to the radius of the stroke."
 
 ### Consistent appearance
+Points that can be covered by the same number of stamps (i.e., $n(x_2) - n(x_1)$ value is the same) form straight lines.
+I call these lines "isocolor", in analogy to "isoheight" line.
+As the name suggests, when $\eta$ is small enough, the points on these lines (inside the bone area) have the same color.
+This explains why we perceive a consistent appearance.
+Let's derive these isocolor lines.
+
+In the figure below, draw a radius across $P$ to intersect the edge at the point $Q$.
+We label this radius's length as $r_q$, and define a ratio value $\lambda$ that makes the distance between $P$ and $Q$ is equal to $\lambda r_q$.
+
+$$
+\lambda \vcentcolon = \frac{|PQ|}{r_q}
+$$
+
+![proof-number](./proof-number.png)
+
+<figcaption>Radius across point P and Q</figcaption>
+
 **Conclusion:**
-For points that have the same stamp number that can cover it (i.e., $n(x_2) - n(x_1)$ value is the same),
-they form a straight line.
-I call this line "isocolor" line (analogy to "isoheight" line).
+$$
+\begin{aligned}
+n(x_2) - n(x_1)
+& = \frac{1}{\eta \cos\theta} \ln\frac
+{1-\cos^2\theta\lambda + \sqrt{(1-\cos^2\theta)(1 - 2\cos^2\theta\lambda + \cos^2\theta\lambda^2)}}
+{1-\cos^2\theta\lambda - \sqrt{(1-\cos^2\theta)(1 - 2\cos^2\theta\lambda + \cos^2\theta\lambda^2)}}
+\end{aligned}
+$$
+To simplify a little bit:
+$$
+ = \frac{1}{\eta \cos\theta} \ln\frac
+{1-\lambda + \tan^2\theta + \tan\theta\sqrt{\tan^2\theta + (1-\lambda)^2}}
+{1-\lambda + \tan^2\theta - \tan\theta\sqrt{\tan^2\theta + (1-\lambda)^2}}
+$$
+
+While the result may appear complex, it's worth noting that it only depends on $\theta$, $\lambda$, and is inversely proportional to $\eta$.
+This suggests that at any point in a given edge, the number of stamps that can cover it only depends on $\lambda$.
+If we connect the points with the same $\lambda$, they form an isocolor line.
+
+**Proof:**
+With the formula (1), we can derive:
+
+$$
+n(x_2) - n(x_1) = \frac{1}{\eta \cos\theta}\ln \frac{r(x_1)}{r(x_2)}
+$$
+
+(Directly using $n(x_2) - n(x_1) = \int_{x_1}^{x_2} \frac{dx}{\eta r(x)} $ makes it easier.)
+
+So, we only need to find the value of $\frac{r(x_1)}{r(x_2)}$.
+It would be very tedious to directly compute $x_1$ and $x_2$.
+I will introduce a tricky geometric method (I spent a whole evening to find it):
+
+Refer to the figure "_Radius across point $P$ and $Q$_".
+Notice $|PX_2| = r(x_2)$ and $|QX_2| = \cos\theta(r_q - r(x_2))$.
+Apply the law of cosines on $\angle PQX_2$, we can derive a quadratic equation with variable $\frac{r(x_2)}{r_q}$.
+Also apply the law of cosines on $\angle PQX_1$,
+we can derive an identical quadratic equation with variable $\frac{r(x_1)}{r_q}$.
+Two roots of this quadratic equation are $\frac{r(x_1)}{r_q}$ and $\frac{r(x_2)}{r_q}$,
+their ratio is $\frac{r(x_1)}{r(x_2)}$.
+
+Computing the roots of quadratic equation is why we have a big block of sqrt in the result.
+If you are interested in more details about the solving process, check the drop-down tab below.
+
+<details>
+<summary>Proof details</summary>
+
+Working in progress. Franky speaking, I'm kind of lazy on this. It's not fun to write.
+</details>
