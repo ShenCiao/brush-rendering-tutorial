@@ -49,13 +49,14 @@ void main() {
     x2 = temp.y;
 
     // With the distance to the polyline's first vertex, we can compute a "stamp index" value.
-    // which indicate the number of stamp from the first vertex.
-    float index0 = l0/interval; // The stamp index of vertex0.
-    float startIndex, endIndex; // The stamp index's begin and end integral values
-    startIndex = x1 < 0.0 ? ceil(index0):ceil(index0 + x1/interval); // if x1 is less than zero, start the loop from vertex0.
+    // which indicate the number of stamp from the first vertex to current point.
+    float index0 = l0/interval; // The stamp index at vertex0.
+    float startIndex, endIndex; // The stamp index's begin and end values
+    float x1Index = index0 + x1/interval; // The stamp index at x1.
+    startIndex = x1 < 0.0 ? ceil(index0):ceil(x1Index); // if x1 is less than zero, start the loop from vertex0.
     float index1 = l1/interval;
-    float backIndex = x2/interval + index0;
-    endIndex = index1 < backIndex ? index1 : backIndex; // if x2 is larger than L, end the loop at vertex1.
+    float x2Index = x2/interval + index0;
+    endIndex = x2 > len ? index1 : x2Index; // if x2 is larger than L, end the loop at vertex1.
     if(startIndex > endIndex) discard;
 
     // The main loop to sample and blend color from the footprint, from `startIndex` to `endIndex`
