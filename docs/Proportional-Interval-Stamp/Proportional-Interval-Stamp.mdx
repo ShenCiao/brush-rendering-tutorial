@@ -136,7 +136,10 @@ Proportional interval has another benefit: Strokes have more consistent appearan
 Watch the start and end points of the fixed interval stroke.
 Because the stroke radius drops to zero at these points, these dots are too sparser to keep a continuous feeling.
 In contrast, the proportional interval is consistent all along the stroke.
-Actually, it's a [fractal](https://en.wikipedia.org/wiki/Fractal) like mandelbrot set.
+Actually, it's a [fractal](https://en.wikipedia.org/wiki/Fractal) when a radius comes to zero.
+
+![zoom](./zoom-in.gif)
+<figcaption> Zoom in until getting numeric error</figcaption>
 
 Krita supports the proportional interval.
 We can find the "Auto" toggle button under the "Spacing" setting, as shown in the figure below.
@@ -154,7 +157,7 @@ float currRadius = firstStampRadius;
 while (currPos != endPos){
   drawFootprint(currPos, currRadius);
   // highlight-next-line
-  float interval = currRadius * interval_ratio;
+  float interval = currRadius * intervalRatio;
   vec2 nextPos = addAlongThePolyline(currPos, interval);
   vec2 nextRadius = radius(nextPos);
   currPos = nextPos; currRadius = nextRadius;
@@ -162,8 +165,9 @@ while (currPos != endPos){
 ```
 
 The `nextPos` depends on `currPos`, so the process cannot be GPU-accelerated.
-To overcome this, we need to eliminate this dependency while maintaining the appearance of the stroke.
-It's a significant challenge and will require some calculus to solve it.
+Our goal is to eliminate this dependency while maintaining the appearance of the stroke.
+It's a challenge, but we will solve it with very small code changes compared to the Stamp section.
+However, understanding the theory behind is crucial, and it requires some knowledge of calculus.
 
 ## Theory
 Given a polyline, pick one of its edges and divide it into infinitely small segments of length $\Delta x$.
@@ -201,7 +205,7 @@ $$
 As $x = L$, we know the total stamp number on the edge, remind that $\cos\theta L = r_0-r_1$:
 
 $$
-\tag{3} n(L) = \frac{1}{\eta \cos\theta}\ln \frac{r_0}{r_1}
+\tag{3} n(L) = \frac{L}{\eta (r_0-r_1)}\ln \frac{r_0}{r_1}
 $$
 
 We will soon use the formula (1)(2)(3) in our code.
@@ -235,8 +239,18 @@ Additionally, to determine $n_0$ and $n_1$, we can compute the prefix sum of the
 Put them into vertex data and pass them into fragment shader, exactly same as the value `length` in the Stamp section.
 
 ## Implementation
+You can verify the correctness of code by changing the variable `intervalRatio`:
 
-## Corner case
+import Stroke from "./ProportionalStampStroke";
+
+<Stroke/>
+
+**Zero division:**
+It's common for strokes to have zero radii at their starting or ending vertices.
+When either $r_0$ or $r_1$ is zero, the value in formula (3) can approach infinity.
+This will bring numeric errors, which we surely want to avoid.
+A simple solution is to add a small number to the radii, as shown in the code above.
+For a more rigorous approach, you can implement checks to prevent $r_0/r_1$ in the logarithm from becoming zero or excessively large.
 
 ## Proof of properties
 In the Stamp Pattern subsection, we claim that "stamp interval is always proportional to radius of stroke" and
@@ -327,7 +341,7 @@ we can derive an identical quadratic equation with variable $\frac{r(x_1)}{r_q}$
 Two roots of this quadratic equation are $\frac{r(x_1)}{r_q}$ and $\frac{r(x_2)}{r_q}$,
 their ratio is $\frac{r(x_1)}{r(x_2)}$.
 
-Computing the roots of quadratic equation is why we have a big block of sqrt in the result.
+Computing the roots of quadratic equation is why we have a big block of sqrt with $\pm$ sign in the result.
 If you are interested in more details about the solving process, check the drop-down tab below.
 
 <details>

@@ -121,7 +121,7 @@ export function Stroke({
     meshRef.current = new THREE.InstancedMesh(
       trapezoidGeometry,
       material,
-      trapezoidGeometry.getAttribute("position0").count - 1,
+      trapezoidGeometry.getAttribute("radius0").count - 1,
     );
     meshRef.current.frustumCulled = false;
     scene.add(meshRef.current);
@@ -234,7 +234,7 @@ export function Stroke({
       }
 
       updateGeometry(meshRef.current.geometry, position, radius);
-      meshRef.current.count = position.length - 1;
+      meshRef.current.count = radius.length - 1;
       renderSceneFnRef.current();
     },
     [],
