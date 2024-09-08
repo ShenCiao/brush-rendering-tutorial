@@ -103,13 +103,13 @@ With varying radius values, which one should be used to calculate the interval?
 Perhaps the maximum radius of a stroke?
 It's a reasonable compromise.
 I did it in Ciallo's paper when conducting performance tests (and it seems I forgot about mentioning it).
-In a paint program like Krita, the user-specified stroke size, as shown in the figure above, is the perfect choice.
+A perfect choice is to use a user-specified stroke size when painting, as shown in the figure above of Krita.
 But outside a paint program, it's not easy to get a user-specified radius value.
-A better solution is to let the stamp interval vary along with the stroke radius.
+A once-and-for-all solution is to let the stamp interval vary along with the stroke radius.
 
 ### Proportional interval
 
-We will learn how to render the "Proportional interval" stroke shown in the figure below.
+We will learn how to render a "Proportional interval" stroke shown in the figure below.
 Its interval is not fixed but vary along with the stroke radius.
 Meanwhile, the interval is always proportional to the radius.
 
@@ -239,18 +239,22 @@ Additionally, to determine $n_0$ and $n_1$, we can compute the prefix sum of the
 Put them into vertex data and pass them into fragment shader, exactly same as the value `length` in the Stamp section.
 
 ## Implementation
-You can verify the correctness of code by changing the variable `intervalRatio`:
+You can validate the code by changing the variable `intervalRatio`:
 
 import Stroke from "./ProportionalStampStroke";
 
 <Stroke/>
 
 **Zero division:**
-It's common for strokes to have zero radii at their starting or ending vertices.
+It's common for a stroke to have zero radii at their starting or ending vertices.
 When either $r_0$ or $r_1$ is zero, the value in formula (3) can approach infinity.
 This will bring numeric errors, which we surely want to avoid.
-A simple solution is to add a small number to the radii, as shown in the code above.
+A simple solution is to add a small number to the radii, as demoed in the code above.
 For a more rigorous approach, you can implement checks to prevent $r_0/r_1$ in the logarithm from becoming zero or excessively large.
+
+Also, it's worth noting that if calculating the prefix sum value of $n(L)$ with CPU,
+maybe you want to push $\eta$ times $n(L)$, $\eta n(L)$ instead of $n(L)$ itself into vertex buffer.
+Because $\eta$ is a value changed more frequently, you won't want to recompute the prefix sum every time it changes.
 
 ## Proof of properties
 In the Stamp Pattern subsection, we claim that "stamp interval is always proportional to radius of stroke" and
@@ -290,10 +294,10 @@ This explains why we perceive a consistent appearance.
 Let's derive these isocolor lines.
 
 In the figure below, draw a radius across $P$ to intersect the edge at the point $Q$.
-We label this radius's length as $r_q$, and define a ratio value $\lambda$ that makes the distance between $P$ and $Q$ is equal to $\lambda r_q$.
+We label this radius's length as $r_p$, and define a ratio value $\lambda$ that makes the distance between $P$ and $Q$ is equal to $\lambda r_p$.
 
 $$
-\lambda \vcentcolon = \frac{|PQ|}{r_q}
+\lambda \vcentcolon = \frac{|PQ|}{r_p}
 $$
 
 ![proof-number](./proof-number.png)
@@ -309,12 +313,18 @@ n(x_2) - n(x_1)
 {1-\cos^2\theta\lambda - \sqrt{(1-\cos^2\theta)(1 - 2\cos^2\theta\lambda + \cos^2\theta\lambda^2)}}
 \end{aligned}
 $$
-To simplify a little bit:
-$$
- = \frac{1}{\eta \cos\theta} \ln\frac
-{1-\lambda + \tan^2\theta + \tan\theta\sqrt{\tan^2\theta + (1-\lambda)^2}}
-{1-\lambda + \tan^2\theta - \tan\theta\sqrt{\tan^2\theta + (1-\lambda)^2}}
-$$
+
+[//]: # (To simplify a little bit:)
+
+[//]: # ($$)
+
+[//]: # ( = \frac{1}{\eta \cos\theta} \ln\frac)
+
+[//]: # ({1-\lambda + \tan^2\theta + \tan\theta\sqrt{\tan^2\theta + &#40;1-\lambda&#41;^2}})
+
+[//]: # ({1-\lambda + \tan^2\theta - \tan\theta\sqrt{\tan^2\theta + &#40;1-\lambda&#41;^2}})
+
+[//]: # ($$)
 
 While the result may appear complex, it's worth noting that it only depends on $\theta$, $\lambda$, and is inversely proportional to $\eta$.
 This suggests that at any point in a given edge, the number of stamps that can cover it only depends on $\lambda$.
@@ -330,22 +340,50 @@ $$
 (Directly using $n(x_2) - n(x_1) = \int_{x_1}^{x_2} \frac{dx}{\eta r(x)} $ makes it easier.)
 
 So, we only need to find the value of $\frac{r(x_1)}{r(x_2)}$.
-It would be very tedious to directly compute $x_1$ and $x_2$.
-I will introduce a tricky geometric method (I spent a whole evening to find it):
+It would be very complicated to directly compute $r(x_1)$ and $r(x_2)$.
+I will introduce a geometric method:
 
-Refer to the figure "_Radius across point $P$ and $Q$_".
-Notice $|PX_2| = r(x_2)$ and $|QX_2| = \cos\theta(r_q - r(x_2))$.
-Apply the law of cosines on $\angle PQX_2$, we can derive a quadratic equation with variable $\frac{r(x_2)}{r_q}$.
-Also apply the law of cosines on $\angle PQX_1$,
-we can derive an identical quadratic equation with variable $\frac{r(x_1)}{r_q}$.
-Two roots of this quadratic equation are $\frac{r(x_1)}{r_q}$ and $\frac{r(x_2)}{r_q}$,
+![solve](solve.png)
+Notice $|PX_2| = r(x_2)$ and $|QX_2| = \cos\theta(r_p - r(x_2))$.
+Apply the law of cosines on $\angle PQX_2$, we can derive a quadratic equation with variable $\frac{r(x_2)}{r_p}$.
+Also apply law of cosines on $\angle PQX_1$,
+we can derive an identical quadratic equation with variable $\frac{r(x_1)}{r_p}$.
+Two roots of this quadratic equation are $\frac{r(x_1)}{r_p}$ and $\frac{r(x_2)}{r_p}$,
 their ratio is $\frac{r(x_1)}{r(x_2)}$.
 
-Computing the roots of quadratic equation is why we have a big block of sqrt with $\pm$ sign in the result.
+Computing the roots of quadratic equation is the reason we have a big block of sqrt with $\pm$ signs in the result.
 If you are interested in more details about the solving process, check the drop-down tab below.
 
-<details>
-<summary>Proof details</summary>
+<details open={true}>
+<summary> Proof details </summary>
 
-Working in progress. Franky speaking, I'm kind of lazy on this. It's not fun to write.
+  To simplify the notations, set $|QX_1| = l_1$, $|QX_2| = l_2$, $r_{x_1} = r(x_1)$ $r_{x_2} = r(x_2)$.
+  It's easy to get:
+
+  $$
+  l_2 = \frac{r_p - r_{x_2}}{\cos\theta}
+  $$
+
+  Apply the law of cosines to $\angle PQX_2$, we get:
+  $$
+  l_2^2 + \lambda^2r_p^2 - r_{x_2}^2 - 2l_2\lambda r_p \cos\theta = 0
+  $$
+
+  Substitute $l_2$ into it, we will get a quadratic equation with variable $r_p$ and $r_{x_2}$.
+  Additionally, you can verify after applying the law of cosines to $\angle PQX_1$ and substituting $l_1$, we get an identical quadratic equation.
+
+  So, we discard the subscript $_1$ and $_2$ and simplify the quadratic equation:
+  $$
+  \underbrace{(1-\cos^2\theta)}_{a}r_x^2
+  \underbrace{- 2(1-\cos^2\theta\lambda)}_{b}r_xr_p
+  + \underbrace{(1 - 2\cos^2\theta + \cos^2\theta\lambda^2)}_{c}r_p^2  = 0
+  $$
+
+  Divide the equation by $r_p^2$, its two roots are $r_{x_1}/r_p$ and $r_{x_2}/r_p$.
+  We only need to know about $r_{x_1}/r_{x_2}$:
+  $$
+  \frac{r_{x_1}}{r_{x_2}} = \frac{-b + \sqrt{b^2 - 4ac}}{-b - \sqrt{b^2 - 4ac}}
+  $$
+
+  You verify the result after substituting $a, b, c$.
 </details>
