@@ -63,7 +63,7 @@ export default function ({
     let texture = new THREE.Texture();
     if (ExecutionEnvironment.canUseDOM) {
       texture = new THREE.TextureLoader().load(
-        `/${docusaurusConfig.projectName}/img/dot-transparent.png`,
+        `/${docusaurusConfig.projectName}/img/stamp86.png`,
         (texture) => {
           window.dispatchEvent(new CustomEvent("TextureLoaded"));
         },

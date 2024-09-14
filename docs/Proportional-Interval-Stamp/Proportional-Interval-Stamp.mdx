@@ -6,7 +6,7 @@ title: Proportional Interval Stamp
 
 :::warning
 
-This content is under construction and not peer-reviewed. Learn it under your own risk!
+This content is not peer-reviewed. Learn it under your own risk!
 
 <details>
 <summary>I'm kidding!</summary>
@@ -286,12 +286,15 @@ Note that these ratios are independent of $n$ or $x$,
 indicating that they don't depend on the position of the footprints along the edge.
 This confirms our intuition that "the stamp interval is always proportional to the radius of the stroke."
 
-### Consistent appearance
+### Isocolor
 Points that can be covered by the same number of stamps (i.e., $n(x_2) - n(x_1)$ value is the same) form straight lines.
-I call these lines "isocolor", in analogy to "isoheight" line.
+I call these lines "isocolor", in analogy to "isoheight".
 As the name suggests, when $\eta$ is small enough, the points on these lines (inside the bone area) have the same color.
 This explains why we perceive a consistent appearance.
 Let's derive these isocolor lines.
+
+![isocolor](./isocolor.png)
+<figcaption> Dashed lines are called "isocolor" lines.</figcaption>
 
 In the figure below, draw a radius across $P$ to intersect the edge at the point $Q$.
 We label this radius's length as $r_p$, and define a ratio value $\lambda$ that makes the distance between $P$ and $Q$ is equal to $\lambda r_p$.
@@ -309,22 +312,10 @@ $$
 \begin{aligned}
 n(x_2) - n(x_1)
 & = \frac{1}{\eta \cos\theta} \ln\frac
-{1-\cos^2\theta\lambda + \sqrt{(1-\cos^2\theta)(1 - 2\cos^2\theta\lambda + \cos^2\theta\lambda^2)}}
-{1-\cos^2\theta\lambda - \sqrt{(1-\cos^2\theta)(1 - 2\cos^2\theta\lambda + \cos^2\theta\lambda^2)}}
+{1-\cos^2\theta\lambda + \cos\theta\sqrt{(2\cos^2\theta - 1)\lambda^2 - 2\cos^2\theta\lambda + 1}}
+{1-\cos^2\theta\lambda - \cos\theta\sqrt{(2\cos^2\theta - 1)\lambda^2 - 2\cos^2\theta\lambda + 1}}
 \end{aligned}
 $$
-
-[//]: # (To simplify a little bit:)
-
-[//]: # ($$)
-
-[//]: # ( = \frac{1}{\eta \cos\theta} \ln\frac)
-
-[//]: # ({1-\lambda + \tan^2\theta + \tan\theta\sqrt{\tan^2\theta + &#40;1-\lambda&#41;^2}})
-
-[//]: # ({1-\lambda + \tan^2\theta - \tan\theta\sqrt{\tan^2\theta + &#40;1-\lambda&#41;^2}})
-
-[//]: # ($$)
 
 While the result may appear complex, it's worth noting that it only depends on $\theta$, $\lambda$, and is inversely proportional to $\eta$.
 This suggests that at any point in a given edge, the number of stamps that can cover it only depends on $\lambda$.
@@ -343,7 +334,7 @@ So, we only need to find the value of $\frac{r(x_1)}{r(x_2)}$.
 It would be very complicated to directly compute $r(x_1)$ and $r(x_2)$.
 I will introduce a geometric method:
 
-![solve](solve.png)
+![solve](./solve.png)
 Notice $|PX_2| = r(x_2)$ and $|QX_2| = \cos\theta(r_p - r(x_2))$.
 Apply the law of cosines on $\angle PQX_2$, we can derive a quadratic equation with variable $\frac{r(x_2)}{r_p}$.
 Also apply law of cosines on $\angle PQX_1$,
@@ -357,7 +348,7 @@ If you are interested in more details about the solving process, check the drop-
 <details open={true}>
 <summary> Proof details </summary>
 
-  To simplify the notations, set $|QX_1| = l_1$, $|QX_2| = l_2$, $r_{x_1} = r(x_1)$ $r_{x_2} = r(x_2)$.
+  To simplify the notations, set $|QX_1| = l_1$, $|QX_2| = l_2$, $r(x_1) = r_{x_1}$ $r(x_2) = r_{x_2}$.
   It's easy to get:
 
   $$
@@ -376,7 +367,7 @@ If you are interested in more details about the solving process, check the drop-
   $$
   \underbrace{(1-\cos^2\theta)}_{a}r_x^2
   \underbrace{- 2(1-\cos^2\theta\lambda)}_{b}r_xr_p
-  + \underbrace{(1 - 2\cos^2\theta + \cos^2\theta\lambda^2)}_{c}r_p^2  = 0
+  + \underbrace{(1 - 2\cos^2\theta\lambda + \cos^2\theta\lambda^2)}_{c}r_p^2  = 0
   $$
 
   Divide the equation by $r_p^2$, its two roots are $r_{x_1}/r_p$ and $r_{x_2}/r_p$.
@@ -386,4 +377,6 @@ If you are interested in more details about the solving process, check the drop-
   $$
 
   You verify the result after substituting $a, b, c$.
+  Note that when $\lambda = 0$ or $\lambda = 1$, the $\triangle PQX_{1}$ and $\triangle PQX_{2}$ don't exist,
+  but the formula still works.
 </details>
