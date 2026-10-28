@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkbrush_stroke_tutorial||=[]).push([[647],{3713(r,e,s){s.r(e),s.d(e,{default:()=>h});s(6540);var t=s(8215),u=s(9872),a=s(6131),c=s(2831),l=s(1152),o=s(4848);function h(r){return(0,o.jsx)(a.e3,{className:(0,t.A)(u.G.wrapper.docsPages),children:(0,o.jsx)(l.A,{children:(0,c.v)(r.route.routes)})})}}}]);

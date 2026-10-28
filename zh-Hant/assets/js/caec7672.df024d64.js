@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkbrush_stroke_tutorial||=[]).push([[895],{6664(s){s.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"gallary"}')}}]);
