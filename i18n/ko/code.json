@@ -1,0 +1,140 @@
+{
+  "gallary.galleryTitle": {
+    "message": "갤러리"
+  },
+  "gallary.pageDescription": {
+    "message": "Ciallo의 벡터 브러시로 그린 일러스트를 감상해 보세요."
+  },
+  "gallary.eyebrow": {
+    "message": "Ciallo · 브라우저에서 감상"
+  },
+  "gallary.artworkBadge": {
+    "message": "인터랙티브 작품"
+  },
+  "gallary.viewerLabel": {
+    "message": "인터랙티브 뷰어"
+  },
+  "gallary.hint": {
+    "message": "드래그로 이동 · 휠로 확대/축소 · 더블 클릭으로 전체 보기"
+  },
+  "gallary.zoomOut": {
+    "message": "축소"
+  },
+  "gallary.zoomIn": {
+    "message": "확대"
+  },
+  "gallary.zoomLevel": {
+    "message": "확대 배율"
+  },
+  "gallary.fit": {
+    "message": "전체 보기"
+  },
+  "gallary.background": {
+    "message": "캔버스 배경"
+  },
+  "gallary.checkerboard": {
+    "message": "체크무늬"
+  },
+  "gallary.light": {
+    "message": "밝게"
+  },
+  "gallary.dark": {
+    "message": "어둡게"
+  },
+  "gallary.off": {
+    "message": "끄기"
+  },
+  "gallary.compare": {
+    "message": "비트맵 비교"
+  },
+  "gallary.longEdge": {
+    "message": "비트맵 긴 변"
+  },
+  "gallary.apply": {
+    "message": "적용"
+  },
+  "gallary.sampling": {
+    "message": "샘플링"
+  },
+  "gallary.bitmapSampling": {
+    "message": "비트맵 샘플링"
+  },
+  "gallary.smooth": {
+    "message": "부드럽게"
+  },
+  "gallary.nearest": {
+    "message": "최근접 픽셀"
+  },
+  "gallary.pixelGrid": {
+    "message": "픽셀 격자"
+  },
+  "gallary.difference": {
+    "message": "차이"
+  },
+  "gallary.differenceGain": {
+    "message": "차이 증폭 배율"
+  },
+  "gallary.difference1": {
+    "message": "차이 1×"
+  },
+  "gallary.difference4": {
+    "message": "차이 4×"
+  },
+  "gallary.difference16": {
+    "message": "차이 16×"
+  },
+  "gallary.sharedCamera": {
+    "message": "이동 및 확대/축소 동기화"
+  },
+  "gallary.vector": {
+    "message": "벡터"
+  },
+  "gallary.bitmap": {
+    "message": "비트맵"
+  },
+  "gallary.vectorHelp": {
+    "message": "벡터 작품. 드래그로 이동, 휠로 확대/축소, Home 키로 전체 보기."
+  },
+  "gallary.bitmapHelp": {
+    "message": "비트맵 비교. 어느 쪽에서든 이동하거나 확대/축소하면 두 화면이 함께 바뀝니다."
+  },
+  "gallary.loading": {
+    "message": "작품 불러오는 중…"
+  },
+  "gallary.baking": {
+    "message": "비트맵 생성 중…"
+  },
+  "gallary.unavailable": {
+    "message": "뷰어를 사용할 수 없습니다"
+  },
+  "gallary.viewerHelp": {
+    "message": "하드웨어 가속을 켠 최신 Chrome 또는 Edge를 사용해 보세요."
+  },
+  "gallary.staticPreview": {
+    "message": "현재 표시된 이미지는 정적 미리보기입니다."
+  },
+  "gallary.bitmapFailed": {
+    "message": "비트맵을 생성하지 못했습니다. 크기를 줄여 보세요."
+  },
+  "gallary.rasterDescription": {
+    "message": "작품 전체를 선택한 해상도로 비트맵화합니다."
+  },
+  "gallary.differenceHint": {
+    "message": "검정은 픽셀이 일치함을 뜻합니다. 밝을수록 차이가 큽니다."
+  },
+  "gallary.bitmapHint": {
+    "message": "확대해도 비트맵 해상도는 유지됩니다. 픽셀이 충분히 커지면 격자가 나타납니다."
+  },
+  "gallary.statistics": {
+    "message": "작품 통계"
+  },
+  "gallary.strokes": {
+    "message": "획"
+  },
+  "gallary.polygons": {
+    "message": "다각형"
+  },
+  "gallary.brushes": {
+    "message": "브러시"
+  }
+}

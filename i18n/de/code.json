@@ -1,0 +1,140 @@
+{
+  "gallary.galleryTitle": {
+    "message": "Galerie"
+  },
+  "gallary.pageDescription": {
+    "message": "Entdecke Illustrationen, die mit den Vektorpinseln von Ciallo gezeichnet wurden."
+  },
+  "gallary.eyebrow": {
+    "message": "Ciallo · Im Browser"
+  },
+  "gallary.artworkBadge": {
+    "message": "Interaktives Kunstwerk"
+  },
+  "gallary.viewerLabel": {
+    "message": "Interaktiver Betrachter"
+  },
+  "gallary.hint": {
+    "message": "Ziehen zum Verschieben · Scrollen zum Zoomen · Doppelklick für die Gesamtansicht"
+  },
+  "gallary.zoomOut": {
+    "message": "Verkleinern"
+  },
+  "gallary.zoomIn": {
+    "message": "Vergrößern"
+  },
+  "gallary.zoomLevel": {
+    "message": "Zoomstufe"
+  },
+  "gallary.fit": {
+    "message": "Einpassen"
+  },
+  "gallary.background": {
+    "message": "Leinwandhintergrund"
+  },
+  "gallary.checkerboard": {
+    "message": "Schachbrett"
+  },
+  "gallary.light": {
+    "message": "Hell"
+  },
+  "gallary.dark": {
+    "message": "Dunkel"
+  },
+  "gallary.off": {
+    "message": "Aus"
+  },
+  "gallary.compare": {
+    "message": "Bitmap vergleichen"
+  },
+  "gallary.longEdge": {
+    "message": "Längste Bitmap-Seite"
+  },
+  "gallary.apply": {
+    "message": "Anwenden"
+  },
+  "gallary.sampling": {
+    "message": "Abtastung"
+  },
+  "gallary.bitmapSampling": {
+    "message": "Bitmap-Abtastung"
+  },
+  "gallary.smooth": {
+    "message": "Glatt"
+  },
+  "gallary.nearest": {
+    "message": "Nächster Pixel"
+  },
+  "gallary.pixelGrid": {
+    "message": "Pixelraster"
+  },
+  "gallary.difference": {
+    "message": "Differenz"
+  },
+  "gallary.differenceGain": {
+    "message": "Differenzverstärkung"
+  },
+  "gallary.difference1": {
+    "message": "Differenz 1×"
+  },
+  "gallary.difference4": {
+    "message": "Differenz 4×"
+  },
+  "gallary.difference16": {
+    "message": "Differenz 16×"
+  },
+  "gallary.sharedCamera": {
+    "message": "Verschieben und Zoomen synchron"
+  },
+  "gallary.vector": {
+    "message": "Vektor"
+  },
+  "gallary.bitmap": {
+    "message": "Bitmap"
+  },
+  "gallary.vectorHelp": {
+    "message": "Vektorgrafik. Ziehen zum Verschieben, Scrollen zum Zoomen, Home für die Gesamtansicht."
+  },
+  "gallary.bitmapHelp": {
+    "message": "Bitmap-Vergleich. Verschieben und Zoomen in einer Ansicht verändert beide."
+  },
+  "gallary.loading": {
+    "message": "Kunstwerk wird geladen…"
+  },
+  "gallary.baking": {
+    "message": "Bitmap wird erstellt…"
+  },
+  "gallary.unavailable": {
+    "message": "Betrachter nicht verfügbar"
+  },
+  "gallary.viewerHelp": {
+    "message": "Versuche es mit einer aktuellen Version von Chrome oder Edge mit aktivierter Hardwarebeschleunigung."
+  },
+  "gallary.staticPreview": {
+    "message": "Das angezeigte Bild ist eine statische Vorschau."
+  },
+  "gallary.bitmapFailed": {
+    "message": "Die Bitmap konnte nicht erstellt werden. Versuche eine kleinere Größe."
+  },
+  "gallary.rasterDescription": {
+    "message": "Das gesamte Kunstwerk wird mit der gewählten Auflösung gerastert."
+  },
+  "gallary.differenceHint": {
+    "message": "Schwarz bedeutet übereinstimmende Pixel. Hellere Farben zeigen größere Unterschiede."
+  },
+  "gallary.bitmapHint": {
+    "message": "Die Bitmap-Auflösung bleibt beim Zoomen gleich. Das Raster erscheint, sobald die Pixel groß genug sind."
+  },
+  "gallary.statistics": {
+    "message": "Werkstatistik"
+  },
+  "gallary.strokes": {
+    "message": "Pinselstriche"
+  },
+  "gallary.polygons": {
+    "message": "Polygone"
+  },
+  "gallary.brushes": {
+    "message": "Pinsel"
+  }
+}

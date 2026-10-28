@@ -1,0 +1,140 @@
+{
+  "gallary.galleryTitle": {
+    "message": "畫廊"
+  },
+  "gallary.pageDescription": {
+    "message": "探索使用 Ciallo 向量筆刷繪製的插畫。"
+  },
+  "gallary.eyebrow": {
+    "message": "Ciallo · 在瀏覽器中欣賞"
+  },
+  "gallary.artworkBadge": {
+    "message": "可互動作品"
+  },
+  "gallary.viewerLabel": {
+    "message": "互動式檢視器"
+  },
+  "gallary.hint": {
+    "message": "拖曳移動 · 滾輪縮放 · 按兩下以符合畫布"
+  },
+  "gallary.zoomOut": {
+    "message": "縮小"
+  },
+  "gallary.zoomIn": {
+    "message": "放大"
+  },
+  "gallary.zoomLevel": {
+    "message": "縮放比例"
+  },
+  "gallary.fit": {
+    "message": "符合畫布"
+  },
+  "gallary.background": {
+    "message": "畫布背景"
+  },
+  "gallary.checkerboard": {
+    "message": "棋盤格"
+  },
+  "gallary.light": {
+    "message": "淺色"
+  },
+  "gallary.dark": {
+    "message": "深色"
+  },
+  "gallary.off": {
+    "message": "關閉"
+  },
+  "gallary.compare": {
+    "message": "比較點陣圖"
+  },
+  "gallary.longEdge": {
+    "message": "點陣圖長邊"
+  },
+  "gallary.apply": {
+    "message": "套用"
+  },
+  "gallary.sampling": {
+    "message": "取樣方式"
+  },
+  "gallary.bitmapSampling": {
+    "message": "點陣圖取樣方式"
+  },
+  "gallary.smooth": {
+    "message": "平滑"
+  },
+  "gallary.nearest": {
+    "message": "最近鄰像素"
+  },
+  "gallary.pixelGrid": {
+    "message": "像素網格"
+  },
+  "gallary.difference": {
+    "message": "差異"
+  },
+  "gallary.differenceGain": {
+    "message": "差異放大倍率"
+  },
+  "gallary.difference1": {
+    "message": "1× 差異"
+  },
+  "gallary.difference4": {
+    "message": "4× 差異"
+  },
+  "gallary.difference16": {
+    "message": "16× 差異"
+  },
+  "gallary.sharedCamera": {
+    "message": "同步移動與縮放"
+  },
+  "gallary.vector": {
+    "message": "向量圖"
+  },
+  "gallary.bitmap": {
+    "message": "點陣圖"
+  },
+  "gallary.vectorHelp": {
+    "message": "向量作品。拖曳移動，滾輪縮放，Home 鍵以符合畫布。"
+  },
+  "gallary.bitmapHelp": {
+    "message": "點陣圖比較。在任一畫布中拖曳或縮放，兩者會同步變化。"
+  },
+  "gallary.loading": {
+    "message": "正在載入作品…"
+  },
+  "gallary.baking": {
+    "message": "正在產生點陣圖…"
+  },
+  "gallary.unavailable": {
+    "message": "檢視器無法使用"
+  },
+  "gallary.viewerHelp": {
+    "message": "請嘗試使用已開啟硬體加速的最新版 Chrome 或 Edge。"
+  },
+  "gallary.staticPreview": {
+    "message": "目前顯示的是靜態預覽圖。"
+  },
+  "gallary.bitmapFailed": {
+    "message": "無法產生點陣圖，請嘗試縮小尺寸。"
+  },
+  "gallary.rasterDescription": {
+    "message": "整幅作品將依所選解析度產生點陣圖。"
+  },
+  "gallary.differenceHint": {
+    "message": "黑色表示像素一致，顏色越亮表示差異越大。"
+  },
+  "gallary.bitmapHint": {
+    "message": "縮放時點陣圖解析度保持不變。像素足夠大時會顯示網格。"
+  },
+  "gallary.statistics": {
+    "message": "作品統計"
+  },
+  "gallary.strokes": {
+    "message": "條筆畫"
+  },
+  "gallary.polygons": {
+    "message": "個多邊形"
+  },
+  "gallary.brushes": {
+    "message": "種筆刷"
+  }
+}

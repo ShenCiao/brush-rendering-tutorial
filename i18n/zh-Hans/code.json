@@ -1,0 +1,140 @@
+{
+  "gallary.galleryTitle": {
+    "message": "画廊"
+  },
+  "gallary.pageDescription": {
+    "message": "探索使用 Ciallo 矢量笔刷绘制的插画。"
+  },
+  "gallary.eyebrow": {
+    "message": "Ciallo · 在浏览器中欣赏"
+  },
+  "gallary.artworkBadge": {
+    "message": "可交互作品"
+  },
+  "gallary.viewerLabel": {
+    "message": "交互式查看器"
+  },
+  "gallary.hint": {
+    "message": "拖拽移动 · 滚轮缩放 · 双击适应画布"
+  },
+  "gallary.zoomOut": {
+    "message": "缩小"
+  },
+  "gallary.zoomIn": {
+    "message": "放大"
+  },
+  "gallary.zoomLevel": {
+    "message": "缩放比例"
+  },
+  "gallary.fit": {
+    "message": "适应画布"
+  },
+  "gallary.background": {
+    "message": "画布背景"
+  },
+  "gallary.checkerboard": {
+    "message": "棋盘格"
+  },
+  "gallary.light": {
+    "message": "浅色"
+  },
+  "gallary.dark": {
+    "message": "深色"
+  },
+  "gallary.off": {
+    "message": "关闭"
+  },
+  "gallary.compare": {
+    "message": "对比位图"
+  },
+  "gallary.longEdge": {
+    "message": "位图长边"
+  },
+  "gallary.apply": {
+    "message": "应用"
+  },
+  "gallary.sampling": {
+    "message": "采样方式"
+  },
+  "gallary.bitmapSampling": {
+    "message": "位图采样方式"
+  },
+  "gallary.smooth": {
+    "message": "平滑"
+  },
+  "gallary.nearest": {
+    "message": "最近邻像素"
+  },
+  "gallary.pixelGrid": {
+    "message": "像素网格"
+  },
+  "gallary.difference": {
+    "message": "差异"
+  },
+  "gallary.differenceGain": {
+    "message": "差异放大倍数"
+  },
+  "gallary.difference1": {
+    "message": "1× 差异"
+  },
+  "gallary.difference4": {
+    "message": "4× 差异"
+  },
+  "gallary.difference16": {
+    "message": "16× 差异"
+  },
+  "gallary.sharedCamera": {
+    "message": "同步移动与缩放"
+  },
+  "gallary.vector": {
+    "message": "矢量图"
+  },
+  "gallary.bitmap": {
+    "message": "位图"
+  },
+  "gallary.vectorHelp": {
+    "message": "矢量作品。拖拽移动，滚轮缩放，Home 键适应画布。"
+  },
+  "gallary.bitmapHelp": {
+    "message": "位图对比。在任意画布中拖拽或缩放，两者同步变化。"
+  },
+  "gallary.loading": {
+    "message": "正在加载作品…"
+  },
+  "gallary.baking": {
+    "message": "正在生成位图…"
+  },
+  "gallary.unavailable": {
+    "message": "查看器不可用"
+  },
+  "gallary.viewerHelp": {
+    "message": "请尝试使用已开启硬件加速的最新版 Chrome 或 Edge。"
+  },
+  "gallary.staticPreview": {
+    "message": "当前显示的是静态预览图。"
+  },
+  "gallary.bitmapFailed": {
+    "message": "无法生成位图，请尝试减小尺寸。"
+  },
+  "gallary.rasterDescription": {
+    "message": "整幅作品将按所选分辨率生成位图。"
+  },
+  "gallary.differenceHint": {
+    "message": "黑色表示像素一致，颜色越亮表示差异越大。"
+  },
+  "gallary.bitmapHint": {
+    "message": "缩放时位图分辨率保持不变。像素足够大时会显示网格。"
+  },
+  "gallary.statistics": {
+    "message": "作品统计"
+  },
+  "gallary.strokes": {
+    "message": "条笔画"
+  },
+  "gallary.polygons": {
+    "message": "个多边形"
+  },
+  "gallary.brushes": {
+    "message": "种笔刷"
+  }
+}

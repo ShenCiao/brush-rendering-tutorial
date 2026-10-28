@@ -1,0 +1,140 @@
+{
+  "gallary.galleryTitle": {
+    "message": "Galerie"
+  },
+  "gallary.pageDescription": {
+    "message": "Découvrez des illustrations réalisées avec les pinceaux vectoriels de Ciallo."
+  },
+  "gallary.eyebrow": {
+    "message": "Ciallo · Dans votre navigateur"
+  },
+  "gallary.artworkBadge": {
+    "message": "Œuvre interactive"
+  },
+  "gallary.viewerLabel": {
+    "message": "Visionneuse interactive"
+  },
+  "gallary.hint": {
+    "message": "Faites glisser pour déplacer · Molette pour zoomer · Double-clic pour tout afficher"
+  },
+  "gallary.zoomOut": {
+    "message": "Dézoomer"
+  },
+  "gallary.zoomIn": {
+    "message": "Zoomer"
+  },
+  "gallary.zoomLevel": {
+    "message": "Niveau de zoom"
+  },
+  "gallary.fit": {
+    "message": "Ajuster"
+  },
+  "gallary.background": {
+    "message": "Fond du canevas"
+  },
+  "gallary.checkerboard": {
+    "message": "Damier"
+  },
+  "gallary.light": {
+    "message": "Clair"
+  },
+  "gallary.dark": {
+    "message": "Sombre"
+  },
+  "gallary.off": {
+    "message": "Désactivé"
+  },
+  "gallary.compare": {
+    "message": "Comparer au bitmap"
+  },
+  "gallary.longEdge": {
+    "message": "Grand côté du bitmap"
+  },
+  "gallary.apply": {
+    "message": "Appliquer"
+  },
+  "gallary.sampling": {
+    "message": "Échantillonnage"
+  },
+  "gallary.bitmapSampling": {
+    "message": "Échantillonnage du bitmap"
+  },
+  "gallary.smooth": {
+    "message": "Lissé"
+  },
+  "gallary.nearest": {
+    "message": "Pixel le plus proche"
+  },
+  "gallary.pixelGrid": {
+    "message": "Grille de pixels"
+  },
+  "gallary.difference": {
+    "message": "Différence"
+  },
+  "gallary.differenceGain": {
+    "message": "Amplification des différences"
+  },
+  "gallary.difference1": {
+    "message": "Différence 1×"
+  },
+  "gallary.difference4": {
+    "message": "Différence 4×"
+  },
+  "gallary.difference16": {
+    "message": "Différence 16×"
+  },
+  "gallary.sharedCamera": {
+    "message": "Déplacement et zoom synchronisés"
+  },
+  "gallary.vector": {
+    "message": "Vectoriel"
+  },
+  "gallary.bitmap": {
+    "message": "Bitmap"
+  },
+  "gallary.vectorHelp": {
+    "message": "Œuvre vectorielle. Faites glisser pour déplacer, utilisez la molette pour zoomer et la touche Home pour tout afficher."
+  },
+  "gallary.bitmapHelp": {
+    "message": "Comparaison bitmap. Déplacer ou zoomer dans une vue agit sur les deux."
+  },
+  "gallary.loading": {
+    "message": "Chargement de l’œuvre…"
+  },
+  "gallary.baking": {
+    "message": "Création du bitmap…"
+  },
+  "gallary.unavailable": {
+    "message": "Visionneuse indisponible"
+  },
+  "gallary.viewerHelp": {
+    "message": "Essayez une version récente de Chrome ou Edge avec l’accélération matérielle activée."
+  },
+  "gallary.staticPreview": {
+    "message": "L’image affichée est un aperçu statique."
+  },
+  "gallary.bitmapFailed": {
+    "message": "Impossible de créer le bitmap. Essayez une taille plus petite."
+  },
+  "gallary.rasterDescription": {
+    "message": "L’œuvre entière est convertie en bitmap à la résolution choisie."
+  },
+  "gallary.differenceHint": {
+    "message": "Le noir indique des pixels identiques. Les couleurs plus vives signalent des différences plus importantes."
+  },
+  "gallary.bitmapHint": {
+    "message": "La résolution du bitmap reste fixe pendant le zoom. La grille apparaît lorsque les pixels sont assez grands."
+  },
+  "gallary.statistics": {
+    "message": "Statistiques de l’œuvre"
+  },
+  "gallary.strokes": {
+    "message": "traits"
+  },
+  "gallary.polygons": {
+    "message": "polygones"
+  },
+  "gallary.brushes": {
+    "message": "pinceaux"
+  }
+}

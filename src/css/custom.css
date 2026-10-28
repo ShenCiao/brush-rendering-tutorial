@@ -53,3 +53,4 @@ mstyle {
 .hidden {
   display: none !important;
 }
+article:has([data-artwork-viewer]) { max-width: 1200px; margin-inline: auto; }

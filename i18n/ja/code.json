@@ -1,0 +1,140 @@
+{
+  "gallary.galleryTitle": {
+    "message": "ギャラリー"
+  },
+  "gallary.pageDescription": {
+    "message": "Ciallo のベクターブラシで描かれたイラストをご覧ください。"
+  },
+  "gallary.eyebrow": {
+    "message": "Ciallo · ブラウザーで鑑賞"
+  },
+  "gallary.artworkBadge": {
+    "message": "操作できる作品"
+  },
+  "gallary.viewerLabel": {
+    "message": "インタラクティブビューアー"
+  },
+  "gallary.hint": {
+    "message": "ドラッグで移動 · ホイールで拡大・縮小 · ダブルクリックで全体表示"
+  },
+  "gallary.zoomOut": {
+    "message": "縮小"
+  },
+  "gallary.zoomIn": {
+    "message": "拡大"
+  },
+  "gallary.zoomLevel": {
+    "message": "ズーム倍率"
+  },
+  "gallary.fit": {
+    "message": "全体表示"
+  },
+  "gallary.background": {
+    "message": "キャンバスの背景"
+  },
+  "gallary.checkerboard": {
+    "message": "市松模様"
+  },
+  "gallary.light": {
+    "message": "ライト"
+  },
+  "gallary.dark": {
+    "message": "ダーク"
+  },
+  "gallary.off": {
+    "message": "オフ"
+  },
+  "gallary.compare": {
+    "message": "ビットマップと比較"
+  },
+  "gallary.longEdge": {
+    "message": "ビットマップの長辺"
+  },
+  "gallary.apply": {
+    "message": "適用"
+  },
+  "gallary.sampling": {
+    "message": "サンプリング"
+  },
+  "gallary.bitmapSampling": {
+    "message": "ビットマップのサンプリング"
+  },
+  "gallary.smooth": {
+    "message": "滑らか"
+  },
+  "gallary.nearest": {
+    "message": "最近傍ピクセル"
+  },
+  "gallary.pixelGrid": {
+    "message": "ピクセルグリッド"
+  },
+  "gallary.difference": {
+    "message": "差分"
+  },
+  "gallary.differenceGain": {
+    "message": "差分の強調倍率"
+  },
+  "gallary.difference1": {
+    "message": "差分 1×"
+  },
+  "gallary.difference4": {
+    "message": "差分 4×"
+  },
+  "gallary.difference16": {
+    "message": "差分 16×"
+  },
+  "gallary.sharedCamera": {
+    "message": "移動・ズームを同期"
+  },
+  "gallary.vector": {
+    "message": "ベクター"
+  },
+  "gallary.bitmap": {
+    "message": "ビットマップ"
+  },
+  "gallary.vectorHelp": {
+    "message": "ベクター作品。ドラッグで移動、ホイールで拡大・縮小、Home キーで全体表示。"
+  },
+  "gallary.bitmapHelp": {
+    "message": "ビットマップ比較。どちらの画面を移動・ズームしても両方に反映されます。"
+  },
+  "gallary.loading": {
+    "message": "作品を読み込み中…"
+  },
+  "gallary.baking": {
+    "message": "ビットマップを生成中…"
+  },
+  "gallary.unavailable": {
+    "message": "ビューアーを利用できません"
+  },
+  "gallary.viewerHelp": {
+    "message": "ハードウェア アクセラレーションを有効にした最新版の Chrome または Edge をお試しください。"
+  },
+  "gallary.staticPreview": {
+    "message": "表示中の画像は静止画のプレビューです。"
+  },
+  "gallary.bitmapFailed": {
+    "message": "ビットマップを生成できませんでした。サイズを小さくしてお試しください。"
+  },
+  "gallary.rasterDescription": {
+    "message": "作品全体を選択した解像度でビットマップ化します。"
+  },
+  "gallary.differenceHint": {
+    "message": "黒はピクセルの一致を表します。明るい色ほど差が大きいことを示します。"
+  },
+  "gallary.bitmapHint": {
+    "message": "ズームしてもビットマップの解像度は変わりません。ピクセルが十分大きくなるとグリッドが表示されます。"
+  },
+  "gallary.statistics": {
+    "message": "作品の統計"
+  },
+  "gallary.strokes": {
+    "message": "ストローク"
+  },
+  "gallary.polygons": {
+    "message": "ポリゴン"
+  },
+  "gallary.brushes": {
+    "message": "ブラシ"
+  }
+}

@@ -12,11 +12,12 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "test:rendering": "playwright test"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.5.2",
-    "@docusaurus/preset-classic": "^3.5.2",
+    "@docusaurus/core": "3.10.2",
+    "@docusaurus/preset-classic": "3.10.2",
     "@mdx-js/react": "^3.0.0",
     "@monaco-editor/react": "^4.5.2",
     "clsx": "^1.2.1",
@@ -31,11 +32,13 @@
     "three": "^0.156.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.5.2",
-    "@docusaurus/tsconfig": "^3.5.2",
+    "@docusaurus/module-type-aliases": "3.10.2",
+    "@docusaurus/tsconfig": "3.10.2",
+    "@playwright/test": "^1.64.1",
     "@types/mdx": "^2.0.7",
     "@types/react": "^18.2.29",
     "@types/three": "^0.156.0",
+    "@webgpu/types": "^0.1.74",
     "prettier": "3.0.3",
     "typescript": "~5.2.2"
   },
@@ -52,6 +55,6 @@
     ]
   },
   "engines": {
-    "node": ">=16.14"
+    "node": ">=20.0"
   }
 }

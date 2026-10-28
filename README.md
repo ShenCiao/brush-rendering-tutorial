@@ -19,6 +19,9 @@ You can create issues or pull requests to fix typos, correct facto mistakes, and
 
 ## Build and Develop
 
+For the interactive artwork gallery, adding MDX entries, and the WebGPU renderer,
+see [Gallary authoring and local development](GALLARY.md).
+
 The textual contents are written in markdown, you can easily modify them without extra web development skills.
 
 Follow the guidance in [Docusaurus's documentation](https://docusaurus.io/docs/installation) for further development.
