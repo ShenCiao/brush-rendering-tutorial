@@ -9,6 +9,7 @@ import {
   BitmapInfo,
   Comparison,
   SampleCount,
+  MAX_BITMAP_LONG_EDGE,
 } from "../../rendering/WebGpuRenderer";
 import styles from "./gallary.module.css";
 import { galleryMessages } from "./messages";
@@ -96,6 +97,7 @@ export default function ArtworkViewer(props: Props) {
   const [gpuSupported, setGpuSupported] = useState(false),
     [segments, setSegments] = useState(0);
   const [adapterInfo, setAdapterInfo] = useState<GPUAdapterInfo>();
+  const [bitmapLimit, setBitmapLimit] = useState(MAX_BITMAP_LONG_EDGE);
   const options = useRef<Options>({
     compare,
     edge,
@@ -381,6 +383,7 @@ export default function ArtworkViewer(props: Props) {
           return;
         }
         renderer = created;
+        setBitmapLimit(created.maxBitmapLongEdge);
         setAdapterInfo(created.adapterInfo);
         setDocument(doc);
         setGpuSupported(created.supportsGpuTiming);
@@ -507,7 +510,7 @@ export default function ArtworkViewer(props: Props) {
                 aria-label={copy.longEdge}
                 type="number"
                 min="64"
-                max="2048"
+                max={bitmapLimit}
                 step="1"
                 required
                 value={edgeInput}

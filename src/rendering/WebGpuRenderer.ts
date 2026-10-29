@@ -16,6 +16,7 @@ type Target = {
   msaaView?: GPUTextureView;
 };
 export type SampleCount = 1 | 4;
+export const MAX_BITMAP_LONG_EDGE = 8192;
 type PaintPipelines = {
   stroke: GPURenderPipeline;
   erase: GPURenderPipeline;
@@ -84,6 +85,12 @@ export class WebGpuRenderer {
   get supportsGpuTiming(): boolean {
     return !!this.timer;
   }
+  get maxBitmapLongEdge(): number {
+    return Math.min(
+      MAX_BITMAP_LONG_EDGE,
+      this.device.limits.maxTextureDimension2D,
+    );
+  }
   private get paint(): PaintPipelines {
     return this.pipelines.get(this.samples)!;
   }
@@ -113,6 +120,12 @@ export class WebGpuRenderer {
         "WebGPU could not find a graphics device. Enable hardware acceleration and try again.",
       );
     const device = await adapter.requestDevice({
+      requiredLimits: {
+        maxTextureDimension2D: Math.min(
+          MAX_BITMAP_LONG_EDGE,
+          adapter.limits.maxTextureDimension2D,
+        ),
+      },
       requiredFeatures: adapter.features.has("timestamp-query")
         ? ["timestamp-query"]
         : [],
@@ -620,14 +633,21 @@ export class WebGpuRenderer {
 
   /** Bake the entire reference canvas once. Camera changes never rebuild it. */
   async bakeBitmap(longEdge: number): Promise<BitmapInfo> {
-    if (!Number.isInteger(longEdge) || longEdge < 64 || longEdge > 2048)
-      throw new Error("Choose a bitmap long edge between 64 and 2048 pixels.");
+    if (
+      !Number.isInteger(longEdge) ||
+      longEdge < 64 ||
+      longEdge > this.maxBitmapLongEdge
+    )
+      throw new Error(
+        `Choose a bitmap long edge between 64 and ${this.maxBitmapLongEdge} pixels.`,
+      );
     const start = performance.now(),
       a = this.document.artwork;
     const scale = longEdge / Math.max(a.width, a.height),
       w = Math.max(1, Math.round(a.width * scale)),
       h = Math.max(1, Math.round(a.height * scale));
     this.timedFrame = false;
+    this.device.pushErrorScope("out-of-memory");
     this.device.pushErrorScope("validation");
     this.prepare(w, h, { x: 0, y: 0, scale });
     const bitmap = this.device.createTexture({
@@ -662,13 +682,20 @@ export class WebGpuRenderer {
     this.device.queue.submit([encoder.finish()]);
     this.available.push(target);
     const cpuMs = performance.now() - start;
-    const [error] = await Promise.all([
+    const [validationError, allocationError] = await Promise.all([
+      this.device.popErrorScope(),
       this.device.popErrorScope(),
       this.device.queue.onSubmittedWorkDone(),
     ]);
-    if (error || this.disposed) {
+    if (validationError || allocationError || this.disposed) {
       bitmap.destroy();
-      if (error) throw new Error(error.message);
+      if (allocationError) {
+        this.releaseTargets();
+        throw new Error(
+          "Not enough GPU memory to generate this bitmap. Try a smaller size or turn off MSAA.",
+        );
+      }
+      if (validationError) throw new Error(validationError.message);
       throw new Error("Viewer closed.");
     }
     this.bitmap?.destroy();

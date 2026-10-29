@@ -60,8 +60,13 @@ sample without a separate resolve target; brush shader anti-aliasing still appli
 
 Enable **Compare bitmap** to show a second canvas. It uses the same camera;
 dragging or zooming either canvas updates both. Set **Bitmap long edge** and
-press **Apply** to rasterize the full reference canvas at 64–2048 pixels on its
-longest side, preserving its aspect ratio. The bitmap stays at that resolution
+press **Apply** to rasterize the full reference canvas at 64–8192 pixels on its
+longest side, preserving its aspect ratio. The input limit is reduced only when
+the WebGPU device exposes a lower maximum 2D texture dimension. Generation renders
+the whole image at once. GPU memory must accommodate the RGBA8 bitmap and the
+full-size RGBA16F compositing targets, including multisample targets when MSAA is
+enabled. Allocation failures are reported so a smaller size can be chosen.
+The bitmap stays at that resolution
 while the live vector view is redrawn for the current camera. Disabling comparison
 releases the bitmap; enabling it again regenerates it.
 
