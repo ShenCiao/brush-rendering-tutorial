@@ -36,6 +36,23 @@ const ms = (value?: number) =>
     ? "<0.01 ms"
     : `${value.toFixed(2)} ms`;
 const mib = (bytes: number) => `${(bytes / 1048576).toFixed(2)} MiB`;
+const gpuName = (info?: GPUAdapterInfo) => {
+  const vendor = info?.vendor.trim() ?? "";
+  const vendorName =
+    {
+      amd: "AMD",
+      nvidia: "NVIDIA",
+      intel: "Intel",
+      apple: "Apple",
+      qualcomm: "Qualcomm",
+      arm: "ARM",
+    }[vendor.toLowerCase()] ?? vendor;
+  return (
+    info?.description.trim() ||
+    [vendorName, info?.architecture.trim()].filter(Boolean).join(" · ") ||
+    "Not disclosed by browser"
+  );
+};
 
 export default function ArtworkViewer(props: Props) {
   const copy = galleryMessages();
@@ -78,6 +95,7 @@ export default function ArtworkViewer(props: Props) {
     [gpu, setGpu] = useState<{ vectorMs: number; bitmapMs?: number }>();
   const [gpuSupported, setGpuSupported] = useState(false),
     [segments, setSegments] = useState(0);
+  const [adapterInfo, setAdapterInfo] = useState<GPUAdapterInfo>();
   const options = useRef<Options>({
     compare,
     edge,
@@ -346,6 +364,7 @@ export default function ArtworkViewer(props: Props) {
     setStatus("loading");
     setStats(undefined);
     setGpu(undefined);
+    setAdapterInfo(undefined);
     setBitmap(undefined);
     setDocument(undefined);
     setBitmapError("");
@@ -362,6 +381,7 @@ export default function ArtworkViewer(props: Props) {
           return;
         }
         renderer = created;
+        setAdapterInfo(created.adapterInfo);
         setDocument(doc);
         setGpuSupported(created.supportsGpuTiming);
         setSegments(created.segmentCount);
@@ -460,6 +480,17 @@ export default function ArtworkViewer(props: Props) {
           </label>
         </div>
       </div>
+      {ready && (
+        <div className={styles.adapterInfo} aria-label="Active WebGPU adapter">
+          <span>
+            Active GPU: <strong>{gpuName(adapterInfo)}</strong>
+            {adapterInfo?.isFallbackAdapter && " · Fallback adapter"}
+          </span>
+          {!adapterInfo?.description.trim() && (
+            <span>Exact model not exposed by browser.</span>
+          )}
+        </div>
+      )}
       {compare && (
         <div className={styles.compareControls}>
           <form

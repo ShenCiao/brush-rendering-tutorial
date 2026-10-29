@@ -121,6 +121,21 @@
   font-size: 0.8rem;
   color: #65666d;
 }
+.adapterInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  padding: 0.5rem 1rem;
+  background: #faf9f7;
+  border-bottom: 1px solid #e3e1dd;
+  color: #65666d;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+.adapterInfo strong {
+  color: #34343c;
+  font-weight: 600;
+}
 .tools {
   display: flex;
   align-items: center;

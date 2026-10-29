@@ -79,6 +79,14 @@ timestamp queries show **Unavailable** for GPU time. Measurements update on redr
 idle time, browser compositing, display refresh, and downloads are excluded.
 The bitmap generation time separately includes CPU work and waiting for the GPU.
 
+**Active GPU**, above the canvas, identifies the WebGPU adapter used to create the
+rendering device. It shows the adapter description when the browser exposes it,
+otherwise the vendor and architecture (for example, `NVIDIA · ampere`). Browsers
+may hide the exact model or all identifying fields; the viewer labels that case
+without guessing a model. A fallback adapter is marked when reported. This uses
+the renderer's existing adapter, without requesting another device or querying
+WebGL, which could select a different GPU.
+
 The statistics distinguish stroke count, polygon fill objects, and fill triangles.
 Expanded details include stroke samples/segments, clipping stacks, draw/pass counts,
 actual canvas backing resolution, and an estimate of vector render-target storage

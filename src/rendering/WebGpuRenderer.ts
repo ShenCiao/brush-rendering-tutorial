@@ -129,6 +129,7 @@ export class WebGpuRenderer {
       device,
       document,
       onError,
+      adapter.info,
     );
     const error = await device.popErrorScope();
     if (error) {
@@ -154,6 +155,7 @@ export class WebGpuRenderer {
     private device: GPUDevice,
     document: RenderDocument,
     private readonly onError: (message: string) => void,
+    readonly adapterInfo: GPUAdapterInfo | undefined,
   ) {
     this.document = document;
     this.timer = device.features.has("timestamp-query")
