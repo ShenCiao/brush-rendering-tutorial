@@ -54,7 +54,8 @@ floating-point precision.
 **MSAA** offers **Off** (the default) and **4×**, the sample counts supported by
 WebGPU. Changing it preserves the camera, switches the paint targets and pipelines,
 and regenerates any comparison bitmap at the same setting. Off uses a single
-sample without a separate resolve target; brush shader anti-aliasing still applies.
+sample without a separate resolve target; brush and polygon shader antialiasing
+still apply according to the exported settings.
 
 ## Bitmap comparison and measurements
 
@@ -142,15 +143,15 @@ available WebGPU adapter; it does not include a WebGL fallback. Ordinary gallery
 navigation and the preview remain usable without WebGPU. Existing Three.js
 tutorial examples are separate from this renderer.
 
-The `ciallo-airbrush-1` profile supports one exported frame, variable-radius and
-pressure Airbrush strokes, erasing, triangulated solid fills, whole-group opacity,
-Normal/Add/Multiply layers, and resolved clipping stacks. Unsupported brushes,
+The `ciallo-airbrush-2` profile supports one exported frame, variable-radius and
+pressure Airbrush strokes, erasing, analytically antialiased solid fills,
+whole-group opacity, Normal/Add/Multiply layers, and resolved clipping stacks. Unsupported brushes,
 image layers, and other drawing types are rejected by Ciallo's exporter. A clip
 does not contain editable Ciallo entities or editor state.
 
 The finished illustration and line art were exported from `Inaba Meguru.ciallo`
 and `Inaba Meguru Lineart.ciallo` by Ciallo's in-app exporter. Hidden layers and
-descendants of hidden folders are excluded. The line art contains 555 strokes and
+descendants of hidden folders are excluded. The line art contains 557 strokes and
 no polygon fills. The supplied PNGs provide the static previews, not the interactive
 rendering. Each artwork's MDX links to the other version.
 
@@ -165,7 +166,12 @@ Compositing follows the custom Godot engine's `Layer2D`:
 `renderer_canvas_render_rd.cpp` defines the layer blend equations. The renderer
 uses linear-sRGB premultiplied RGBA16F targets, optional 4× MSAA, and converts the finished
 image to premultiplied sRGB for browser presentation. Brush equations follow
-Ciallo's Gaussian Airbrush shader. GPU target allocation and draw batching are
+Ciallo's Gaussian Airbrush shader. Polygon fills follow
+`Ciallo/Rendering/PolygonFillAA.gdshaderinc`: triangle/pixel intersection area,
+exponential alpha mapping, and bounded vertex expansion in render-target pixels.
+The export carries the shared AA settings (normally enabled, epsilon `0.01`,
+maximum vertex offset `10` pixels). These apply to both live rendering and bitmap
+generation, even with MSAA off. GPU target allocation and draw batching are
 runtime choices, not serialized commands.
 
 ## Develop and verify
@@ -182,8 +188,9 @@ yarn build
 The production build is static and works under the configured GitHub Pages base
 URL. Adding or editing an MDX entry requires rebuilding the site for publication.
 
-Focused GPU regressions cover transparency-sensitive group opacity, clipping,
-Multiply, and the shared-camera/bitmap-regeneration lifecycle across MSAA changes. They require a
+Focused GPU regressions cover polygon coverage and shared edges,
+transparency-sensitive group opacity, clipping, Multiply, and the
+shared-camera/bitmap-regeneration lifecycle across MSAA changes. They require a
 WebGPU-capable browser:
 
 ```sh

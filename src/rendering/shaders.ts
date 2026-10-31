@@ -86,18 +86,122 @@ fn curve(brush:u32, which:u32, t:f32)->f32 {
 }
 `;
 
+// Matches Ciallo/Rendering/PolygonFillAA.gdshaderinc: bounded screen-space
+// expansion, triangle/pixel intersection area, and exponential source-over alpha.
 export const fillShader = /* wgsl */ `
 struct View { size:vec2f, center:vec2f, scale:f32, documentWidth:f32, documentHeight:f32, padding:f32 }
+struct PolygonAA { enabled:u32, epsilon:f32, maxVertexOffsetPixels:f32, padding:f32 }
 @group(0) @binding(0) var<uniform> view:View;
-struct Vertex { @builtin(position) position:vec4f, @location(0) color:vec4f }
-@vertex fn vertexMain(@location(0) position:vec2f,@location(1) color:vec4f)->Vertex {
- let p=(position-view.center)*view.scale;
- var out:Vertex; out.position=vec4f(p.x*2.0/view.size.x,-p.y*2.0/view.size.y,0,1); out.color=color; return out;
+@group(0) @binding(4) var<uniform> aa:PolygonAA;
+struct Vertex {
+ @builtin(position) position:vec4f,
+ @location(0) @interpolate(flat) color:vec4f,
+ @location(1) @interpolate(flat) a:vec2f,
+ @location(2) @interpolate(flat) b:vec2f,
+ @location(3) @interpolate(flat) c:vec2f,
+}
+fn cross2(a:vec2f,b:vec2f)->f32 { return a.x*b.y-a.y*b.x; }
+fn vertexOffset(previous:vec2f,current:vec2f,next:vec2f,winding:f32)->vec2f {
+ let incoming=current-previous;
+ let outgoing=next-current;
+ let incomingLength=length(incoming);
+ let outgoingLength=length(outgoing);
+ if(incomingLength==0.0 || outgoingLength==0.0 || winding==0.0){return vec2f(0);}
+ let n0=winding*vec2f(incoming.y,-incoming.x)/incomingLength;
+ let n1=winding*vec2f(outgoing.y,-outgoing.x)/outgoingLength;
+ // Half-pixel square support, including Ciallo's rasterizer rounding allowance.
+ let h0=0.501*(abs(n0.x)+abs(n0.y));
+ let h1=0.501*(abs(n1.x)+abs(n1.y));
+ let numerator=vec2f(h0*n1.y-h1*n0.y,n0.x*h1-n1.x*h0)*winding;
+ let numeratorLength=length(numerator);
+ if(numeratorLength==0.0 || aa.maxVertexOffsetPixels<=0.0){return vec2f(0);}
+ let denominator=max(abs(cross2(n0,n1)),numeratorLength/aa.maxVertexOffsetPixels);
+ return numerator/denominator;
+}
+@vertex fn vertexMain(
+ @builtin(vertex_index) corner:u32,
+ @location(0) a:vec2f,@location(1) b:vec2f,@location(2) c:vec2f,
+ @location(3) color:vec4f,
+)->Vertex {
+ let triangle=array<vec2f,3>(
+   (a-view.center)*view.scale+view.size*0.5,
+   (b-view.center)*view.scale+view.size*0.5,
+   (c-view.center)*view.scale+view.size*0.5);
+ var pixel=triangle[corner];
+ if(aa.enabled!=0u && view.scale!=0.0){
+   let winding=sign(cross2(triangle[1]-triangle[0],triangle[2]-triangle[0]));
+   pixel+=vertexOffset(triangle[(corner+2u)%3u],pixel,triangle[(corner+1u)%3u],winding);
+ }
+ var out:Vertex;
+ out.position=vec4f(pixel.x*2.0/view.size.x-1.0,1.0-pixel.y*2.0/view.size.y,0,1);
+ out.color=color;out.a=triangle[0];out.b=triangle[1];out.c=triangle[2];
+ return out;
+}
+fn coverage(in:Vertex)->f32 {
+ let triangle=array<vec2f,3>(in.a-in.position.xy,in.b-in.position.xy,in.c-in.position.xy);
+ let winding=sign(cross2(triangle[1]-triangle[0],triangle[2]-triangle[0]));
+ if(winding==0.0){return 0.0;}
+ var normals:array<vec2f,3>;
+ var distances:array<f32,3>;
+ var fullyInside=true;
+ for(var edge=0u;edge<3u;edge++){
+   let delta=triangle[(edge+1u)%3u]-triangle[edge];
+   let normal=winding*vec2f(-delta.y,delta.x);
+   let distance=-dot(normal,triangle[edge]);
+   let radius=0.5*(abs(normal.x)+abs(normal.y));
+   if(distance+radius<=0.0){return 0.0;}
+   fullyInside=fullyInside && distance>=radius;
+   normals[edge]=normal;distances[edge]=distance;
+ }
+ if(fullyInside){return 1.0;}
+ // Clip the unit pixel against the triangle. The intersection has <= 7 vertices.
+ var polygon:array<vec2f,8>;
+ var clipped:array<vec2f,8>;
+ polygon[0]=vec2f(-0.5,-0.5);polygon[1]=vec2f(0.5,-0.5);
+ polygon[2]=vec2f(0.5,0.5);polygon[3]=vec2f(-0.5,0.5);
+ var count=4u;
+ for(var edge=0u;edge<3u;edge++){
+   var outputCount=0u;
+   var previous=polygon[count-1u];
+   var previousDistance=dot(normals[edge],previous)+distances[edge];
+   for(var i=0u;i<count;i++){
+     let current=polygon[i];
+     let distance=dot(normals[edge],current)+distances[edge];
+     // Strict crossings avoid duplicating vertices on the clipping plane.
+     if((distance>0.0 && previousDistance<0.0) || (distance<0.0 && previousDistance>0.0)){
+       let t=previousDistance/(previousDistance-distance);
+       clipped[outputCount]=mix(previous,current,t);outputCount++;
+     }
+     if(distance>=0.0){clipped[outputCount]=current;outputCount++;}
+     previous=current;previousDistance=distance;
+   }
+   if(outputCount<3u){return 0.0;}
+   count=outputCount;
+   for(var i=0u;i<count;i++){polygon[i]=clipped[i];}
+ }
+ var twiceArea=0.0;
+ var previous=polygon[count-1u];
+ for(var i=0u;i<count;i++){
+   twiceArea+=cross2(previous,polygon[i]);previous=polygon[i];
+ }
+ return clamp(abs(twiceArea)*0.5,0.0,1.0);
+}
+fn fillAlpha(in:Vertex)->f32 {
+ if(aa.enabled==0u){return in.color.a;}
+ let depth=-log2(max(1.0-clamp(in.color.a,0.0,1.0),aa.epsilon));
+ let x=coverage(in)*depth;
+ // Preserve very small contributions from subpixel triangles.
+ if(x<0.001){
+   let y=x*0.69314718056;
+   return y*(1.0-0.5*y+y*y/6.0);
+ }
+ return 1.0-exp2(-x);
 }
 @fragment fn fragmentMain(in:Vertex)->@location(0) vec4f {
  let world=(in.position.xy-view.size*0.5)/view.scale+view.center;
  if(abs(world.x)>view.documentWidth*0.5 || abs(world.y)>view.documentHeight*0.5){discard;}
- return vec4f(in.color.rgb*in.color.a,in.color.a);
+ let alpha=fillAlpha(in);
+ return vec4f(in.color.rgb*alpha,alpha);
 }
 `;
 

@@ -62,8 +62,7 @@ export class WebGpuRenderer {
   private readonly draws = new Map<PaintNode, Draw>();
   private readonly viewBuffer: GPUBuffer;
   private readonly geometryBind: GPUBindGroup;
-  private readonly fillVertices: GPUBuffer;
-  private readonly fillIndices: GPUBuffer;
+  private readonly fillTriangles: GPUBuffer;
   private readonly pipelines = new Map<SampleCount, PaintPipelines>();
   private samples: SampleCount = 1;
   private readonly presentPipeline: GPURenderPipeline;
@@ -197,8 +196,7 @@ export class WebGpuRenderer {
     };
     this.viewBuffer = buffer(new Float32Array(8), GPUBufferUsage.UNIFORM);
     const segmentWords: number[] = [],
-      vertices: number[] = [],
-      indices: number[] = [];
+      triangles: number[] = [];
     const walk = (node: PaintNode) => {
       if (node.kind === "group") node.children.forEach(walk);
       else if (node.kind === "clip") {
@@ -236,13 +234,17 @@ export class WebGpuRenderer {
         });
       } else {
         const p = document.floats(node.positions),
-          ix = document.indices(node.indices),
-          base = vertices.length / 6;
-        const first = indices.length;
-        for (let i = 0; i < p.length; i += 2)
-          vertices.push(p[i], p[i + 1], ...node.color);
-        for (const index of ix) indices.push(base + index);
-        this.draws.set(node, { first, count: ix.length });
+          ix = document.indices(node.indices);
+        const first = triangles.length / 10;
+        // Each instance carries the original triangle for analytic pixel coverage.
+        for (let i = 0; i < ix.length; i += 3) {
+          for (let corner = 0; corner < 3; corner++) {
+            const v = ix[i + corner] * 2;
+            triangles.push(p[v], p[v + 1]);
+          }
+          triangles.push(...node.color);
+        }
+        this.draws.set(node, { first, count: ix.length / 3 });
       }
     };
     document.artwork.nodes.forEach(walk);
@@ -262,11 +264,18 @@ export class WebGpuRenderer {
       curveData.set(document.floats(b.pressure), i * 1024);
       curveData.set(document.floats(b.falloff), i * 1024 + 512);
     });
-    this.fillVertices = buffer(
-      new Float32Array(vertices),
+    this.fillTriangles = buffer(
+      new Float32Array(triangles),
       GPUBufferUsage.VERTEX,
     );
-    this.fillIndices = buffer(new Uint32Array(indices), GPUBufferUsage.INDEX);
+    const aa = document.artwork.polygonAA;
+    const aaData = new Float32Array([
+      0,
+      aa.epsilon,
+      aa.maxVertexOffsetPixels,
+      0,
+    ]);
+    new Uint32Array(aaData.buffer)[0] = Number(aa.enabled);
     const layout = device.createBindGroupLayout({
       entries: [
         {
@@ -279,6 +288,11 @@ export class WebGpuRenderer {
           visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT,
           buffer: { type: "read-only-storage" as const },
         })),
+        {
+          binding: 4,
+          visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT,
+          buffer: { type: "uniform" as const },
+        },
       ],
     });
     const gpuBuffers = [
@@ -286,6 +300,7 @@ export class WebGpuRenderer {
       buffer(segments, GPUBufferUsage.STORAGE),
       buffer(brushData, GPUBufferUsage.STORAGE),
       buffer(curveData, GPUBufferUsage.STORAGE),
+      buffer(aaData, GPUBufferUsage.UNIFORM),
     ];
     this.geometryBind = device.createBindGroup({
       layout,
@@ -341,10 +356,13 @@ export class WebGpuRenderer {
           entryPoint: "vertexMain",
           buffers: [
             {
-              arrayStride: 24,
+              arrayStride: 40,
+              stepMode: "instance",
               attributes: [
                 { shaderLocation: 0, offset: 0, format: "float32x2" as const },
-                { shaderLocation: 1, offset: 8, format: "float32x4" as const },
+                { shaderLocation: 1, offset: 8, format: "float32x2" as const },
+                { shaderLocation: 2, offset: 16, format: "float32x2" as const },
+                { shaderLocation: 3, offset: 24, format: "float32x4" as const },
               ],
             },
           ],
@@ -542,9 +560,8 @@ export class WebGpuRenderer {
           pass.draw(6, draw.count, 0, draw.first);
         } else {
           pass.setPipeline(this.paint.fill);
-          pass.setVertexBuffer(0, this.fillVertices);
-          pass.setIndexBuffer(this.fillIndices, "uint32");
-          pass.drawIndexed(draw.count, 1, draw.first);
+          pass.setVertexBuffer(0, this.fillTriangles);
+          pass.draw(3, draw.count, 0, draw.first);
         }
       } else {
         pass.end();

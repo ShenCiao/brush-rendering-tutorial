@@ -37,6 +37,11 @@ export interface Clip {
   clips: Group[];
 }
 export type PaintNode = Stroke | Fill | Group | Clip;
+export interface PolygonAA {
+  enabled: boolean;
+  epsilon: number;
+  maxVertexOffsetPixels: number;
+}
 export interface Artwork {
   version: number;
   profile: string;
@@ -45,6 +50,7 @@ export interface Artwork {
   height: number;
   frame: number;
   colorSpace: string;
+  polygonAA: PolygonAA;
   brushes: Brush[];
   nodes: PaintNode[];
 }
@@ -104,7 +110,7 @@ export class RenderDocument {
     const a = this.artwork;
     if (
       a.version !== 1 ||
-      a.profile !== "ciallo-airbrush-1" ||
+      a.profile !== "ciallo-airbrush-2" ||
       a.colorSpace !== "linear-srgb"
     )
       throw new Error("Unsupported Ciallo render version or brush profile.");
@@ -114,6 +120,17 @@ export class RenderDocument {
       !Array.isArray(a.nodes)
     )
       throw new Error("Invalid canvas or resource description.");
+    const aa = a.polygonAA;
+    if (
+      !aa ||
+      typeof aa.enabled !== "boolean" ||
+      !Number.isFinite(aa.epsilon) ||
+      aa.epsilon <= 0 ||
+      aa.epsilon >= 1 ||
+      !Number.isFinite(aa.maxVertexOffsetPixels) ||
+      aa.maxVertexOffsetPixels < 0
+    )
+      throw new Error("Invalid polygon antialiasing settings.");
     const color = (c: number[]) => {
       if (
         !Array.isArray(c) ||

@@ -1,4 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
+import { renderFile } from "./helpers/renderFile";
 
 // These cases distinguish whole-group opacity, clipped alpha, and transparent
 // Multiply from superficially similar but incorrect blend implementations.
@@ -14,34 +15,7 @@ function fixture(nodes: (fill: (color: number[]) => object) => object[]) {
     positions: { offset: 0, count: 8 },
     indices: { offset: 32, count: 6 },
   });
-  const json = Buffer.from(
-    JSON.stringify({
-      version: 1,
-      profile: "ciallo-airbrush-1",
-      colorSpace: "linear-srgb",
-      width: 200,
-      height: 200,
-      frame: 1,
-      name: "Compositing",
-      brushes: [],
-      nodes: nodes(fill),
-    }),
-  );
-  const chunk = (tag: string, payload: Buffer) => {
-    const h = Buffer.alloc(8);
-    h.write(tag);
-    h.writeUInt32LE(payload.length, 4);
-    return Buffer.concat([h, payload, Buffer.alloc(payload.length & 1)]);
-  };
-  const body = Buffer.concat([
-    Buffer.from("C2DI"),
-    chunk("JSON", json),
-    chunk("BIN0", data),
-  ]);
-  const head = Buffer.alloc(8);
-  head.write("RIFF");
-  head.writeUInt32LE(body.length, 4);
-  return Buffer.concat([head, body]);
+  return renderFile(nodes(fill), data);
 }
 const group = (children: object[], opacity = 1, blend = 0) => ({
   kind: "group",
