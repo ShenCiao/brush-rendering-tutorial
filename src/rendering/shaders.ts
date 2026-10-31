@@ -86,8 +86,8 @@ fn curve(brush:u32, which:u32, t:f32)->f32 {
 }
 `;
 
-// Matches Ciallo/Rendering/PolygonFillAA.gdshaderinc: bounded screen-space
-// expansion, triangle/pixel intersection area, and exponential source-over alpha.
+// Preserves Ciallo/Rendering/PolygonFillAA.gdshaderinc coverage and blending.
+// Pixel area uses a boundary integral to avoid per-fragment polygon arrays.
 export const fillShader = /* wgsl */ `
 struct View { size:vec2f, center:vec2f, scale:f32, documentWidth:f32, documentHeight:f32, padding:f32 }
 struct PolygonAA { enabled:u32, epsilon:f32, maxVertexOffsetPixels:f32, padding:f32 }
@@ -137,54 +137,42 @@ fn vertexOffset(previous:vec2f,current:vec2f,next:vec2f,winding:f32)->vec2f {
  out.color=color;out.a=triangle[0];out.b=triangle[1];out.c=triangle[2];
  return out;
 }
+// Signed integral of clamp(y, 0, 1) dx along one edge inside the pixel's
+// vertical strip. Closing edges at x=0 or x=1 have dx=0 and add no area.
+fn edgeArea(a:vec2f,b:vec2f)->f32 {
+ let dx=b.x-a.x;
+ if(dx==0.0){return 0.0;}
+ // Canonical ordering makes reversed shared edges numerically symmetric.
+ let p=select(b,a,dx>0.0);
+ let q=select(a,b,dx>0.0);
+ let left=max(p.x,0.0);
+ let right=min(q.x,1.0);
+ if(right<=left){return 0.0;}
+ let slope=(q.y-p.y)/(q.x-p.x);
+ // Evaluate from the nearer endpoint to limit cancellation when zoomed in.
+ let origin=select(p,q,abs(q.x-0.5)<abs(p.x-0.5));
+ let y0=fma(left-origin.x,slope,origin.y);
+ let y1=fma(right-origin.x,slope,origin.y);
+ let low=min(y0,y1);
+ let high=max(y0,y1);
+ var average:f32;
+ if(low>=1.0){average=1.0;}
+ else if(high<=0.0){return 0.0;}
+ else if(low>=0.0 && high<=1.0){average=0.5*(low+high);}
+ else {
+   let bottom=clamp(low,0.0,1.0);
+   let top=clamp(high,0.0,1.0);
+   average=(0.5*(bottom+top)*(top-bottom)+max(high-1.0,0.0))/(high-low);
+ }
+ return sign(dx)*(right-left)*average;
+}
 fn coverage(in:Vertex)->f32 {
- let triangle=array<vec2f,3>(in.a-in.position.xy,in.b-in.position.xy,in.c-in.position.xy);
- let winding=sign(cross2(triangle[1]-triangle[0],triangle[2]-triangle[0]));
- if(winding==0.0){return 0.0;}
- var normals:array<vec2f,3>;
- var distances:array<f32,3>;
- var fullyInside=true;
- for(var edge=0u;edge<3u;edge++){
-   let delta=triangle[(edge+1u)%3u]-triangle[edge];
-   let normal=winding*vec2f(-delta.y,delta.x);
-   let distance=-dot(normal,triangle[edge]);
-   let radius=0.5*(abs(normal.x)+abs(normal.y));
-   if(distance+radius<=0.0){return 0.0;}
-   fullyInside=fullyInside && distance>=radius;
-   normals[edge]=normal;distances[edge]=distance;
- }
- if(fullyInside){return 1.0;}
- // Clip the unit pixel against the triangle. The intersection has <= 7 vertices.
- var polygon:array<vec2f,8>;
- var clipped:array<vec2f,8>;
- polygon[0]=vec2f(-0.5,-0.5);polygon[1]=vec2f(0.5,-0.5);
- polygon[2]=vec2f(0.5,0.5);polygon[3]=vec2f(-0.5,0.5);
- var count=4u;
- for(var edge=0u;edge<3u;edge++){
-   var outputCount=0u;
-   var previous=polygon[count-1u];
-   var previousDistance=dot(normals[edge],previous)+distances[edge];
-   for(var i=0u;i<count;i++){
-     let current=polygon[i];
-     let distance=dot(normals[edge],current)+distances[edge];
-     // Strict crossings avoid duplicating vertices on the clipping plane.
-     if((distance>0.0 && previousDistance<0.0) || (distance<0.0 && previousDistance>0.0)){
-       let t=previousDistance/(previousDistance-distance);
-       clipped[outputCount]=mix(previous,current,t);outputCount++;
-     }
-     if(distance>=0.0){clipped[outputCount]=current;outputCount++;}
-     previous=current;previousDistance=distance;
-   }
-   if(outputCount<3u){return 0.0;}
-   count=outputCount;
-   for(var i=0u;i<count;i++){polygon[i]=clipped[i];}
- }
- var twiceArea=0.0;
- var previous=polygon[count-1u];
- for(var i=0u;i<count;i++){
-   twiceArea+=cross2(previous,polygon[i]);previous=polygon[i];
- }
- return clamp(abs(twiceArea)*0.5,0.0,1.0);
+ let a=in.a-in.position.xy+vec2f(0.5);
+ let b=in.b-in.position.xy+vec2f(0.5);
+ let c=in.c-in.position.xy+vec2f(0.5);
+ if(cross2(b-a,c-a)==0.0){return 0.0;}
+ // Green's theorem: the clipped boundary integral equals triangle/pixel area.
+ return clamp(abs(edgeArea(a,b)+edgeArea(b,c)+edgeArea(c,a)),0.0,1.0);
 }
 fn fillAlpha(in:Vertex)->f32 {
  if(aa.enabled==0u){return in.color.a;}
