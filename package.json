@@ -16,6 +16,7 @@
     "test:rendering": "playwright test"
   },
   "dependencies": {
+    "@ciallo/renderer": "file:vendor/ciallo-renderer-5392d262224921eb.tgz",
     "@docusaurus/core": "3.10.2",
     "@docusaurus/preset-classic": "3.10.2",
     "@mdx-js/react": "^3.0.0",

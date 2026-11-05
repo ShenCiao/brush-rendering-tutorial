@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
-import { RenderDocument } from "../../rendering/format";
 import {
+  RenderDocument,
   WebGpuRenderer,
   Camera,
   RenderStats,
@@ -10,7 +10,7 @@ import {
   Comparison,
   SampleCount,
   MAX_BITMAP_LONG_EDGE,
-} from "../../rendering/WebGpuRenderer";
+} from "@ciallo/renderer";
 import styles from "./gallary.module.css";
 import { galleryMessages } from "./messages";
 

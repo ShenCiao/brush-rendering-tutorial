@@ -143,6 +143,19 @@ available WebGPU adapter; it does not include a WebGL fallback. Ordinary gallery
 navigation and the preview remain usable without WebGPU. Existing Three.js
 tutorial examples are separate from this renderer.
 
+The renderer code lives in the separate `ciallo-renderer` repository. This site
+installs it as `@ciallo/renderer` from a `.tgz` file committed in `vendor/`, so CI
+and GitHub Pages build without that repository. The React viewer, controls,
+translations, and artworks stay here.
+
+To update the renderer:
+
+1. In `ciallo-renderer`, run `npm ci` (first time only), then `npm run pack:web`.
+2. Copy the printed `.tgz` into this site's `vendor/`.
+3. Run `yarn add file:vendor/<printed-filename>.tgz`.
+4. Check with `yarn typecheck`, `yarn build`, and `yarn test:rendering`.
+5. Delete the old `.tgz`. Commit the new one with `package.json` and `yarn.lock`.
+
 The `ciallo-airbrush-2` profile supports one exported frame, variable-radius and
 pressure Airbrush strokes, erasing, analytically antialiased solid fills,
 whole-group opacity, Normal/Add/Multiply layers, and resolved clipping stacks. Unsupported brushes,
@@ -161,18 +174,16 @@ in the Ciallo repository. `.glb2dim` is a RIFF draft with GLB-style JSON/binary
 organization; it is not a glTF/GLB file. Its version and profile are checked before
 rendering.
 
-Compositing follows the custom Godot engine's `Layer2D`:
-`renderer_canvas_cull.cpp` defines clipping stacks and automatic isolation;
-`renderer_canvas_render_rd.cpp` defines the layer blend equations. The renderer
-uses linear-sRGB premultiplied RGBA16F targets, optional 4× MSAA, and converts the finished
-image to premultiplied sRGB for browser presentation. Brush equations follow
-Ciallo's Gaussian Airbrush shader. Polygon fills follow
-`Ciallo/Rendering/PolygonFillAA.gdshaderinc`: triangle/pixel intersection area,
-exponential alpha mapping, and bounded vertex expansion in render-target pixels.
-The export carries the shared AA settings (normally enabled, epsilon `0.01`,
-maximum vertex offset `10` pixels). These apply to both live rendering and bitmap
-generation, even with MSAA off. GPU target allocation and draw batching are
-runtime choices, not serialized commands.
+The renderer aims to match Ciallo's output. Layer blending and clipping follow the
+custom Godot engine's `Layer2D` (`renderer_canvas_cull.cpp` and
+`renderer_canvas_render_rd.cpp`). Strokes use Ciallo's Gaussian Airbrush shader.
+Fills follow `Ciallo/Rendering/PolygonFillAA.gdshaderinc`: analytic triangle/pixel
+intersection area, exponential alpha mapping, and bounded vertex expansion in
+render-target pixels. The file supplies the AA settings (normally enabled,
+epsilon `0.01`, max vertex offset `10` px), which apply to live rendering and
+bitmap generation whether MSAA is on or off. Compositing uses premultiplied
+linear-sRGB RGBA16F targets; presentation converts the result to premultiplied
+sRGB. These shared rules do not guarantee bit-identical output across GPUs.
 
 ## Develop and verify
 
@@ -188,7 +199,7 @@ yarn build
 The production build is static and works under the configured GitHub Pages base
 URL. Adding or editing an MDX entry requires rebuilding the site for publication.
 
-Focused GPU regressions cover polygon coverage and shared edges,
+Focused GPU regressions cover polygon antialiasing and shared edges,
 transparency-sensitive group opacity, clipping, Multiply, and the
 shared-camera/bitmap-regeneration lifecycle across MSAA changes. They require a
 WebGPU-capable browser:
@@ -201,3 +212,7 @@ yarn test:rendering
 To use installed Chrome instead, set `PLAYWRIGHT_CHANNEL=chrome`. The tests start
 the dev server if it is not already running. GPU availability is required; a
 missing adapter fails the tests instead of silently skipping them.
+
+The shader-only polygon coverage regression now lives in `ciallo-renderer` and
+runs there with `npm run test:gpu`. The tests here verify the installed package
+through the actual gallery UI, including compositing and bitmap comparisons.

@@ -1,4 +1,4 @@
-import type { PolygonAA } from "../../src/rendering/format";
+import type { PolygonAA } from "@ciallo/renderer";
 
 export function renderFile(
   nodes: object[],

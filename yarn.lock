@@ -2179,6 +2179,12 @@
     "@babel/helper-string-parser" "^7.29.11"
     "@babel/helper-validator-identifier" "^7.29.7"
 
+"@ciallo/renderer@file:vendor/ciallo-renderer-5392d262224921eb.tgz":
+  version "0.0.0-private"
+  resolved "file:vendor/ciallo-renderer-5392d262224921eb.tgz#8d3bdea24518d0b7fa0a5114693b838bc3b0b6d7"
+  dependencies:
+    "@webgpu/types" "0.1.74"
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
@@ -4366,7 +4372,7 @@
     "@webassemblyjs/ast" "1.14.1"
     "@xtuc/long" "4.2.2"
 
-"@webgpu/types@^0.1.74":
+"@webgpu/types@0.1.74", "@webgpu/types@^0.1.74":
   version "0.1.74"
   resolved "https://registry.yarnpkg.com/@webgpu/types/-/types-0.1.74.tgz#e0e0417074a90da1929c7bf710d6bb970aa91b13"
   integrity sha512-lgiI4hbuLcI9unnm2cL/tvCaQU45dp0xcLWJh5uB/9MBGvIA4F8XIk7nSiBeg+K4xWGYwgZKn80LmERI5CxoTA==

@@ -1,5 +1,5 @@
 import { expect, test, Page } from "@playwright/test";
-import type { PolygonAA } from "../src/rendering/format";
+import type { PolygonAA } from "@ciallo/renderer";
 import { renderFile } from "./helpers/renderFile";
 
 type Point = [number, number];
